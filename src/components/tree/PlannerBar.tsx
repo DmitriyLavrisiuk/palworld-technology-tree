@@ -4,7 +4,7 @@ import { ChevronDownIcon, ChevronUpIcon, TriangleAlertIcon, XIcon } from "lucide
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { iconUrl } from "@/lib/data"
-import { pointsLabel, t } from "@/lib/i18n"
+import { pointsLabel, stepsLabel, t } from "@/lib/i18n"
 import type { Route } from "@/lib/planner"
 import type { Locale } from "@/types/tech"
 
@@ -45,7 +45,7 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
             ) : (
               <>
                 <span className="tabular-nums">
-                  {remaining.length} {t("routeSteps", locale)}
+                  {remaining.length} {stepsLabel(remaining.length, locale)}
                 </span>
                 {route.techPoints > 0 && (
                   <span className="tabular-nums">
@@ -64,6 +64,15 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
                     }
                   >
                     {t("routeNeedLevel", locale)} {route.requiredLevel}
+                  </span>
+                )}
+                {route.synthesisedSteps > 0 && (
+                  <span
+                    className="inline-flex items-center gap-1 text-synth"
+                    title={t("routeSynthesisedNote", locale)}
+                  >
+                    <span aria-hidden className="size-1.5 rounded-full bg-synth" />
+                    {t("routeSynthesisedTitle", locale)}: {route.synthesisedSteps}
                   </span>
                 )}
               </>
@@ -98,7 +107,8 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
             <p className="mb-2 flex items-start gap-2 rounded-md border border-synth/40 bg-synth-surface p-2 text-xs">
               <TriangleAlertIcon className="mt-px size-4 shrink-0 text-synth" />
               <span>
-                {route.synthesisedSteps} {t("routeSynthesised", locale)}
+                {t("routeSynthesisedTitle", locale)}: {route.synthesisedSteps}{" "}
+                {stepsLabel(route.synthesisedSteps, locale)}. {t("routeSynthesisedNote", locale)}
               </span>
             </p>
           )}
@@ -142,11 +152,10 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
                       {step.tech.name[locale]}
                     </span>
                     {step.source === "chain" && (
-                      <span
-                        aria-label={t("chainSynthesised", locale)}
-                        title={t("chainSynthesised", locale)}
-                        className="size-1.5 shrink-0 rounded-full bg-synth"
-                      />
+                      <span className="inline-flex shrink-0 items-center gap-1 text-[10px] text-synth">
+                        <span aria-hidden className="size-1.5 rounded-full bg-synth" />
+                        {t("synthShort", locale)}
+                      </span>
                     )}
                     <span className="shrink-0 text-[10px] text-muted-foreground tabular-nums">
                       {levelShort} {step.tech.level}
@@ -164,7 +173,10 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
 
           {route.materials.length > 0 && (
             <section>
-              <h3 className="mb-1 text-xs font-medium">{t("routeMaterials", locale)}</h3>
+    <h3 className="mb-1 text-xs font-medium">{t("routeMaterials", locale)}</h3>
+              <p className="mb-1 text-[10px] text-muted-foreground">
+                {t("routeMaterialsHint", locale)}
+              </p>
               <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,14rem),1fr))] gap-x-4">
                 {route.materials.map((material) => (
                   <li key={material.id} className="flex justify-between gap-2 text-xs">

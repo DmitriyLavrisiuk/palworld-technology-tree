@@ -95,9 +95,7 @@ export default function App() {
         onFilters={setFilters}
       />
 
-      {/* Панель маршрута липнет к низу, поэтому под неё резервируется место:
-          иначе она закрывала бы последние ряды дерева. */}
-      <main className={route ? "pb-20" : undefined}>
+      <main>
         <h1 className="sr-only">{t("appName", progress.locale)}</h1>
         <TechTree
           data={data}

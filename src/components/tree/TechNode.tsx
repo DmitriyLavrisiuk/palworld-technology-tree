@@ -1,4 +1,4 @@
-import { CheckIcon, LockIcon, SparklesIcon } from "lucide-react"
+import { CheckIcon, LockIcon, RouteIcon, SparklesIcon } from "lucide-react"
 
 import { iconUrl } from "@/lib/data"
 import { t } from "@/lib/i18n"
@@ -98,6 +98,17 @@ export function TechNode({
         {locked && (
           <span className="absolute -top-1.5 -right-1.5 grid size-4 place-items-center rounded-full border-2 border-background bg-muted text-muted-foreground">
             <LockIcon className="size-2" strokeWidth={3} />
+          </span>
+        )}
+
+        {onRoute && (
+          <span
+            role="img"
+            aria-label={t("onRoute", locale)}
+            title={t("onRoute", locale)}
+            className="absolute -bottom-1.5 -left-1.5 grid size-4 place-items-center rounded-full border-2 border-background bg-route text-background"
+          >
+            <RouteIcon className="size-2" strokeWidth={3} />
           </span>
         )}
 

@@ -33,15 +33,21 @@ export const UI = {
   planRoute: { ru: "Проложить путь", en: "Plan route" },
   clearRoute: { ru: "Убрать маршрут", en: "Clear route" },
   routeTitle: { ru: "Путь до цели", en: "Route to target" },
-  routeSteps: { ru: "шагов", en: "steps" },
+
   routeNeedLevel: { ru: "нужен уровень", en: "level needed" },
   routeDone: { ru: "Всё изучено", en: "All researched" },
-  routeMaterials: { ru: "Суммарно материалов", en: "Materials in total" },
-  routeBlockers: { ru: "Очками не покупается", en: "Points cannot buy this" },
-  routeSynthesised: {
-    ru: "шагов маршрута достроены нами, а не взяты из игры",
-    en: "route steps are our reconstruction, not game data",
+  routeMaterials: { ru: "Материалы на крафт ступеней", en: "Materials to craft the tiers" },
+  routeMaterialsHint: {
+    ru: "Исследование стоит очков. Материалы нужны, только если крафтить сами предметы.",
+    en: "Research costs points. Materials are only needed if you craft the items themselves.",
   },
+  routeBlockers: { ru: "Очками не покупается", en: "Points cannot buy this" },
+  routeSynthesisedTitle: { ru: "Достроено нами", en: "Our reconstruction" },
+  routeSynthesisedNote: {
+    ru: "В игре у этих технологий нет пререквизитов — порядок восстановлен нами.",
+    en: "The game gives these technologies no prerequisites — the order is our reconstruction.",
+  },
+  onRoute: { ru: "в маршруте", en: "on route" },
   expand: { ru: "Развернуть", en: "Expand" },
   collapse: { ru: "Свернуть", en: "Collapse" },
   switchLanguage: { ru: "Переключить на английский", en: "Switch to Russian" },
@@ -91,12 +97,16 @@ const ANCIENT_POINT_FORMS = {
   en: ["ancient point", "ancient points", "ancient points"],
 } as const
 
+const STEP_FORMS = {
+  ru: ["шаг", "шага", "шагов"],
+  en: ["step", "steps", "steps"],
+} as const
+
 /**
- * «1 очков» — так писать нельзя. Русский требует трёх форм, английскому
- * хватает двух, поэтому склонение живёт здесь, а не в компонентах.
+ * «1 очков» и «1 шагов» — так писать нельзя. Русский требует трёх форм,
+ * английскому хватает двух, поэтому склонение живёт здесь, а не в компонентах.
  */
-export function pointsLabel(count: number, locale: Locale, ancient: boolean): string {
-  const forms = ancient ? ANCIENT_POINT_FORMS[locale] : POINT_FORMS[locale]
+function pluralForm(count: number, locale: Locale, forms: readonly string[]): string {
   if (locale === "en") return count === 1 ? forms[0] : forms[1]
 
   const tail = Math.abs(count) % 100
@@ -105,4 +115,12 @@ export function pointsLabel(count: number, locale: Locale, ancient: boolean): st
   if (last === 1) return forms[0]
   if (last >= 2 && last <= 4) return forms[1]
   return forms[2]
+}
+
+export function pointsLabel(count: number, locale: Locale, ancient: boolean): string {
+  return pluralForm(count, locale, ancient ? ANCIENT_POINT_FORMS[locale] : POINT_FORMS[locale])
+}
+
+export function stepsLabel(count: number, locale: Locale): string {
+  return pluralForm(count, locale, STEP_FORMS[locale])
 }

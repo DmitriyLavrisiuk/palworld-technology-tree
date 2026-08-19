@@ -10,7 +10,7 @@ import {
   visibleTechs,
   NO_FILTERS,
 } from "./tree.ts"
-import { pointsLabel } from "@/lib/i18n"
+import { pointsLabel, stepsLabel } from "@/lib/i18n"
 import type { Technology } from "@/types/tech"
 
 function tech(id: string, over: Partial<Technology> = {}): Technology {
@@ -223,5 +223,22 @@ describe("склонение очков", () => {
     expect(pointsLabel(2, "en", false)).toBe("points")
     expect(pointsLabel(1, "en", true)).toBe("ancient point")
     expect(pointsLabel(11, "en", true)).toBe("ancient points")
+  })
+})
+
+describe("склонение шагов", () => {
+  it("русский требует трёх форм", () => {
+    // 404 маршрута из 588 состоят ровно из одного шага — «1 шагов» было бы
+    // самым частым текстом в панели.
+    expect(stepsLabel(1, "ru")).toBe("шаг")
+    expect(stepsLabel(2, "ru")).toBe("шага")
+    expect(stepsLabel(5, "ru")).toBe("шагов")
+    expect(stepsLabel(11, "ru")).toBe("шагов")
+    expect(stepsLabel(21, "ru")).toBe("шаг")
+  })
+
+  it("английскому хватает двух", () => {
+    expect(stepsLabel(1, "en")).toBe("step")
+    expect(stepsLabel(3, "en")).toBe("steps")
   })
 })

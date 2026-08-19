@@ -59,9 +59,16 @@ export function buildRoute(
   const target = data.byId.get(targetId)
   if (!target) return null
 
-  const sources = new Map<string, StepSource>()
+  /**
+   * Настоящие рёбра игры собираются ПЕРВЫМИ и побеждают метку цепочки.
+   * Порядок здесь не косметика: все 17 рёбер RequireTechnology лежат внутри
+   * тех же цепочек, что и их потомки, поэтому при обратном порядке ветка
+   * "game" не срабатывала бы никогда, а шаги настоящих цепочек маршрут
+   * выдавал бы за нашу реконструкцию — и один и тот же узел оказывался бы
+   * помечен в маршруте и не помечен в дереве.
+   */
+  const gameIds = new Set<string>()
 
-  /** Разворачивает цепочку RequireTechnology вверх от узла. */
   const followGameEdges = (fromId: string) => {
     const guard = new Set<string>()
     let current = data.byId.get(fromId)?.reqTech ?? null
@@ -70,7 +77,7 @@ export function buildRoute(
       guard.add(current)
       const tech = data.byId.get(current)
       if (!tech) break
-      if (!sources.has(current)) sources.set(current, "game")
+      gameIds.add(current)
       current = tech.reqTech
     }
   }
@@ -80,14 +87,18 @@ export function buildRoute(
   const chain = data.chainOf.get(anchorId)
   const anchorIndex = data.indexInChain.get(anchorId) ?? -1
 
-  if (chain && chain.kind === "chain" && anchorIndex >= 0) {
-    for (const id of chain.members.slice(0, anchorIndex + 1)) {
-      if (id !== targetId) sources.set(id, "chain")
-    }
-  }
+  const chainIds =
+    chain && chain.kind === "chain" && anchorIndex >= 0
+      ? chain.members.slice(0, anchorIndex + 1).filter((id) => id !== targetId)
+      : []
 
   followGameEdges(targetId)
-  for (const id of [...sources.keys()]) followGameEdges(id)
+  for (const id of chainIds) followGameEdges(id)
+  for (const id of [...gameIds]) followGameEdges(id)
+
+  const sources = new Map<string, StepSource>()
+  for (const id of gameIds) sources.set(id, "game")
+  for (const id of chainIds) if (!sources.has(id)) sources.set(id, "chain")
   sources.set(targetId, "target")
 
   const steps: RouteStep[] = [...sources.entries()]

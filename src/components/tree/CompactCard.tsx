@@ -1,4 +1,4 @@
-import { CheckIcon, LockIcon, SparklesIcon } from "lucide-react"
+import { CheckIcon, LockIcon, RouteIcon, SparklesIcon } from "lucide-react"
 
 import { iconUrl } from "@/lib/data"
 import { t } from "@/lib/i18n"
@@ -75,6 +75,12 @@ export function CompactCard({
             {tech.ancient && <SparklesIcon className="size-3 text-ancient" strokeWidth={3} />}
             {tech.cost}
           </span>
+          {onRoute && (
+            <span className="inline-flex items-center gap-1 text-route">
+              <RouteIcon className="size-3" strokeWidth={3} />
+              {t("onRoute", locale)}
+            </span>
+          )}
           {synthesised && (
             <span className="inline-flex items-center gap-1 text-synth">
               <span aria-hidden className="size-1.5 rounded-full bg-synth" />

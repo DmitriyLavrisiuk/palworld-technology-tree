@@ -264,32 +264,98 @@ describe("достоверность маршрута", () => {
 })
 
 describe("на настоящих данных", () => {
-  it("маршрут до легендарной сферы содержит все предыдущие ступени, суммы сходятся", async () => {
+  // Числа зафиксированы литералами, а не вычислены из результата: иначе тест
+  // не поймает неверный набор шагов — он подстроится под него.
+
+  it("«Абсолютная сфера»: семь ступеней, 23 очка, уровень 51", async () => {
     const data = await loadTechData()
-    const targetId = "Special_PalSphere_Grade_07"
-    const route = buildRoute(targetId, data, new Set())
+    const route = buildRoute("Special_PalSphere_Grade_07", data, new Set())!
 
-    expect(route).not.toBeNull()
-    const ids = route!.steps.map((step) => step.tech.id)
+    expect(route.steps.map((step) => step.tech.id)).toEqual([
+      "Special_PalSphere_Grade_01",
+      "Special_PalSphere_Grade_02",
+      "Special_PalSphere_Grade_03",
+      "Special_PalSphere_Grade_04",
+      "Special_PalSphere_Grade_05",
+      "Special_PalSphere_Grade_06",
+      "Special_PalSphere_Grade_07",
+    ])
+    expect(route.techPoints).toBe(23)
+    expect(route.ancientPoints).toBe(0)
+    expect(route.requiredLevel).toBe(51)
+    expect(route.blockers).toEqual([])
+  })
 
-    // Все семь ступеней семейства, по возрастанию уровня.
-    for (let grade = 1; grade <= 7; grade++) {
-      expect(ids, `ступень ${grade}`).toContain(`Special_PalSphere_Grade_0${grade}`)
+  it("«Лазерная винтовка»: пять шагов, 17 очков, уровень 51", async () => {
+    const data = await loadTechData()
+    const route = buildRoute("Battle_RangeWeapon_LaserRifle", data, new Set())!
+
+    expect(route.steps).toHaveLength(5)
+    expect(route.steps.at(-1)!.tech.id).toBe("Battle_RangeWeapon_LaserRifle")
+    expect(route.techPoints).toBe(17)
+    expect(route.ancientPoints).toBe(0)
+    expect(route.requiredLevel).toBe(51)
+  })
+
+  it("шаги настоящей цепочки игры помечены как данные игры, а не как наша достройка", async () => {
+    // Ловит порядок присвоения источников: все 17 рёбер RequireTechnology
+    // лежат внутри своих же цепочек, и при неверном порядке метка "game"
+    // не срабатывала бы ни разу, а маршрут выдавал бы игру за реконструкцию.
+    const data = await loadTechData()
+    const route = buildRoute("AutoMealPouch_Tier5", data, new Set())!
+    const sources = new Map(route.steps.map((step) => [step.tech.id, step.source]))
+
+    expect(sources.get("AutoMealPouch_Tier1")).toBe("game")
+    expect(sources.get("AutoMealPouch_Tier4")).toBe("game")
+    expect(sources.get("AutoMealPouch_Tier5")).toBe("target")
+    expect(route.synthesisedSteps).toBe(0)
+  })
+
+  it("ни один шаг из цепочки с confidence hard не выдаётся за нашу достройку", async () => {
+    const data = await loadTechData()
+    const wrong: string[] = []
+
+    for (const tech of data.technologies) {
+      const route = buildRoute(tech.id, data, new Set())!
+      for (const step of route.steps) {
+        if (step.source !== "chain") continue
+        if (data.chainOf.get(step.tech.id)?.confidence === "hard") wrong.push(step.tech.id)
+      }
     }
-    const levels = route!.steps.map((step) => step.tech.level)
-    expect([...levels].sort((a, b) => a - b)).toEqual(levels)
+    expect([...new Set(wrong)]).toEqual([])
+  })
 
-    // Ручной подсчёт: суммы по тем же шагам, посчитанные независимо.
-    const expectedTech = route!.steps
-      .filter((step) => !step.tech.ancient)
-      .reduce((sum, step) => sum + step.tech.cost, 0)
-    const expectedAncient = route!.steps
-      .filter((step) => step.tech.ancient)
-      .reduce((sum, step) => sum + step.tech.cost, 0)
+  it("параллельные семейства на настоящих данных не порождают пререквизитов", async () => {
+    const data = await loadTechData()
+    const group = data.chains.chains.find((chain) => chain.kind === "group")!
+    const last = group.members.at(-1)!
 
-    expect(route!.techPoints).toBe(expectedTech)
-    expect(route!.ancientPoints).toBe(expectedAncient)
-    expect(route!.requiredLevel).toBe(Math.max(...levels))
+    expect(buildRoute(last, data, new Set())!.steps.map((step) => step.tech.id)).toEqual([last])
+  })
+
+  it("вариант брони требует свои базовые ступени", async () => {
+    const data = await loadTechData()
+    const [variantId] = [...data.variantOf.keys()]
+    const base = data.variantOf.get(variantId)!
+    const route = buildRoute(variantId, data, new Set())!
+    const ids = route.steps.map((step) => step.tech.id)
+
+    expect(ids.at(-1)).toBe(variantId)
+    expect(ids).toContain(base)
+  })
+
+  it("шаги идут в порядке, в котором их можно изучать", async () => {
+    // Сортировка по уровню совпадает с порядком цепочки только пока данные
+    // это позволяют. Инвариант должен ломаться сразу, а не в интерфейсе.
+    const data = await loadTechData()
+    for (const tech of data.technologies) {
+      const route = buildRoute(tech.id, data, new Set())!
+      const levels = route.steps.map((step) => step.tech.level)
+      expect([...levels].sort((a, b) => a - b), tech.id).toEqual(levels)
+
+      const ids = route.steps.map((step) => step.tech.id)
+      expect(new Set(ids).size, tech.id).toBe(ids.length)
+    }
   })
 
   it("отметка изученного уменьшает стоимость ровно на цену шага", async () => {
@@ -297,10 +363,9 @@ describe("на настоящих данных", () => {
     const targetId = "Special_PalSphere_Grade_07"
     const full = buildRoute(targetId, data, new Set())!
     const first = full.steps[0].tech
-
     const partial = buildRoute(targetId, data, new Set([first.id]))!
-    const field = first.ancient ? "ancientPoints" : "techPoints"
-    expect(full[field] - partial[field]).toBe(first.cost)
+
+    expect(full.techPoints - partial.techPoints).toBe(first.cost)
     expect(partial.steps).toHaveLength(full.steps.length)
   })
 
@@ -313,17 +378,19 @@ describe("на настоящих данных", () => {
     expect(route.blockers[0].boss ?? route.blockers[0].research).toBeTruthy()
   })
 
-  it("маршрут ни до одной технологии не разрастается неправдоподобно", async () => {
+  it("исследование лаборатории тоже попадает в блокеры", async () => {
     const data = await loadTechData()
-    let worst = { id: "", steps: 0 }
-    for (const tech of data.technologies) {
-      const route = buildRoute(tech.id, data, new Set())!
-      if (route.steps.length > worst.steps) worst = { id: tech.id, steps: route.steps.length }
-      // Шаги уникальны: узел не может попасть в маршрут дважды.
-      const ids = route.steps.map((step) => step.tech.id)
-      expect(new Set(ids).size, tech.id).toBe(ids.length)
-    }
-    // Самая длинная цепочка в данных — 8 членов; с транзитивными рёбрами запас.
-    expect(worst.steps, `самый длинный маршрут: ${worst.id}`).toBeLessThanOrEqual(12)
+    const gated = data.technologies.find((tech) => tech.reqResearch)!
+    const route = buildRoute(gated.id, data, new Set())!
+
+    expect(route.blockers.some((blocker) => blocker.research !== null)).toBe(true)
+  })
+
+  it("повторное построение не портит рецепты", async () => {
+    const data = await loadTechData()
+    const first = buildRoute("Special_PalSphere_Grade_07", data, new Set())!
+    const second = buildRoute("Special_PalSphere_Grade_07", data, new Set())!
+
+    expect(second.materials).toEqual(first.materials)
   })
 })
