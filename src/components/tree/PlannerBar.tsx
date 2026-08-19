@@ -174,7 +174,7 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
                       alt=""
                       width={24}
                       height={24}
-                      loading="lazy"
+                      fetchPriority="high"
                       className="size-6 shrink-0 object-contain"
                     />
                     <span className="min-w-0 flex-1 truncate text-xs">

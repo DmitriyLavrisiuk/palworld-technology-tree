@@ -26,7 +26,9 @@ export function StationList({ stations, locale, className }: StationListProps) {
             alt=""
             width={20}
             height={20}
-            loading="lazy"
+            // Не lazy: панель только что открыли, иконок здесь десяток, и в
+            // общей очереди с 588 плитками дерева они ждали много секунд.
+            fetchPriority="high"
             decoding="async"
             className="size-5 shrink-0 object-contain"
             // Иконки может не оказаться после патча игры: пустое место

@@ -22,7 +22,9 @@ export function MaterialList({ materials, locale, className }: MaterialListProps
             alt=""
             width={28}
             height={28}
-            loading="lazy"
+            // Не lazy: панель только что открыли, иконок здесь десяток, и в
+            // общей очереди с 588 плитками дерева они ждали много секунд.
+            fetchPriority="high"
             decoding="async"
             className="size-7 shrink-0 object-contain"
             // Иконки может не оказаться после патча игры: пустое место
