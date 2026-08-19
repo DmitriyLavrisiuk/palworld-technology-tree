@@ -1,0 +1,674 @@
+{
+  "_comment": "Hand-written families. These win over every heuristic and survive re-running the scraper. The generated src/data/chains.json is disposable — correct mistakes here. Verified against game version 1.0.3.",
+  "chains": [
+    {
+      "id": "armor",
+      "group": "armor",
+      "name": {
+        "ru": "Броня",
+        "en": "Armor"
+      },
+      "_note": "Three naming schemes across the tiers, so no heuristic assembles this. Heat/cold/lightweight are variants of a tier, not steps in the chain.",
+      "members": [
+        "Battle_Armor_Grade_01_Cloth",
+        "Battle_Armor_Grade_02_Fur",
+        "Battle_Armor_Grade_03_Copper",
+        "Battle_Armor_Grade_03_Iron",
+        "Battle_Armor_Grade_04_Steal",
+        "Battle_Armor_Grade_05_Plastic",
+        "SFArmor",
+        "AncientArmor"
+      ],
+      "variants": {
+        "Battle_Armor_Grade_01_Cloth": [
+          "Battle_Armor_Grade_01_Cloth_Heat",
+          "Battle_Armor_Grade_01_Cloth_Cold"
+        ],
+        "Battle_Armor_Grade_02_Fur": [
+          "Battle_Armor_Grade_02_Fur_Heat",
+          "Battle_Armor_Grade_02_Fur_Cold"
+        ],
+        "Battle_Armor_Grade_03_Copper": [
+          "Battle_Armor_Grade_03_Copper_Heat",
+          "Battle_Armor_Grade_03_Copper_Cold"
+        ],
+        "Battle_Armor_Grade_03_Iron": [
+          "Battle_Armor_Grade_03_Iron_Heat",
+          "Battle_Armor_Grade_03_Iron_Cold"
+        ],
+        "Battle_Armor_Grade_04_Steal": [
+          "Battle_Armor_Grade_04_Steal_Heat",
+          "Battle_Armor_Grade_04_Steal_Cold"
+        ],
+        "Battle_Armor_Grade_05_Plastic": [
+          "Battle_Armor_Grade_05_Plastic_Heat",
+          "Battle_Armor_Grade_05_Plastic_Cold",
+          "Battle_Armor_Grade_05_Plastic_Weight"
+        ],
+        "SFArmor": [
+          "SFArmorHeat",
+          "SFArmorCold",
+          "SFArmorWeight"
+        ],
+        "AncientArmor": [
+          "AncientArmorHeat",
+          "AncientArmorCold",
+          "AncientArmorWeight"
+        ]
+      }
+    },
+    {
+      "id": "helmets",
+      "group": "armor",
+      "name": {
+        "ru": "Шлемы",
+        "en": "Helmets"
+      },
+      "members": [
+        "Battle_Helm_Grade_02_Fur",
+        "Battle_Helm_Grade_03_Copper",
+        "Battle_Helm_Grade_04_Iron",
+        "Battle_Helm_Grade_05_Steal",
+        "Battle_Helm_Grade_06_Plastic",
+        "SFHelmet",
+        "AncientHelmet"
+      ]
+    },
+    {
+      "id": "spheres",
+      "group": "gear",
+      "name": {
+        "ru": "Сферы",
+        "en": "Pal Spheres"
+      },
+      "_note": "The heuristic splits the Grade_NN run from the three late spheres, which use their own ids.",
+      "members": [
+        "Special_PalSphere_Grade_01",
+        "Special_PalSphere_Grade_02",
+        "Special_PalSphere_Grade_03",
+        "Special_PalSphere_Grade_04",
+        "Special_PalSphere_Grade_05",
+        "Special_PalSphere_Grade_06",
+        "Special_PalSphere_Grade_07",
+        "PalSphere_Exotic",
+        "PalSphere_Ancient_1",
+        "PalSphere_Ancient_2"
+      ]
+    },
+    {
+      "id": "bows",
+      "group": "weapon",
+      "name": {
+        "ru": "Луки",
+        "en": "Bows"
+      },
+      "members": [
+        "Battle_RangeWeapon_Bow1",
+        "Battle_RangeWeapon_Bow3",
+        "Battle_RangeWeapon_CompoundBow",
+        "SFBow",
+        "SkyBow"
+      ]
+    },
+    {
+      "id": "rifles",
+      "group": "weapon",
+      "name": {
+        "ru": "Винтовки",
+        "en": "Rifles"
+      },
+      "_note": "Nine tiers, six different id schemes.",
+      "members": [
+        "MakeshiftAssaultRifle",
+        "Battle_RangeWeapon_Rifle",
+        "Battle_RangeWeapon_SemiAutoRifle",
+        "Battle_RangeWeapon_AssaultRifle",
+        "Battle_RangeWeapon_LaserRifle",
+        "OverheatRifle",
+        "ChargeLaserRifle",
+        "SkyAssaultRifle",
+        "ElectricArcAssaultRifle"
+      ]
+    },
+    {
+      "id": "sphere-launchers",
+      "group": "weapon",
+      "name": {
+        "ru": "Сферомёты",
+        "en": "Sphere Launchers"
+      },
+      "members": [
+        "Battle_RangeWeapon_SphereLauncher_Once",
+        "Battle_RangeWeapon_SphereLauncher",
+        "Battle_RangeWeapon_HomingSphereLauncher"
+      ]
+    },
+    {
+      "id": "spears",
+      "group": "weapon",
+      "name": {
+        "ru": "Копья",
+        "en": "Spears"
+      },
+      "_note": "Excludes Lily's Spear, which the name heuristic pulls in but is not part of the tier run.",
+      "members": [
+        "Spear",
+        "Spear_2",
+        "Spear_3"
+      ]
+    },
+    {
+      "id": "axes",
+      "group": "tools",
+      "name": {
+        "ru": "Топоры",
+        "en": "Axes"
+      },
+      "members": [
+        "Product_Axe_Grade_01",
+        "Product_Axe_Grade_02",
+        "Product_Axe_Grade_03",
+        "Battle_MeleeWeapon_Axe_Steal"
+      ]
+    },
+    {
+      "id": "pickaxes",
+      "group": "tools",
+      "name": {
+        "ru": "Кирки",
+        "en": "Pickaxes"
+      },
+      "members": [
+        "Product_Pickaxe_Grade_01",
+        "Product_Pickaxe_Grade_02",
+        "Product_Pickaxe_Grade_03",
+        "Battle_MeleeWeapon_Pickaxe_Steal"
+      ]
+    },
+    {
+      "id": "gliders",
+      "group": "tools",
+      "name": {
+        "ru": "Планеры",
+        "en": "Gliders"
+      },
+      "members": [
+        "Battle_Glider_Grade_01",
+        "Battle_Glider_Grade_02",
+        "Battle_Glider_Grade_03",
+        "Battle_Glider_Grade_04",
+        "WingGlider"
+      ]
+    },
+    {
+      "id": "fishing-rods",
+      "group": "tools",
+      "name": {
+        "ru": "Удочки",
+        "en": "Fishing Rods"
+      },
+      "members": [
+        "FishingSet1",
+        "FishingRod_02_1",
+        "FishingRod_03_1"
+      ]
+    },
+    {
+      "id": "workbenches",
+      "group": "base",
+      "name": {
+        "ru": "Верстаки",
+        "en": "Workbenches"
+      },
+      "members": [
+        "Workbench",
+        "Product_Factory_Hard_Grade_01",
+        "Product_Factory_Hard_Grade_02",
+        "Product_Factory_Hard_Grade_03",
+        "Factory_Hard_04"
+      ]
+    },
+    {
+      "id": "sphere-production",
+      "group": "base",
+      "name": {
+        "ru": "Производство сфер",
+        "en": "Sphere Production"
+      },
+      "members": [
+        "Special_SphereFactory_Black_Grade_01",
+        "Special_SphereFactory_Black_Grade_02",
+        "Special_SphereFactory_Black_Grade_03",
+        "SphereFactory_Black_04"
+      ]
+    },
+    {
+      "id": "weapon-production",
+      "group": "base",
+      "name": {
+        "ru": "Производство оружия",
+        "en": "Weapon Production"
+      },
+      "members": [
+        "Product_WeaponFactory_Dirty_Grade_01",
+        "Product_WeaponFactory_Dirty_Grade_02",
+        "Product_WeaponFactory_Dirty_Grade_03",
+        "WeaponFactory_Dirty_04"
+      ]
+    },
+    {
+      "id": "medicine-benches",
+      "group": "base",
+      "name": {
+        "ru": "Медицинские верстаки",
+        "en": "Medicine Workbenches"
+      },
+      "members": [
+        "Product_Medicine_Grade_01",
+        "Product_Medicine_Grade_02",
+        "MedicineFacility_03"
+      ]
+    },
+    {
+      "id": "kitchen",
+      "group": "base",
+      "name": {
+        "ru": "Кухня",
+        "en": "Cooking"
+      },
+      "members": [
+        "Product_Cooking_Grade_01",
+        "Product_Cooking_Grade_02",
+        "Product_Cooking_Grade_03",
+        "HugeKitchen",
+        "AncientCookingStove"
+      ]
+    },
+    {
+      "id": "chests",
+      "group": "base",
+      "name": {
+        "ru": "Сундуки",
+        "en": "Chests"
+      },
+      "members": [
+        "Infra_ItemChest_Grade_01",
+        "Infra_ItemChest_Grade_02",
+        "Infra_ItemChest_Grade_03",
+        "ItemChest_04"
+      ]
+    },
+    {
+      "id": "pal-beds",
+      "group": "base",
+      "name": {
+        "ru": "Кровати палов",
+        "en": "Pal Beds"
+      },
+      "members": [
+        "Infra_PalBed_Grade_01",
+        "Infra_PalBed_Grade_02",
+        "MedicalPalBed_04",
+        "MedicalPalBed_05",
+        "Ancient_MedicalPalBed"
+      ]
+    },
+    {
+      "id": "hot-springs",
+      "group": "base",
+      "name": {
+        "ru": "Горячие источники",
+        "en": "Hot Springs"
+      },
+      "members": [
+        "Spa",
+        "Spa2",
+        "Spa3",
+        "Ancient_Spa"
+      ]
+    },
+    {
+      "id": "monitoring-stands",
+      "group": "base",
+      "name": {
+        "ru": "Наблюдательные вышки",
+        "en": "Monitoring Stands"
+      },
+      "members": [
+        "BaseCampWorkHard",
+        "BaseCampWorkHard02",
+        "BaseCampWorkHard03"
+      ]
+    },
+    {
+      "id": "logging-sites",
+      "group": "base",
+      "name": {
+        "ru": "Лесопилки",
+        "en": "Logging Sites"
+      },
+      "members": [
+        "Product_StationDeforest",
+        "Product_StationDeforest2"
+      ]
+    },
+    {
+      "id": "jump-boots",
+      "group": "gear",
+      "name": {
+        "ru": "Ботинки прыжка",
+        "en": "Jump Boots"
+      },
+      "_note": "The Russian common tail collapses to the genitive 'прыжка'.",
+      "members": [
+        "Accessory_JumpCount_Increase1",
+        "Accessory_JumpCount_Increase2"
+      ]
+    },
+    {
+      "id": "cartridges",
+      "group": "gear",
+      "name": {
+        "ru": "Энергокассеты",
+        "en": "Energy Cartridges"
+      },
+      "members": [
+        "LaserBullet",
+        "LaserGatlingBullet",
+        "EnergyLauncherBullet"
+      ]
+    },
+    {
+      "id": "structure-sets",
+      "group": "base",
+      "name": {
+        "ru": "Наборы для строительства",
+        "en": "Structure Sets"
+      },
+      "_note": "Russian names put the material after a colon, so no shared tail exists.",
+      "members": [
+        "Wooden_houseset",
+        "Stone_houseset",
+        "Metal_houseset",
+        "Glass_houseset",
+        "JapaneseStyle_houseset",
+        "SF_houseset"
+      ]
+    },
+    {
+      "id": "air-dash-boots",
+      "group": "gear",
+      "name": {
+        "ru": "Ботинки рывка",
+        "en": "Air Dash Boots"
+      },
+      "_note": "Russian noun fallback yields the locative 'Воздухе'.",
+      "members": [
+        "Accessory_AirDash1",
+        "Accessory_AirDash2",
+        "Accessory_AirDash3"
+      ]
+    },
+    {
+      "id": "grappling-guns",
+      "group": "tools",
+      "name": {
+        "ru": "Крюк-кошка",
+        "en": "Grappling Guns"
+      },
+      "_note": "Russian tail resolves to the instrumental case 'Крюком'.",
+      "members": [
+        "GrapplingGun",
+        "GrapplingGun2",
+        "GrapplingGun3",
+        "GrapplingGun4",
+        "GrapplingGun5"
+      ]
+    },
+    {
+      "id": "shields",
+      "group": "gear",
+      "name": {
+        "ru": "Щиты",
+        "en": "Shields"
+      },
+      "_note": "The heuristic misses Advanced Shield, whose id breaks the Shield_NN run.",
+      "members": [
+        "Shield_01",
+        "Shield_02",
+        "Shield_03",
+        "Shield_04",
+        "Shield_05",
+        "Shield_SF",
+        "Shield_07"
+      ]
+    },
+    {
+      "id": "fishing-bait",
+      "group": "gear",
+      "name": {
+        "ru": "Приманки",
+        "en": "Fishing Bait"
+      },
+      "members": [
+        "FishingBait_2",
+        "FishingBait_3",
+        "FishingBait_3_A"
+      ]
+    },
+    {
+      "id": "incubators",
+      "group": "base",
+      "name": {
+        "ru": "Инкубаторы",
+        "en": "Incubators"
+      },
+      "_note": "The game's own edge covers only the first two; the later tiers use unrelated ids.",
+      "members": [
+        "Special_HatchingPalEgg",
+        "Special_ElectricHatchingPalEgg",
+        "MultiHatchingPalEgg",
+        "MultiElectricHatchingPalEgg",
+        "MultiElectricHatchingPalEggWithBreed"
+      ]
+    },
+    {
+      "id": "mines",
+      "group": "weapon",
+      "name": {
+        "ru": "Мины",
+        "en": "Mines"
+      },
+      "_note": "Split from the ore sites: English 'Mine' means both a weapon and a quarry.",
+      "members": [
+        "Trap_MineAttack",
+        "Trap_MineElecShock",
+        "Trap_MineFreeze"
+      ]
+    },
+    {
+      "id": "ore-sites",
+      "group": "base",
+      "name": {
+        "ru": "Рудники",
+        "en": "Ore Sites"
+      },
+      "members": [
+        "Product_CoalPit",
+        "Product_QuartzPit",
+        "Product_SulfurPit",
+        "CrystalPit",
+        "SkyIslandOrePit"
+      ]
+    },
+    {
+      "id": "generators",
+      "group": "base",
+      "name": {
+        "ru": "Генераторы",
+        "en": "Power Generators"
+      },
+      "_note": "Wave emitters share the English noun but are not power generation.",
+      "members": [
+        "ManualElectricGenerator",
+        "Infra_ElectricGenerator_Grade_01",
+        "ElectricGenerator_Large",
+        "AncientElectricGenerator"
+      ]
+    },
+    {
+      "id": "grenade-launchers",
+      "group": "weapon",
+      "name": {
+        "ru": "Гранатомёты",
+        "en": "Grenade Launchers"
+      },
+      "members": [
+        "Battle_RangeWeapon_GrenadeLauncher",
+        "SkyGrenadeLauncher"
+      ]
+    },
+    {
+      "id": "rocket-launchers",
+      "group": "weapon",
+      "name": {
+        "ru": "Ракетные установки",
+        "en": "Rocket Launchers"
+      },
+      "members": [
+        "Battle_RangeWeapon_GuidedMissileLauncher",
+        "Battle_RangeWeapon_RocketLauncher"
+      ]
+    },
+    {
+      "id": "palboxes",
+      "group": "base",
+      "name": {
+        "ru": "Палбоксы",
+        "en": "Palboxes"
+      },
+      "members": [
+        "PALBOX",
+        "GlobalPalStorage"
+      ]
+    },
+    {
+      "id": "crops",
+      "group": "base",
+      "kind": "group",
+      "name": {
+        "ru": "Плантации",
+        "en": "Plantations"
+      },
+      "_note": "Parallel alternatives, not an upgrade path.",
+      "members": [
+        "Product_Farm_Berries",
+        "Product_Farm_wheat",
+        "Product_Farm_tomato",
+        "Product_Farm_Lettuce",
+        "Product_Farm_Potato",
+        "Product_Farm_Carrot",
+        "Product_Farm_Onion"
+      ]
+    },
+    {
+      "id": "sphere-modules",
+      "group": "gear",
+      "kind": "group",
+      "name": {
+        "ru": "Модули сфер",
+        "en": "Sphere Modules"
+      },
+      "_note": "Parallel alternatives, not an upgrade path.",
+      "members": [
+        "SphereModule_Heavy",
+        "SphereModule_Curve",
+        "SphereModule_Sniper",
+        "SphereModule_Curve2",
+        "SphereModule_Homing",
+        "SphereModule_Sniper2"
+      ]
+    },
+    {
+      "id": "lamps",
+      "group": "base",
+      "kind": "group",
+      "name": {
+        "ru": "Лампы",
+        "en": "Lamps"
+      },
+      "_note": "Parallel alternatives, not an upgrade path.",
+      "members": [
+        "Lamp",
+        "CeilingLamp",
+        "LargeLamp",
+        "LargeCeilingLamp"
+      ]
+    },
+    {
+      "id": "late-ingots",
+      "group": "gear",
+      "kind": "group",
+      "name": {
+        "ru": "Поздние слитки",
+        "en": "Late Ingots"
+      },
+      "_note": "Parallel alternatives, not an upgrade path.",
+      "members": [
+        "ManganeseIngot",
+        "SkyislandIngot",
+        "WorldTreeIngot"
+      ]
+    },
+    {
+      "id": "torches",
+      "group": "base",
+      "kind": "group",
+      "name": {
+        "ru": "Факелы",
+        "en": "Torches"
+      },
+      "_note": "Parallel alternatives, not an upgrade path.",
+      "members": [
+        "HandTorch",
+        "Torch",
+        "WallTorch"
+      ]
+    },
+    {
+      "id": "signs",
+      "group": "base",
+      "kind": "group",
+      "name": {
+        "ru": "Вывески",
+        "en": "Signs"
+      },
+      "_note": "Parallel alternatives, not an upgrade path.",
+      "members": [
+        "Signboard",
+        "WallSignboard"
+      ]
+    }
+  ],
+  "exclude": [
+    "OlympicCauldron",
+    "Cauldron",
+    "Thermal_Core",
+    "AIcore",
+    "IceHorseStatue",
+    "JetDragonStatue",
+    "OperatingTable",
+    "CompositeDesk",
+    "BreedFarm",
+    "AncientFarmBlock",
+    "Battle_Defense_BowGun",
+    "Battle_RangeWeapon_BowGun",
+    "SanityDecrease1",
+    "WorkSpeedIncrease1",
+    "Launcher_Meteor",
+    "Battle_Defense_Missile",
+    "DroneLauncher",
+    "BeamLauncher",
+    "Infra_ElectronicCircuit"
+  ]
+}
