@@ -15,7 +15,7 @@
 - **Конвейер данных**: `npm run scrape` собирает 588 технологий, 527 рецептов, 66 цепочек, 588 иконок. Контрольные суммы сходятся, пересборка воспроизводима.
 - **Каркас**: Vite 8 + React 19 + TS + Tailwind v4, токены shadcn (`base-nova`), Geist, `components.json` — компоненты добавляются через `npx shadcn@latest add`.
 - **Данные едут отдельными чанками**: technologies 74 КБ gzip, recipes 16 КБ, chains 6 КБ; основной бандл — 61 КБ gzip и данных не содержит.
-- `npm test` (37 тестов, без сети), `npm run typecheck`, `npm run lint`, `npm run build` — чисто.
+- `npm test` (45 тестов, без сети), `npm run typecheck`, `npm run lint`, `npm run build` — чисто.
 
 ## В процессе
 

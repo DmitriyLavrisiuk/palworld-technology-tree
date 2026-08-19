@@ -102,6 +102,43 @@ describe("технологии: инварианты", () => {
   })
 })
 
+describe("ручные правки цепочек", () => {
+  interface Overrides {
+    chains: { id: string; members: string[]; variants?: Record<string, string[]> }[]
+    exclude?: string[]
+  }
+  const overrides = read<Overrides>("scripts/chain-overrides.json")
+
+  it("каждый упомянутый идентификатор существует", () => {
+    const mentioned = [
+      ...overrides.chains.flatMap((chain) => chain.members),
+      ...overrides.chains.flatMap((chain) => Object.keys(chain.variants ?? {})),
+      ...overrides.chains.flatMap((chain) => Object.values(chain.variants ?? {}).flat()),
+      ...(overrides.exclude ?? []),
+    ]
+    expect(mentioned.filter((id) => !ids.has(id))).toEqual([])
+  })
+
+  it("ни одна ручная семья не потерялась по дороге", () => {
+    // Опечатка в id оставляет семье меньше двух членов, и build-chains
+    // молча её пропускает: `continue` без предупреждения. Единственная
+    // разрешённая поверхность правок обязана быть под присмотром.
+    const produced = new Set(
+      chains.chains.filter((chain) => chain.confidence === "manual").map((chain) => chain.id),
+    )
+    const lost = overrides.chains.map((chain) => chain.id).filter((id) => !produced.has(id))
+    expect(lost).toEqual([])
+  })
+
+  it("исключённые технологии остались в дереве, но вне цепочек", () => {
+    const inChains = new Set(chains.chains.flatMap((chain) => chain.members))
+    for (const id of overrides.exclude ?? []) {
+      expect(ids.has(id), id).toBe(true)
+      expect(inChains.has(id), id).toBe(false)
+    }
+  })
+})
+
 describe("заглушки локали", () => {
   const PLACEHOLDER = /^[a-z]{2}_Text$/i
 
@@ -207,10 +244,14 @@ describe("цепочки", () => {
     }
   })
 
-  it("настоящих связей игры не больше, чем их есть в данных", () => {
-    // Защита от того, что эвристика начнёт выдавать себя за данные игры.
+  it("узлов с меткой hard ровно столько, сколько дают связи игры", () => {
+    // Точное число, а не потолок: эвристика, притворившаяся данными игры,
+    // должна ронять тест сразу, а не после двукратного роста.
     const hard = chains.chains.filter((chain) => chain.confidence === "hard")
-    const members = hard.reduce((sum, chain) => sum + chain.members.length, 0)
-    expect(members).toBeLessThanOrEqual(17 * 2)
+    const nodes = hard.reduce(
+      (sum, chain) => sum + chain.members.length + Object.values(chain.variants ?? {}).flat().length,
+      0,
+    )
+    expect(nodes).toBe(16)
   })
 })

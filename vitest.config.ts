@@ -6,6 +6,11 @@ import { defineConfig } from "vitest/config"
  * в vite.config.ts: сборке сайта тестовый рантайм не нужен.
  */
 export default defineConfig({
+  /**
+   * Намеренно не "/": путь, захардкоженный от корня, обязан валить тест
+   * iconUrl. С base "/" такая проверка была бы тавтологией.
+   */
+  base: "/test-base/",
   resolve: {
     alias: { "@": path.resolve(import.meta.dirname, "./src") },
   },
