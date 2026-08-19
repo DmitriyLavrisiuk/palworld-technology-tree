@@ -81,7 +81,12 @@ export function Toolbar({
             min={1}
             max={MAX_LEVEL}
             value={level}
-            onChange={(event) => onLevel(Number(event.target.value))}
+            onChange={(event) => {
+              // Пустое поле не должно схлопывать уровень в 1: пока не введено
+              // число, оставляем прежнее значение, иначе набрать новое нельзя.
+              const next = Number(event.target.value)
+              if (event.target.value !== "" && Number.isFinite(next)) onLevel(next)
+            }}
             aria-label={t("myLevel", locale)}
             className="h-11 w-16 rounded-md border bg-transparent px-2 text-center text-sm tabular-nums focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
           />
@@ -101,10 +106,10 @@ export function Toolbar({
         <Button
           variant="outline"
           className="h-11 w-14 shrink-0 font-mono text-xs"
-          aria-label={locale === "ru" ? "English" : "Русский"}
+          aria-label={t("switchLanguage", locale)}
           onClick={() => onLocale(locale === "ru" ? "en" : "ru")}
         >
-          {locale === "ru" ? "RU" : "EN"}
+          {t("localeCode", locale)}
         </Button>
       </div>
 

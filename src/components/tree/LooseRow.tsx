@@ -55,7 +55,7 @@ export function LooseRow({
                   locale={locale}
                   status={statusOf(tech)}
                   selected={selectedId === tech.id}
-                  synthesised={false}
+                  confidence={null}
                   size={size}
                   onSelect={onSelect}
                 />

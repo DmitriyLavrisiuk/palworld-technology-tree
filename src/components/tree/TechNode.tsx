@@ -2,17 +2,20 @@ import { CheckIcon, LockIcon, SparklesIcon } from "lucide-react"
 
 import { iconUrl } from "@/lib/data"
 import { t } from "@/lib/i18n"
-import type { NodeStatus } from "@/lib/tree"
+import { isGuessed, isSynthesised, type NodeStatus } from "@/lib/tree"
 import { cn } from "@/lib/utils"
-import type { Locale, Technology } from "@/types/tech"
+import type { ChainConfidence, Locale, Technology } from "@/types/tech"
 
 interface TechNodeProps {
   tech: Technology
   locale: Locale
   status: NodeStatus
   selected: boolean
-  /** Узел стоит в цепочке, которую достроили мы, а не игра. */
-  synthesised: boolean
+  /**
+   * Достоверность цепочки узла; `null` — узел вне цепочек. Именно тип, а не
+   * булев флаг: забыть пометку, передав `false`, больше не получится незаметно.
+   */
+  confidence: ChainConfidence | null
   /** Сторона плитки в пикселях. Не меньше 44 — это цель касания. */
   size?: number
   showLabel?: boolean
@@ -29,13 +32,15 @@ export function TechNode({
   locale,
   status,
   selected,
-  synthesised,
+  confidence,
   size = 48,
   showLabel = false,
   onSelect,
 }: TechNodeProps) {
   const researched = status === "researched"
   const locked = status === "locked"
+  const synthesised = confidence !== null && isSynthesised(confidence)
+  const guessed = confidence !== null && isGuessed(confidence)
 
   return (
     <button
@@ -94,9 +99,13 @@ export function TechNode({
 
         {synthesised && (
           <span
-            aria-hidden
-            title={t("chainSynthesised", locale)}
-            className="absolute -top-1 -left-1 size-2.5 rounded-full border-2 border-background bg-synth"
+            role="img"
+            aria-label={t(guessed ? "confidenceNote" : "chainSynthesised", locale)}
+            title={t(guessed ? "confidenceNote" : "chainSynthesised", locale)}
+            className={cn(
+              "absolute -top-1 -left-1 size-2.5 rounded-full border-2 border-background bg-synth",
+              guessed && "ring-2 ring-synth/50",
+            )}
           />
         )}
       </span>

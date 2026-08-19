@@ -1,4 +1,4 @@
-import { CheckIcon, SparklesIcon, TriangleAlertIcon } from "lucide-react"
+import { CheckIcon, SparklesIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -40,8 +40,18 @@ export function DetailSheet({
 
   return (
     <Sheet open onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="right" className="gap-0 overflow-y-auto">
-        <SheetHeader>
+      <SheetContent side="right" className="gap-0 overflow-y-auto" showCloseButton={false}>
+        {/* Своя кнопка вместо штатной: та 28 px и подписана по-английски. */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2 size-11"
+          aria-label={t("close", locale)}
+          onClick={onClose}
+        >
+          <XIcon />
+        </Button>
+        <SheetHeader className="pr-12">
           <div className="flex items-start gap-3">
             <img
               src={iconUrl(tech.id)}
@@ -75,6 +85,7 @@ export function DetailSheet({
 
           <Button
             variant={isDone ? "outline" : "default"}
+            className="h-11"
             onClick={() => onToggleResearched(tech.id)}
           >
             {isDone ? null : <CheckIcon />}

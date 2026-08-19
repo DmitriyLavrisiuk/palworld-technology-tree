@@ -115,6 +115,7 @@ export function useProgress() {
   }, [])
 
   const setLevel = useCallback((level: number) => {
+    if (!Number.isFinite(level)) return
     setState((previous) => ({
       ...previous,
       level: Math.min(MAX_LEVEL, Math.max(1, Math.round(level))),

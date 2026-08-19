@@ -16,16 +16,12 @@ export const UI = {
   filterAvailable: { ru: "Только доступные", en: "Available only" },
   filterAncient: { ru: "Только древние", en: "Ancient only" },
   filterHideDone: { ru: "Скрыть изученные", en: "Hide researched" },
-  filters: { ru: "Фильтры", en: "Filters" },
 
   themeLight: { ru: "Светлая тема", en: "Light theme" },
   themeDark: { ru: "Тёмная тема", en: "Dark theme" },
   themeSystem: { ru: "Как в системе", en: "System theme" },
 
-  level: { ru: "Уровень", en: "Level" },
   levelShort: { ru: "ур.", en: "lv." },
-  cost: { ru: "Стоимость", en: "Cost" },
-  ancient: { ru: "древняя", en: "ancient" },
   researched: { ru: "Изучено", en: "Researched" },
   available: { ru: "Доступно", en: "Available" },
   locked: { ru: "Нужен уровень", en: "Level required" },
@@ -33,27 +29,28 @@ export const UI = {
   markResearched: { ru: "Отметить изученным", en: "Mark researched" },
   unmark: { ru: "Снять отметку", en: "Unmark" },
   close: { ru: "Закрыть", en: "Close" },
+  switchLanguage: { ru: "Переключить на английский", en: "Switch to Russian" },
+  localeCode: { ru: "RU", en: "EN" },
 
   recipe: { ru: "Рецепт", en: "Recipe" },
   stations: { ru: "Где делается", en: "Crafted at" },
-  materials: { ru: "Материалы", en: "Materials" },
   noRecipe: { ru: "Рецепта нет — постройка или набор", en: "No recipe — a structure or a set" },
-  unlocks: { ru: "Открывает", en: "Unlocks" },
 
   requiresBoss: { ru: "Нужна победа над боссом башни", en: "Requires a tower boss" },
   requiresResearch: { ru: "Нужно исследование лаборатории", en: "Requires lab research" },
   requiresTech: { ru: "Нужна технология", en: "Requires technology" },
 
   chainSynthesised: { ru: "Связь достроена нами", en: "Link reconstructed by us" },
-  chainFromGame: { ru: "Связь из данных игры", en: "Link from game data" },
   synthShort: { ru: "достроено", en: "reconstructed" },
+  guessedShort: { ru: "догадка", en: "guess" },
+  stepsHidden: { ru: "ступени скрыты фильтром", en: "steps hidden by filter" },
   confidenceNote: {
     ru: "В игре у этой технологии нет пререквизитов: цепочка собрана нами и может быть неточной.",
     en: "The game gives this technology no prerequisites: the chain is our reconstruction and may be wrong.",
   },
 
   parallel: { ru: "Параллельные варианты, не ступени", en: "Parallel options, not tiers" },
-  variantsOf: { ru: "Варианты", en: "Variants" },
+  variantsOf: { ru: "варианты того же тира", en: "same-tier variants" },
   ungrouped: { ru: "Вне цепочек", en: "Ungrouped" },
 
   nothingFound: { ru: "Ничего не найдено", en: "Nothing found" },

@@ -2,16 +2,16 @@ import { CheckIcon, LockIcon, SparklesIcon } from "lucide-react"
 
 import { iconUrl } from "@/lib/data"
 import { t } from "@/lib/i18n"
-import type { NodeStatus } from "@/lib/tree"
+import { isSynthesised, type NodeStatus } from "@/lib/tree"
 import { cn } from "@/lib/utils"
-import type { Locale, Technology } from "@/types/tech"
+import type { ChainConfidence, Locale, Technology } from "@/types/tech"
 
 interface CompactCardProps {
   tech: Technology
   locale: Locale
   status: NodeStatus
   selected: boolean
-  synthesised: boolean
+  confidence: ChainConfidence | null
   onSelect: (id: string) => void
 }
 
@@ -24,11 +24,12 @@ export function CompactCard({
   locale,
   status,
   selected,
-  synthesised,
+  confidence,
   onSelect,
 }: CompactCardProps) {
   const researched = status === "researched"
   const locked = status === "locked"
+  const synthesised = confidence !== null && isSynthesised(confidence)
 
   return (
     <button
@@ -71,6 +72,12 @@ export function CompactCard({
             {tech.ancient && <SparklesIcon className="size-3 text-ancient" strokeWidth={3} />}
             {tech.cost}
           </span>
+          {synthesised && (
+            <span className="inline-flex items-center gap-1 text-synth">
+              <span aria-hidden className="size-1.5 rounded-full bg-synth" />
+              {t("synthShort", locale)}
+            </span>
+          )}
         </span>
       </span>
 

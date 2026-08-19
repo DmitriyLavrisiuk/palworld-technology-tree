@@ -8,6 +8,8 @@ import type { Chain, Locale, Technology } from "@/types/tech"
 interface ChainRowProps {
   chain: Chain
   members: Technology[]
+  /** Варианты того же тира: стоят под своей ступенью, а не рядом с ней. */
+  variants: Map<string, Technology[]>
   locale: Locale
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
@@ -25,6 +27,7 @@ interface ChainRowProps {
 export function ChainRow({
   chain,
   members,
+  variants,
   locale,
   statusOf,
   selectedId,
@@ -34,6 +37,8 @@ export function ChainRow({
   onSelect,
 }: ChainRowProps) {
   const size = Math.min(GRID.node / 2.5, step * 0.9)
+  const allVariants = [...variants.values()].flat()
+  const height = allVariants.length ? 112 : 64
 
   return (
     <div className="flex border-b last:border-b-0">
@@ -52,31 +57,46 @@ export function ChainRow({
         )}
       </div>
 
-      <div className="relative h-16" style={{ width: MAX_LEVEL * step }}>
+      <div className="relative" style={{ width: MAX_LEVEL * step, height }}>
+        <div aria-hidden className={cn("absolute h-px bg-rail")} style={{ left: 0, right: 0, top: 32 }} />
         <div
           aria-hidden
-          className={cn("absolute top-1/2 h-px bg-rail")}
-          style={{ left: 0, right: 0 }}
-        />
-        <div
-          aria-hidden
-          className="absolute top-0 bottom-0 w-px bg-synth/40"
+          className="absolute inset-y-0 w-px bg-synth/40"
           style={{ left: (playerLevel - 0.5) * step }}
         />
 
         {members.map((tech) => (
           <div
             key={tech.id}
-            className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{ left: (tech.level - 0.5) * step }}
+            className="absolute -translate-x-1/2 -translate-y-1/2"
+            style={{ left: (tech.level - 0.5) * step, top: 32 }}
           >
             <TechNode
               tech={tech}
               locale={locale}
               status={statusOf(tech)}
               selected={selectedId === tech.id}
-              synthesised={isSynthesised(chain.confidence)}
+              confidence={chain.confidence}
               size={size}
+              onSelect={onSelect}
+            />
+          </div>
+        ))}
+
+        {allVariants.map((tech) => (
+          <div
+            key={tech.id}
+            className="absolute -translate-x-1/2"
+            style={{ left: (tech.level - 0.5) * step, top: 68 }}
+            title={t("variantsOf", locale)}
+          >
+            <TechNode
+              tech={tech}
+              locale={locale}
+              status={statusOf(tech)}
+              selected={selectedId === tech.id}
+              confidence={chain.confidence}
+              size={Math.max(32, size * 0.7)}
               onSelect={onSelect}
             />
           </div>

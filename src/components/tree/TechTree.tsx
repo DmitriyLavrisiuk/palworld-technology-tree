@@ -2,7 +2,7 @@ import { useMemo } from "react"
 
 import { ChainRow } from "@/components/tree/ChainRow"
 import { CompactCard } from "@/components/tree/CompactCard"
-import { LaneRow } from "@/components/tree/LaneRow"
+import { LaneRow, type ChainStep } from "@/components/tree/LaneRow"
 import { LevelRuler } from "@/components/tree/LevelRuler"
 import { LooseRow } from "@/components/tree/LooseRow"
 import { TechNode } from "@/components/tree/TechNode"
@@ -11,8 +11,8 @@ import type { ViewMode } from "@/hooks/useProgress"
 import { GRID, GROUP_NAMES, GROUP_ORDER } from "@/lib/constants"
 import type { TechData } from "@/lib/data"
 import { t } from "@/lib/i18n"
-import { isSynthesised, type NodeStatus, type VisibleTech } from "@/lib/tree"
-import type { Chain, GroupKey, Locale, Technology } from "@/types/tech"
+import type { NodeStatus, VisibleTech } from "@/lib/tree"
+import type { Chain, ChainConfidence, GroupKey, Locale, Technology } from "@/types/tech"
 
 const LABEL_WIDTH = 144
 const NODE_SIZE = 44
@@ -28,10 +28,18 @@ interface TechTreeProps {
   onSelect: (id: string) => void
 }
 
+interface ChainEntry {
+  chain: Chain
+  /** Видимые ступени с исходной позицией — по ней видно вырезанную середину. */
+  steps: ChainStep[]
+  /** Видимые варианты того же тира, разложенные по базовой ступени. */
+  variants: Map<string, Technology[]>
+}
+
 interface Section {
   key: string
   title: string
-  chains: { chain: Chain; members: Technology[] }[]
+  chains: ChainEntry[]
   loose: Technology[]
   /** Подпись ряда без цепочек. У корзин это их собственное имя. */
   looseLabel?: string
@@ -61,18 +69,23 @@ export function TechTree({
     }
 
     for (const chain of data.chains.chains) {
-      const ids = [
-        ...chain.members,
-        ...Object.values(chain.variants ?? {}).flat(),
-      ].filter((id) => shown.has(id))
-      if (!ids.length) continue
+      const steps: ChainStep[] = []
+      chain.members.forEach((id, index) => {
+        const tech = shown.has(id) ? data.byId.get(id) : undefined
+        if (tech) steps.push({ tech, index })
+      })
 
-      const members = ids
-        .map((id) => data.byId.get(id))
-        .filter((tech): tech is Technology => Boolean(tech))
-        .sort((a, b) => a.level - b.level || a.cost - b.cost)
+      const variants = new Map<string, Technology[]>()
+      for (const [base, list] of Object.entries(chain.variants ?? {})) {
+        const visibleVariants = list
+          .filter((id) => shown.has(id))
+          .map((id) => data.byId.get(id))
+          .filter((tech): tech is Technology => Boolean(tech))
+        if (visibleVariants.length) variants.set(base, visibleVariants)
+      }
 
-      byGroup.get(chain.group)?.chains.push({ chain, members })
+      if (!steps.length && !variants.size) continue
+      byGroup.get(chain.group)?.chains.push({ chain, steps, variants })
     }
 
     for (const entry of data.chains.loose) {
@@ -125,14 +138,22 @@ export function TechTree({
     return (
       <div className="flex flex-col gap-6 p-3">
         {sections.map((section) => {
-          const all = [...section.chains.flatMap((entry) => entry.members), ...section.loose].sort(
+          const chained = section.chains.flatMap((entry) => [
+            ...entry.steps.map((step) => step.tech),
+            ...[...entry.variants.values()].flat(),
+          ])
+          const all = [...chained, ...section.loose].sort(
             (a, b) => a.level - b.level || a.cost - b.cost,
           )
-          const synth = new Set(
-            section.chains
-              .filter((entry) => isSynthesised(entry.chain.confidence))
-              .flatMap((entry) => entry.members.map((tech) => tech.id)),
-          )
+          const confidenceOf = new Map<string, ChainConfidence>()
+          for (const entry of section.chains) {
+            for (const tech of [
+              ...entry.steps.map((step) => step.tech),
+              ...[...entry.variants.values()].flat(),
+            ]) {
+              confidenceOf.set(tech.id, entry.chain.confidence)
+            }
+          }
 
           return (
             <section key={section.key}>
@@ -145,7 +166,7 @@ export function TechTree({
                     locale={locale}
                     status={statusOf(tech)}
                     selected={selectedId === tech.id}
-                    synthesised={synth.has(tech.id)}
+                    confidence={confidenceOf.get(tech.id) ?? null}
                     onSelect={onSelect}
                   />
                 ))}
@@ -168,7 +189,8 @@ export function TechTree({
                 <LaneRow
                   key={entry.chain.id}
                   chain={entry.chain}
-                  members={entry.members}
+                  steps={entry.steps}
+                  variants={entry.variants}
                   locale={locale}
                   statusOf={statusOf}
                   selectedId={selectedId}
@@ -188,7 +210,7 @@ export function TechTree({
                         locale={locale}
                         status={statusOf(tech)}
                         selected={selectedId === tech.id}
-                        synthesised={false}
+                        confidence={null}
                         size={44}
                         showLabel
                         onSelect={onSelect}
@@ -221,7 +243,8 @@ export function TechTree({
                 <ChainRow
                   key={entry.chain.id}
                   chain={entry.chain}
-                  members={entry.members}
+                  members={entry.steps.map((step) => step.tech)}
+                  variants={entry.variants}
                   locale={locale}
                   statusOf={statusOf}
                   selectedId={selectedId}

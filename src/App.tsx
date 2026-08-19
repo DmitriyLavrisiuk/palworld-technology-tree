@@ -21,6 +21,10 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   useEffect(() => {
+    document.documentElement.lang = progress.locale
+  }, [progress.locale])
+
+  useEffect(() => {
     loadTechData().then(setData, (cause: unknown) => {
       setError(cause instanceof Error ? cause.message : String(cause))
     })
