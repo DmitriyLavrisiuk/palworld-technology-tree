@@ -3,7 +3,6 @@
   "chains": [
     {
       "id": "armor",
-      "group": "armor",
       "name": {
         "ru": "Броня",
         "en": "Armor"
@@ -59,7 +58,6 @@
     },
     {
       "id": "helmets",
-      "group": "armor",
       "name": {
         "ru": "Шлемы",
         "en": "Helmets"
@@ -76,7 +74,6 @@
     },
     {
       "id": "spheres",
-      "group": "gear",
       "name": {
         "ru": "Сферы",
         "en": "Pal Spheres"
@@ -97,7 +94,6 @@
     },
     {
       "id": "bows",
-      "group": "weapon",
       "name": {
         "ru": "Луки",
         "en": "Bows"
@@ -112,7 +108,6 @@
     },
     {
       "id": "rifles",
-      "group": "weapon",
       "name": {
         "ru": "Винтовки",
         "en": "Rifles"
@@ -132,7 +127,6 @@
     },
     {
       "id": "sphere-launchers",
-      "group": "weapon",
       "name": {
         "ru": "Сферомёты",
         "en": "Sphere Launchers"
@@ -145,7 +139,6 @@
     },
     {
       "id": "spears",
-      "group": "weapon",
       "name": {
         "ru": "Копья",
         "en": "Spears"
@@ -159,7 +152,6 @@
     },
     {
       "id": "axes",
-      "group": "tools",
       "name": {
         "ru": "Топоры",
         "en": "Axes"
@@ -173,7 +165,6 @@
     },
     {
       "id": "pickaxes",
-      "group": "tools",
       "name": {
         "ru": "Кирки",
         "en": "Pickaxes"
@@ -187,7 +178,6 @@
     },
     {
       "id": "gliders",
-      "group": "tools",
       "name": {
         "ru": "Планеры",
         "en": "Gliders"
@@ -202,7 +192,6 @@
     },
     {
       "id": "fishing-rods",
-      "group": "tools",
       "name": {
         "ru": "Удочки",
         "en": "Fishing Rods"
@@ -215,7 +204,6 @@
     },
     {
       "id": "workbenches",
-      "group": "base",
       "name": {
         "ru": "Верстаки",
         "en": "Workbenches"
@@ -230,7 +218,6 @@
     },
     {
       "id": "sphere-production",
-      "group": "base",
       "name": {
         "ru": "Производство сфер",
         "en": "Sphere Production"
@@ -244,7 +231,6 @@
     },
     {
       "id": "weapon-production",
-      "group": "base",
       "name": {
         "ru": "Производство оружия",
         "en": "Weapon Production"
@@ -258,7 +244,6 @@
     },
     {
       "id": "medicine-benches",
-      "group": "base",
       "name": {
         "ru": "Медицинские верстаки",
         "en": "Medicine Workbenches"
@@ -271,7 +256,6 @@
     },
     {
       "id": "kitchen",
-      "group": "base",
       "name": {
         "ru": "Кухня",
         "en": "Cooking"
@@ -286,7 +270,6 @@
     },
     {
       "id": "chests",
-      "group": "base",
       "name": {
         "ru": "Сундуки",
         "en": "Chests"
@@ -300,7 +283,6 @@
     },
     {
       "id": "pal-beds",
-      "group": "base",
       "name": {
         "ru": "Кровати палов",
         "en": "Pal Beds"
@@ -315,7 +297,6 @@
     },
     {
       "id": "hot-springs",
-      "group": "base",
       "name": {
         "ru": "Горячие источники",
         "en": "Hot Springs"
@@ -329,7 +310,6 @@
     },
     {
       "id": "monitoring-stands",
-      "group": "base",
       "name": {
         "ru": "Наблюдательные вышки",
         "en": "Monitoring Stands"
@@ -342,7 +322,6 @@
     },
     {
       "id": "logging-sites",
-      "group": "base",
       "name": {
         "ru": "Лесопилки",
         "en": "Logging Sites"
@@ -354,7 +333,6 @@
     },
     {
       "id": "jump-boots",
-      "group": "gear",
       "name": {
         "ru": "Ботинки прыжка",
         "en": "Jump Boots"
@@ -367,7 +345,6 @@
     },
     {
       "id": "cartridges",
-      "group": "gear",
       "name": {
         "ru": "Энергокассеты",
         "en": "Energy Cartridges"
@@ -380,7 +357,6 @@
     },
     {
       "id": "structure-sets",
-      "group": "base",
       "name": {
         "ru": "Наборы для строительства",
         "en": "Structure Sets"
@@ -397,7 +373,6 @@
     },
     {
       "id": "air-dash-boots",
-      "group": "gear",
       "name": {
         "ru": "Ботинки рывка",
         "en": "Air Dash Boots"
@@ -411,7 +386,6 @@
     },
     {
       "id": "grappling-guns",
-      "group": "tools",
       "name": {
         "ru": "Крюк-кошка",
         "en": "Grappling Guns"
@@ -427,7 +401,6 @@
     },
     {
       "id": "shields",
-      "group": "gear",
       "name": {
         "ru": "Щиты",
         "en": "Shields"
@@ -445,7 +418,6 @@
     },
     {
       "id": "fishing-bait",
-      "group": "gear",
       "name": {
         "ru": "Приманки",
         "en": "Fishing Bait"
@@ -458,7 +430,6 @@
     },
     {
       "id": "incubators",
-      "group": "base",
       "name": {
         "ru": "Инкубаторы",
         "en": "Incubators"
@@ -474,7 +445,6 @@
     },
     {
       "id": "mines",
-      "group": "weapon",
       "name": {
         "ru": "Мины",
         "en": "Mines"
@@ -488,7 +458,6 @@
     },
     {
       "id": "ore-sites",
-      "group": "base",
       "name": {
         "ru": "Рудники",
         "en": "Ore Sites"
@@ -503,7 +472,6 @@
     },
     {
       "id": "generators",
-      "group": "base",
       "name": {
         "ru": "Генераторы",
         "en": "Power Generators"
@@ -518,7 +486,6 @@
     },
     {
       "id": "grenade-launchers",
-      "group": "weapon",
       "name": {
         "ru": "Гранатомёты",
         "en": "Grenade Launchers"
@@ -530,7 +497,6 @@
     },
     {
       "id": "rocket-launchers",
-      "group": "weapon",
       "name": {
         "ru": "Ракетные установки",
         "en": "Rocket Launchers"
@@ -542,7 +508,6 @@
     },
     {
       "id": "palboxes",
-      "group": "base",
       "name": {
         "ru": "Палбоксы",
         "en": "Palboxes"
@@ -554,7 +519,6 @@
     },
     {
       "id": "crops",
-      "group": "base",
       "kind": "group",
       "name": {
         "ru": "Плантации",
@@ -573,7 +537,6 @@
     },
     {
       "id": "sphere-modules",
-      "group": "gear",
       "kind": "group",
       "name": {
         "ru": "Модули сфер",
@@ -591,7 +554,6 @@
     },
     {
       "id": "lamps",
-      "group": "base",
       "kind": "group",
       "name": {
         "ru": "Лампы",
@@ -607,7 +569,6 @@
     },
     {
       "id": "late-ingots",
-      "group": "gear",
       "kind": "group",
       "name": {
         "ru": "Поздние слитки",
@@ -622,7 +583,6 @@
     },
     {
       "id": "torches",
-      "group": "base",
       "kind": "group",
       "name": {
         "ru": "Факелы",
@@ -637,7 +597,6 @@
     },
     {
       "id": "signs",
-      "group": "base",
       "kind": "group",
       "name": {
         "ru": "Вывески",

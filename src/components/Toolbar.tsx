@@ -7,6 +7,7 @@ import {
   SparklesIcon,
 } from "lucide-react"
 
+import { CategoryFilter } from "@/components/CategoryFilter"
 import { SettingsSheet } from "@/components/SettingsSheet"
 import { Badge } from "@/components/ui/badge"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
@@ -15,6 +16,7 @@ import { MAX_LEVEL } from "@/lib/constants"
 import { t } from "@/lib/i18n"
 import type { NodeSizeKey } from "@/lib/nodeSize"
 import type { Filters, ResearchedTotals } from "@/lib/tree"
+import type { GroupKey } from "@/types/tech"
 import { cn } from "@/lib/utils"
 import type { Locale } from "@/types/tech"
 
@@ -34,7 +36,10 @@ const VIEWS: { value: ViewMode; label: UiKey; icon: typeof Rows3Icon }[] = [
   { value: "compact", label: "viewCompact", icon: LayoutGridIcon },
 ]
 
-const FILTERS: { key: keyof Filters; label: UiKey; short: UiKey }[] = [
+/** Только переключаемые фильтры: категории живут отдельным поповером. */
+type ToggleFilter = "availableOnly" | "ancientOnly" | "hideResearched"
+
+const FILTERS: { key: ToggleFilter; label: UiKey; short: UiKey }[] = [
   { key: "availableOnly", label: "filterAvailable", short: "filterAvailableShort" },
   { key: "ancientOnly", label: "filterAncient", short: "filterAncientShort" },
   { key: "hideResearched", label: "filterHideDone", short: "filterHideDoneShort" },
@@ -66,6 +71,9 @@ interface ToolbarProps {
   onTheme: (theme: Theme) => void
   onFilters: (filters: Filters) => void
   onNodeSize: (size: NodeSizeKey) => void
+  groupCounts: ReadonlyMap<GroupKey, number>
+  onToggleGroup: (group: GroupKey) => void
+  onClearGroups: () => void
 }
 
 export function Toolbar({
@@ -86,6 +94,9 @@ export function Toolbar({
   onTheme,
   onFilters,
   onNodeSize,
+  groupCounts,
+  onToggleGroup,
+  onClearGroups,
 }: ToolbarProps) {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
@@ -190,6 +201,15 @@ export function Toolbar({
         </span>
 
         <span className="flex flex-wrap items-center gap-2">
+          <CategoryFilter
+            locale={locale}
+            selected={filters.groups}
+            counts={groupCounts}
+            className={CONTROL}
+            onToggle={onToggleGroup}
+            onClear={onClearGroups}
+          />
+
           {FILTERS.map((item) => {
             const active = filters[item.key]
             return (

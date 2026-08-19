@@ -10,7 +10,13 @@ import { useTheme } from "@/hooks/useTheme"
 import { loadTechData, type TechData } from "@/lib/data"
 import { buildRoute } from "@/lib/planner"
 import { t } from "@/lib/i18n"
-import { NO_FILTERS, researchedTotals, visibleTechs, type Filters } from "@/lib/tree"
+import {
+  NO_FILTERS,
+  countByGroup,
+  researchedTotals,
+  visibleTechs,
+  type Filters,
+} from "@/lib/tree"
 
 export default function App() {
   const progress = useProgress()
@@ -19,7 +25,8 @@ export default function App() {
   const [data, setData] = useState<TechData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState("")
-  const [filters, setFilters] = useState<Filters>(NO_FILTERS)
+  /** Переключаемые фильтры эфемерны, категории живут в хранилище. */
+  const [toggles, setToggles] = useState<Filters>(NO_FILTERS)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   /** Цель маршрута живёт только в сессии: в localStorage её не кладём. */
   const [routeTargetId, setRouteTargetId] = useState<string | null>(null)
@@ -33,6 +40,13 @@ export default function App() {
       setError(cause instanceof Error ? cause.message : String(cause))
     })
   }, [])
+
+  const filters = useMemo<Filters>(
+    () => ({ ...toggles, groups: new Set(progress.groups) }),
+    [toggles, progress.groups],
+  )
+
+  const groupCounts = useMemo(() => countByGroup(data?.technologies ?? []), [data])
 
   const visible = useMemo(
     () =>
@@ -99,7 +113,10 @@ export default function App() {
         onLevel={progress.setLevel}
         onLocale={progress.setLocale}
         onTheme={progress.setTheme}
-        onFilters={setFilters}
+        onFilters={setToggles}
+        groupCounts={groupCounts}
+        onToggleGroup={progress.toggleGroup}
+        onClearGroups={progress.clearGroups}
         onNodeSize={progress.setNodeSize}
       />
 

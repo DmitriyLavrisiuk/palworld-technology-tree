@@ -25,10 +25,6 @@ const AMBIGUOUS_NOUNS = new Set([
   "Site", "Gun", "Pal", "I", "II", "III", "IV", "V",
 ])
 
-const WEAPON_WORDS = /\b(bow|rifle|shotgun|sword|spear|gun|launcher|grenade|arrow|ammo|crossbow|handgun|missile|bomb|club|musket|knife|cleaver)\b/i
-const ARMOR_WORDS = /\b(armor|outfit|helm|helmet|shield|garb|robe|band)\b/i
-const TOOL_WORDS = /\b(axe|pickaxe|torch|net|rod|glider|parachute|lamp|lantern|grappling)\b/i
-
 export interface ChainOverride {
   id: string
   group?: GroupKey
@@ -111,20 +107,10 @@ function commonTail(names: string[]): string {
   return capitalise(tail.join(" "))
 }
 
-function groupOf(tech: Technology): GroupKey {
-  if (tech.category === "Structures") return "base"
-  const name = tech.name.en
-  if (ARMOR_WORDS.test(name)) return "armor"
-  if (WEAPON_WORDS.test(name)) return "weapon"
-  if (TOOL_WORDS.test(name)) return "tools"
-  return "gear"
-}
-
 function dominantGroup(members: Technology[]): GroupKey {
   const tally = new Map<GroupKey, number>()
   for (const tech of members) {
-    const key = groupOf(tech)
-    tally.set(key, (tally.get(key) ?? 0) + 1)
+    tally.set(tech.group, (tally.get(tech.group) ?? 0) + 1)
   }
   return [...tally.entries()].sort((a, b) => b[1] - a[1])[0][0]
 }
@@ -367,7 +353,7 @@ export function buildChains(
   const looseTechs = technologies.filter((tech) => !assigned.has(tech.id))
   const looseByGroup = new Map<GroupKey, string[]>()
   for (const tech of looseTechs) {
-    const key = groupOf(tech)
+    const key = tech.group
     const list = looseByGroup.get(key)
     if (list) list.push(tech.id)
     else looseByGroup.set(key, [tech.id])

@@ -17,6 +17,7 @@ function tech(id: string, nameEn: string, over: Partial<Technology> = {}): Techn
     cost: 1,
     ancient: false,
     category: "Items",
+    group: "material",
     iconName: id,
     reqTech: null,
     reqBoss: null,

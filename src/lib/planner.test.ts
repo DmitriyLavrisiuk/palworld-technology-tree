@@ -13,6 +13,7 @@ function tech(id: string, over: Partial<Technology> = {}): Technology {
     cost: 1,
     ancient: false,
     category: "Items",
+    group: "material",
     iconName: id,
     reqTech: null,
     reqBoss: null,
@@ -68,7 +69,7 @@ function makeData(
 function chain(id: string, members: string[], over: Partial<Chain> = {}): Chain {
   return {
     id,
-    group: "gear",
+    group: "material",
     name: { en: id, ru: id },
     kind: "chain",
     confidence: "manual",

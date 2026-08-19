@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { MAX_LEVEL } from "@/lib/constants"
 import { DEFAULT_NODE_SIZE, isNodeSizeKey, type NodeSizeKey } from "@/lib/nodeSize"
-import type { Locale } from "@/types/tech"
+import { GROUP_ORDER } from "@/lib/constants"
+import type { GroupKey, Locale } from "@/types/tech"
 
 const STORAGE_KEY = "palworld-technology-tree"
 
@@ -26,6 +27,9 @@ export interface Progress {
   view: ViewMode
   theme: Theme
   nodeSize: NodeSizeKey
+  /** Показываемые категории. Пустой список означает «все» — так фильтр
+   *  выключен по умолчанию и не требует перечислять всё при первом запуске. */
+  groups: GroupKey[]
 }
 
 const VIEWS: ViewMode[] = ["levels", "lanes", "compact"]
@@ -45,6 +49,7 @@ const DEFAULTS: Progress = {
   view: "levels",
   theme: "system",
   nodeSize: DEFAULT_NODE_SIZE,
+  groups: [],
 }
 
 /**
@@ -74,6 +79,11 @@ function coerce(raw: unknown): Progress {
     view: VIEWS.includes(value.view as ViewMode) ? (value.view as ViewMode) : DEFAULTS.view,
     theme: THEMES.includes(value.theme as Theme) ? (value.theme as Theme) : DEFAULTS.theme,
     nodeSize: isNodeSizeKey(value.nodeSize) ? value.nodeSize : DEFAULTS.nodeSize,
+    groups: Array.isArray(value.groups)
+      ? value.groups.filter((group): group is GroupKey =>
+          (GROUP_ORDER as string[]).includes(group as string),
+        )
+      : DEFAULTS.groups,
   }
 }
 
@@ -142,6 +152,19 @@ export function useProgress() {
     setState((previous) => ({ ...previous, nodeSize }))
   }, [])
 
+  const toggleGroup = useCallback((group: GroupKey) => {
+    setState((previous) => {
+      const next = new Set(previous.groups)
+      if (next.has(group)) next.delete(group)
+      else next.add(group)
+      return { ...previous, groups: [...next] }
+    })
+  }, [])
+
+  const clearGroups = useCallback(() => {
+    setState((previous) => ({ ...previous, groups: [] }))
+  }, [])
+
   return {
     ...state,
     researched,
@@ -151,5 +174,7 @@ export function useProgress() {
     setView,
     setTheme,
     setNodeSize,
+    toggleGroup,
+    clearGroups,
   }
 }

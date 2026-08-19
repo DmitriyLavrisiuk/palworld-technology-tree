@@ -1,4 +1,4 @@
-import type { Chain, ChainConfidence, ChainKind, Technology } from "@/types/tech"
+import type { Chain, ChainConfidence, ChainKind, GroupKey, Technology } from "@/types/tech"
 
 /**
  * Чистая логика дерева: состояние узла, поиск и фильтры. Живёт отдельно от
@@ -12,12 +12,15 @@ export interface Filters {
   availableOnly: boolean
   ancientOnly: boolean
   hideResearched: boolean
+  /** Показываемые категории. Пустой набор означает «все». */
+  groups: ReadonlySet<GroupKey>
 }
 
 export const NO_FILTERS: Filters = {
   availableOnly: false,
   ancientOnly: false,
   hideResearched: false,
+  groups: new Set(),
 }
 
 /**
@@ -83,6 +86,7 @@ export function passesFilters(
   status: NodeStatus,
   filters: Filters,
 ): boolean {
+  if (filters.groups.size > 0 && !filters.groups.has(tech.group)) return false
   if (filters.ancientOnly && !tech.ancient) return false
   if (filters.hideResearched && status === "researched") return false
   if (filters.availableOnly && status !== "available") return false
@@ -222,4 +226,15 @@ export function connectorBetween(
 ): Connector {
   if (nextIndex - previousIndex !== 1) return "gap"
   return kind === "chain" ? "arrow" : "none"
+}
+
+/** Сколько технологий в каждой категории — для подписи в списке категорий. */
+export function countByGroup(
+  technologies: readonly Technology[],
+): ReadonlyMap<GroupKey, number> {
+  const counts = new Map<GroupKey, number>()
+  for (const tech of technologies) {
+    counts.set(tech.group, (counts.get(tech.group) ?? 0) + 1)
+  }
+  return counts
 }

@@ -22,6 +22,8 @@ export const UI = {
   viewLanes: { ru: "Дорожки", en: "Lanes" },
   viewCompact: { ru: "Компактно", en: "Compact" },
 
+  categories: { ru: "Категории", en: "Categories" },
+  categoriesAll: { ru: "Показать все", en: "Show all" },
   filterAvailable: { ru: "Только доступные", en: "Available only" },
   filterAncient: { ru: "Только древние", en: "Ancient only" },
   filterHideDone: { ru: "Скрыть изученные", en: "Hide researched" },

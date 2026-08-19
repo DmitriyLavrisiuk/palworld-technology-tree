@@ -1,8 +1,43 @@
 import { load } from "cheerio"
 import { fetchText } from "../lib/http.ts"
-import type { Locale } from "../../src/types/tech.ts"
+import type { GroupKey, Locale } from "../../src/types/tech.ts"
 
 const BASE = "https://paldb.cc"
+
+/**
+ * Сегмент имени ассета → категория игры. Путь иконки несёт классификацию,
+ * которую придумали не мы: `T_icon_buildObject_*`, `T_itemicon_Weapon_*`,
+ * а снаряжение палов лежит в каталоге `PalIcon/`.
+ *
+ * Проверка, что это действительно данные, а не совпадение: множество
+ * `structure` в точности равно множеству `category === "Structures"`.
+ */
+const ASSET_GROUP: Record<string, GroupKey> = {
+  buildObject: "structure",
+  Weapon: "weapon",
+  Armor: "armor",
+  Ammo: "ammo",
+  Material: "material",
+  Salvage: "material",
+  Essential: "essential",
+  Accessory: "accessory",
+  PalSphere: "sphere",
+  SphereModule: "sphere",
+  Glider: "glider",
+  Consume: "consumable",
+  food: "consumable",
+  Food: "consumable",
+}
+
+export function groupFromIcon(url: string): GroupKey {
+  // Сёдла и снаряжение палов различаются каталогом, а не именем файла:
+  // иконка там — портрет самого пала.
+  if (url.includes("/PalIcon/")) return "palgear"
+
+  const file = url.split("/").pop() ?? ""
+  const segment = /^T_(?:itemicon|icon)_([A-Za-z0-9]+)/.exec(file)?.[1] ?? ""
+  return ASSET_GROUP[segment] ?? "essential"
+}
 
 export interface PaldbTech {
   id: string
@@ -12,6 +47,7 @@ export interface PaldbTech {
   level: number
   cost: number
   ancient: boolean
+  group: GroupKey
 }
 
 /**
@@ -54,6 +90,7 @@ export async function fetchTechList(locale: Locale, fresh: boolean): Promise<Pal
       level: Number(levelText),
       cost: Number(node.find(".hoverTechCost").first().text().trim()),
       ancient: (node.attr("class") ?? "").includes("BossTechnology"),
+      group: groupFromIcon(icon),
     })
   })
 

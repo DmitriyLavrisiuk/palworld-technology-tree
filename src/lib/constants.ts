@@ -36,14 +36,33 @@ export const ZOOM = { min: 0.35, max: 2.5, initial: 1 } as const
 /** Movement beyond this many pixels turns a click into a drag. */
 export const DRAG_THRESHOLD = 4
 
-export const GROUP_ORDER: GroupKey[] = ["gear", "armor", "tools", "weapon", "base"]
+/** Порядок секций: сперва то, чего больше и что ищут чаще. */
+export const GROUP_ORDER: GroupKey[] = [
+  "structure",
+  "weapon",
+  "armor",
+  "ammo",
+  "sphere",
+  "material",
+  "consumable",
+  "essential",
+  "accessory",
+  "glider",
+  "palgear",
+]
 
 export const GROUP_NAMES: Record<GroupKey, Localized> = {
-  gear: { ru: "Снаряжение", en: "Gear" },
-  armor: { ru: "Броня", en: "Armor" },
-  tools: { ru: "Инструменты", en: "Tools" },
+  structure: { ru: "Постройки", en: "Structures" },
   weapon: { ru: "Оружие", en: "Weapons" },
-  base: { ru: "База и производство", en: "Base & Production" },
+  armor: { ru: "Броня и щиты", en: "Armor & Shields" },
+  ammo: { ru: "Боеприпасы", en: "Ammo" },
+  sphere: { ru: "Сферы и модули", en: "Spheres & Modules" },
+  material: { ru: "Ресурсы", en: "Materials" },
+  consumable: { ru: "Расходники и еда", en: "Consumables & Food" },
+  essential: { ru: "Ключевые предметы", en: "Essentials" },
+  accessory: { ru: "Аксессуары", en: "Accessories" },
+  glider: { ru: "Планеры", en: "Gliders" },
+  palgear: { ru: "Снаряжение палов", en: "Pal Gear" },
 }
 
 /** Internal-id prefixes pulled out of chain building entirely. */

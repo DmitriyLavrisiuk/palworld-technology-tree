@@ -102,6 +102,7 @@ async function buildTechnologies(): Promise<Technology[]> {
       cost: row.cost,
       ancient: row.ancient,
       category: paldbEn?.category ?? (row.unlockBuild.length ? "Structures" : "Items"),
+      group: paldbEn?.group ?? (row.unlockBuild.length ? "structure" : "essential"),
       iconName: row.iconName,
       reqTech: row.reqTech,
       reqBoss: row.reqBoss,

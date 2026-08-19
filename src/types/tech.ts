@@ -14,8 +14,28 @@ export type Locale = "ru" | "en"
 
 export type Localized = Record<Locale, string>
 
-/** Which visual section a chain belongs to. */
-export type GroupKey = "gear" | "armor" | "tools" | "weapon" | "base"
+/**
+ * Категория предмета по классификации самой игры: она закодирована в пути
+ * ассета иконки (`T_icon_buildObject_*`, `T_itemicon_Weapon_*`, каталог
+ * `PalIcon/` у снаряжения палов). Это НЕ наша догадка — множество
+ * `structure` в точности совпадает с `category === "Structures"`.
+ *
+ * До этого секции строились эвристикой по словам в названии; она удалена.
+ * Побочное следствие игровой классификации: топоры и кирки — оружие,
+ * щиты — броня, отдельной категории «инструменты» в игре нет.
+ */
+export type GroupKey =
+  | "structure"
+  | "palgear"
+  | "weapon"
+  | "armor"
+  | "ammo"
+  | "material"
+  | "essential"
+  | "sphere"
+  | "accessory"
+  | "consumable"
+  | "glider"
 
 /**
  * How a chain link was established.
@@ -36,6 +56,8 @@ export interface Technology {
   /** IsBossTechnology — costs Ancient Technology Points. */
   ancient: boolean
   category: TechCategory
+  /** Категория из классификации игры. См. GroupKey. */
+  group: GroupKey
   /** Icon slug. Does NOT reliably match the CDN path — see docs/DATA_MODEL.md. */
   iconName: string
   /** RequireTechnology — the only real tech-to-tech edges the game defines. */

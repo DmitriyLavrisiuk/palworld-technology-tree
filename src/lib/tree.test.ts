@@ -4,6 +4,7 @@ import {
   isGuessed,
   chainSummary,
   connectorBetween,
+  countByGroup,
   researchedTotals,
   isSynthesised,
   matches,
@@ -14,7 +15,7 @@ import {
   NO_FILTERS,
 } from "./tree.ts"
 import { pointsLabel, stepsLabel } from "@/lib/i18n"
-import type { Technology } from "@/types/tech"
+import type { GroupKey, Technology } from "@/types/tech"
 
 function tech(id: string, over: Partial<Technology> = {}): Technology {
   return {
@@ -25,6 +26,7 @@ function tech(id: string, over: Partial<Technology> = {}): Technology {
     cost: 1,
     ancient: false,
     category: "Items",
+    group: "material",
     iconName: id,
     reqTech: null,
     reqBoss: null,
@@ -139,7 +141,7 @@ describe("фильтры", () => {
 
   it("фильтры складываются", () => {
     const relic = tech("Relic", { ancient: true })
-    const filters = { availableOnly: true, ancientOnly: true, hideResearched: true }
+    const filters = { ...NO_FILTERS, availableOnly: true, ancientOnly: true, hideResearched: true }
     expect(passesFilters(relic, "available", filters)).toBe(true)
     expect(passesFilters(relic, "locked", filters)).toBe(false)
   })
@@ -320,5 +322,39 @@ describe("соединитель между ступенями", () => {
   it("вырезанная фильтром середина показывается разрывом, а не стрелкой", () => {
     expect(connectorBetween(0, 3, "chain")).toBe("gap")
     expect(connectorBetween(0, 3, "group")).toBe("gap")
+  })
+})
+
+describe("фильтр по категориям", () => {
+  const list = [
+    tech("Wood", { group: "material" }),
+    tech("Sword", { group: "weapon" }),
+    tech("Wall", { group: "structure" }),
+  ]
+
+  it("пустой набор означает «все», а не «ничего»", () => {
+    // Иначе при первом запуске пришлось бы перечислять одиннадцать категорий.
+    expect(visibleTechs(list, new Set(), 80, "", NO_FILTERS)).toHaveLength(3)
+  })
+
+  it("выбранные категории оставляют только их", () => {
+    const filters = { ...NO_FILTERS, groups: new Set<GroupKey>(["material", "weapon"]) }
+    expect(visibleTechs(list, new Set(), 80, "", filters).map((x) => x.tech.id)).toEqual([
+      "Wood",
+      "Sword",
+    ])
+  })
+
+  it("категория складывается с остальными фильтрами", () => {
+    const relic = tech("Relic", { group: "weapon", ancient: true })
+    const filters = { ...NO_FILTERS, ancientOnly: true, groups: new Set<GroupKey>(["weapon"]) }
+    const result = visibleTechs([...list, relic], new Set(), 80, "", filters)
+    expect(result.map((x) => x.tech.id)).toEqual(["Relic"])
+  })
+
+  it("считает технологии по категориям без потерь", () => {
+    const counts = countByGroup(list)
+    expect(counts.get("material")).toBe(1)
+    expect([...counts.values()].reduce((a, b) => a + b, 0)).toBe(list.length)
   })
 })

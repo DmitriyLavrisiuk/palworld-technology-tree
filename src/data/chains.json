@@ -3,6 +3,67 @@
   "generatedAt": "2026-08-19",
   "chains": [
     {
+      "id": "air-dash-boots",
+      "group": "accessory",
+      "name": {
+        "ru": "Ботинки рывка",
+        "en": "Air Dash Boots"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Accessory_AirDash1",
+        "Accessory_AirDash2",
+        "Accessory_AirDash3"
+      ]
+    },
+    {
+      "id": "jump-boots",
+      "group": "accessory",
+      "name": {
+        "ru": "Ботинки прыжка",
+        "en": "Jump Boots"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Accessory_JumpCount_Increase1",
+        "Accessory_JumpCount_Increase2"
+      ]
+    },
+    {
+      "id": "arrow",
+      "group": "ammo",
+      "name": {
+        "en": "Arrow",
+        "ru": "Стрела"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "Arrow",
+        "Arrow_Fire",
+        "Arrow_Poison",
+        "ReinforcedArrow",
+        "SFArrow"
+      ]
+    },
+    {
+      "id": "cartridges",
+      "group": "ammo",
+      "name": {
+        "ru": "Энергокассеты",
+        "en": "Energy Cartridges"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "LaserBullet",
+        "LaserGatlingBullet",
+        "EnergyLauncherBullet"
+      ]
+    },
+    {
       "id": "armor",
       "group": "armor",
       "name": {
@@ -79,637 +140,8 @@
       ]
     },
     {
-      "id": "chests",
-      "group": "base",
-      "name": {
-        "ru": "Сундуки",
-        "en": "Chests"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Infra_ItemChest_Grade_01",
-        "Infra_ItemChest_Grade_02",
-        "Infra_ItemChest_Grade_03",
-        "ItemChest_04"
-      ]
-    },
-    {
-      "id": "clinic",
-      "group": "base",
-      "name": {
-        "en": "Clinic",
-        "ru": "Клиника"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "Clinic",
-        "Ancient_Clinic"
-      ]
-    },
-    {
-      "id": "cooler",
-      "group": "base",
-      "name": {
-        "en": "Cooler",
-        "ru": "Кулер"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "Cooler",
-        "ElectricCooler"
-      ]
-    },
-    {
-      "id": "crops",
-      "group": "base",
-      "name": {
-        "ru": "Плантации",
-        "en": "Plantations"
-      },
-      "kind": "group",
-      "confidence": "manual",
-      "members": [
-        "Product_Farm_Berries",
-        "Product_Farm_wheat",
-        "Product_Farm_tomato",
-        "Product_Farm_Lettuce",
-        "Product_Farm_Potato",
-        "Product_Farm_Carrot",
-        "Product_Farm_Onion"
-      ]
-    },
-    {
-      "id": "crusher",
-      "group": "base",
-      "name": {
-        "en": "Crusher",
-        "ru": "Дробилка"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "Crusher",
-        "IceCrusher"
-      ]
-    },
-    {
-      "id": "extractor",
-      "group": "base",
-      "name": {
-        "en": "Crude Oil Extractor",
-        "ru": "Вышка"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "OilPump",
-        "OilPump02"
-      ]
-    },
-    {
-      "id": "fishingpond",
-      "group": "base",
-      "name": {
-        "en": "Fishing Pond",
-        "ru": "Рыболовный пруд"
-      },
-      "kind": "chain",
-      "confidence": "stem",
-      "members": [
-        "FishingPond1",
-        "FishingPond2"
-      ]
-    },
-    {
-      "id": "furnace",
-      "group": "base",
-      "name": {
-        "en": "Furnace",
-        "ru": "Печь"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "Product_Ingot_Grade_01_Copper",
-        "Product_Ingot_Grade_02_Iron",
-        "Product_Ingot_Grade_03_Steal",
-        "BlastFurnace4",
-        "AncientBlastFurnace"
-      ]
-    },
-    {
-      "id": "gate",
-      "group": "base",
-      "name": {
-        "en": "Gate",
-        "ru": "Ворота"
-      },
-      "kind": "chain",
-      "confidence": "stem",
-      "members": [
-        "Wood_Gate",
-        "Stone_Gate",
-        "Metal_Gate"
-      ]
-    },
-    {
-      "id": "generators",
-      "group": "base",
-      "name": {
-        "ru": "Генераторы",
-        "en": "Power Generators"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "ManualElectricGenerator",
-        "Infra_ElectricGenerator_Grade_01",
-        "ElectricGenerator_Large",
-        "AncientElectricGenerator"
-      ]
-    },
-    {
-      "id": "heater",
-      "group": "base",
-      "name": {
-        "en": "Heater",
-        "ru": "Обогреватель"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "Heater",
-        "ElectricHeater"
-      ]
-    },
-    {
-      "id": "hot-springs",
-      "group": "base",
-      "name": {
-        "ru": "Горячие источники",
-        "en": "Hot Springs"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Spa",
-        "Spa2",
-        "Spa3",
-        "Ancient_Spa"
-      ]
-    },
-    {
-      "id": "incubators",
-      "group": "base",
-      "name": {
-        "ru": "Инкубаторы",
-        "en": "Incubators"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Special_HatchingPalEgg",
-        "Special_ElectricHatchingPalEgg",
-        "MultiHatchingPalEgg",
-        "MultiElectricHatchingPalEgg",
-        "MultiElectricHatchingPalEggWithBreed"
-      ]
-    },
-    {
-      "id": "infra_playerbed",
-      "group": "base",
-      "name": {
-        "en": "Bed",
-        "ru": "Кровать"
-      },
-      "kind": "chain",
-      "confidence": "stem",
-      "members": [
-        "Infra_PlayerBed_Grade_01",
-        "Infra_PlayerBed_Grade_02"
-      ]
-    },
-    {
-      "id": "kitchen",
-      "group": "base",
-      "name": {
-        "ru": "Кухня",
-        "en": "Cooking"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Product_Cooking_Grade_01",
-        "Product_Cooking_Grade_02",
-        "Product_Cooking_Grade_03",
-        "HugeKitchen",
-        "AncientCookingStove"
-      ]
-    },
-    {
-      "id": "lamps",
-      "group": "base",
-      "name": {
-        "ru": "Лампы",
-        "en": "Lamps"
-      },
-      "kind": "group",
-      "confidence": "manual",
-      "members": [
-        "Lamp",
-        "CeilingLamp",
-        "LargeLamp",
-        "LargeCeilingLamp"
-      ]
-    },
-    {
-      "id": "logging-sites",
-      "group": "base",
-      "name": {
-        "ru": "Лесопилки",
-        "en": "Logging Sites"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Product_StationDeforest",
-        "Product_StationDeforest2"
-      ]
-    },
-    {
-      "id": "medicine-benches",
-      "group": "base",
-      "name": {
-        "ru": "Медицинские верстаки",
-        "en": "Medicine Workbenches"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Product_Medicine_Grade_01",
-        "Product_Medicine_Grade_02",
-        "MedicineFacility_03"
-      ]
-    },
-    {
-      "id": "monitoring-stands",
-      "group": "base",
-      "name": {
-        "ru": "Наблюдательные вышки",
-        "en": "Monitoring Stands"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "BaseCampWorkHard",
-        "BaseCampWorkHard02",
-        "BaseCampWorkHard03"
-      ]
-    },
-    {
-      "id": "ore-sites",
-      "group": "base",
-      "name": {
-        "ru": "Рудники",
-        "en": "Ore Sites"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Product_CoalPit",
-        "Product_SulfurPit",
-        "Product_QuartzPit",
-        "CrystalPit",
-        "SkyIslandOrePit"
-      ]
-    },
-    {
-      "id": "pal-beds",
-      "group": "base",
-      "name": {
-        "ru": "Кровати палов",
-        "en": "Pal Beds"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Infra_PalBed_Grade_01",
-        "Infra_PalBed_Grade_02",
-        "MedicalPalBed_04",
-        "MedicalPalBed_05",
-        "Ancient_MedicalPalBed"
-      ]
-    },
-    {
-      "id": "palboxes",
-      "group": "base",
-      "name": {
-        "ru": "Палбоксы",
-        "en": "Palboxes"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "PALBOX",
-        "GlobalPalStorage"
-      ]
-    },
-    {
-      "id": "product_copperpit",
-      "group": "base",
-      "name": {
-        "en": "Site",
-        "ru": "Рудник"
-      },
-      "kind": "chain",
-      "confidence": "hard",
-      "members": [
-        "Product_CopperPit",
-        "Product_CopperPit_2"
-      ]
-    },
-    {
-      "id": "signs",
-      "group": "base",
-      "name": {
-        "ru": "Вывески",
-        "en": "Signs"
-      },
-      "kind": "group",
-      "confidence": "manual",
-      "members": [
-        "Signboard",
-        "WallSignboard"
-      ]
-    },
-    {
-      "id": "sphere-production",
-      "group": "base",
-      "name": {
-        "ru": "Производство сфер",
-        "en": "Sphere Production"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Special_SphereFactory_Black_Grade_01",
-        "Special_SphereFactory_Black_Grade_02",
-        "Special_SphereFactory_Black_Grade_03",
-        "SphereFactory_Black_04"
-      ]
-    },
-    {
-      "id": "structure-sets",
-      "group": "base",
-      "name": {
-        "ru": "Наборы для строительства",
-        "en": "Structure Sets"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Wooden_houseset",
-        "Stone_houseset",
-        "Metal_houseset",
-        "Glass_houseset",
-        "JapaneseStyle_houseset",
-        "SF_houseset"
-      ]
-    },
-    {
-      "id": "torches",
-      "group": "base",
-      "name": {
-        "ru": "Факелы",
-        "en": "Torches"
-      },
-      "kind": "group",
-      "confidence": "manual",
-      "members": [
-        "HandTorch",
-        "Torch",
-        "WallTorch"
-      ]
-    },
-    {
-      "id": "wall",
-      "group": "base",
-      "name": {
-        "en": "Defensive Wall",
-        "ru": "Защитная стена"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "DefenseWall_Wood",
-        "DefenseWall",
-        "DefenseWall_Metal"
-      ]
-    },
-    {
-      "id": "weapon-production",
-      "group": "base",
-      "name": {
-        "ru": "Производство оружия",
-        "en": "Weapon Production"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Product_WeaponFactory_Dirty_Grade_01",
-        "Product_WeaponFactory_Dirty_Grade_02",
-        "Product_WeaponFactory_Dirty_Grade_03",
-        "WeaponFactory_Dirty_04"
-      ]
-    },
-    {
-      "id": "workbenches",
-      "group": "base",
-      "name": {
-        "ru": "Верстаки",
-        "en": "Workbenches"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Workbench",
-        "Product_Factory_Hard_Grade_01",
-        "Product_Factory_Hard_Grade_02",
-        "Product_Factory_Hard_Grade_03",
-        "Factory_Hard_04"
-      ]
-    },
-    {
-      "id": "additionalinventory",
-      "group": "gear",
-      "name": {
-        "en": "Pouch",
-        "ru": "Расширяющаяся сумка"
-      },
-      "kind": "chain",
-      "confidence": "hard",
-      "members": [
-        "AdditionalInventory_001",
-        "AdditionalInventory_002",
-        "AdditionalInventory_003",
-        "AdditionalInventory_004"
-      ]
-    },
-    {
-      "id": "air-dash-boots",
-      "group": "gear",
-      "name": {
-        "ru": "Ботинки рывка",
-        "en": "Air Dash Boots"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Accessory_AirDash1",
-        "Accessory_AirDash2",
-        "Accessory_AirDash3"
-      ]
-    },
-    {
-      "id": "automealpouch",
-      "group": "gear",
-      "name": {
-        "en": "Feed Bag",
-        "ru": "Мешочек с кормом"
-      },
-      "kind": "chain",
-      "confidence": "hard",
-      "members": [
-        "AutoMealPouch_Tier1",
-        "AutoMealPouch_Tier2",
-        "AutoMealPouch_Tier3",
-        "AutoMealPouch_Tier4",
-        "AutoMealPouch_Tier5"
-      ]
-    },
-    {
-      "id": "bat",
-      "group": "gear",
-      "name": {
-        "en": "Bat",
-        "ru": "Бита"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "Battle_MeleeWeapon_Bat2",
-        "Bat3"
-      ]
-    },
-    {
-      "id": "board",
-      "group": "gear",
-      "name": {
-        "en": "Wooden Board",
-        "ru": "Деревянная доска"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "Processed_Wood",
-        "HighGrade_Processed_Wood"
-      ]
-    },
-    {
-      "id": "cake",
-      "group": "gear",
-      "name": {
-        "en": "Cake",
-        "ru": "Торт"
-      },
-      "kind": "chain",
-      "confidence": "stem",
-      "members": [
-        "Cake02",
-        "Cake03",
-        "Cake04",
-        "Cake05"
-      ]
-    },
-    {
-      "id": "cartridges",
-      "group": "gear",
-      "name": {
-        "ru": "Энергокассеты",
-        "en": "Energy Cartridges"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "LaserBullet",
-        "LaserGatlingBullet",
-        "EnergyLauncherBullet"
-      ]
-    },
-    {
-      "id": "cloth",
-      "group": "gear",
-      "name": {
-        "en": "Cloth",
-        "ru": "Ткань"
-      },
-      "kind": "chain",
-      "confidence": "name",
-      "members": [
-        "Battle_Cloth",
-        "Cloth2"
-      ]
-    },
-    {
-      "id": "fishing-bait",
-      "group": "gear",
-      "name": {
-        "ru": "Приманки",
-        "en": "Fishing Bait"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "FishingBait_2",
-        "FishingBait_3",
-        "FishingBait_3_A"
-      ]
-    },
-    {
-      "id": "jump-boots",
-      "group": "gear",
-      "name": {
-        "ru": "Ботинки прыжка",
-        "en": "Jump Boots"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Accessory_JumpCount_Increase1",
-        "Accessory_JumpCount_Increase2"
-      ]
-    },
-    {
-      "id": "late-ingots",
-      "group": "gear",
-      "name": {
-        "ru": "Поздние слитки",
-        "en": "Late Ingots"
-      },
-      "kind": "group",
-      "confidence": "manual",
-      "members": [
-        "ManganeseIngot",
-        "SkyislandIngot",
-        "WorldTreeIngot"
-      ]
-    },
-    {
       "id": "shields",
-      "group": "gear",
+      "group": "armor",
       "name": {
         "ru": "Щиты",
         "en": "Shields"
@@ -727,23 +159,161 @@
       ]
     },
     {
-      "id": "smg",
-      "group": "gear",
+      "id": "cake",
+      "group": "consumable",
       "name": {
-        "en": "SMG",
-        "ru": "Пистолет пулемёт"
+        "en": "Cake",
+        "ru": "Торт"
+      },
+      "kind": "chain",
+      "confidence": "stem",
+      "members": [
+        "Cake02",
+        "Cake03",
+        "Cake04",
+        "Cake05"
+      ]
+    },
+    {
+      "id": "fishing-bait",
+      "group": "consumable",
+      "name": {
+        "ru": "Приманки",
+        "en": "Fishing Bait"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "FishingBait_2",
+        "FishingBait_3",
+        "FishingBait_3_A"
+      ]
+    },
+    {
+      "id": "additionalinventory",
+      "group": "essential",
+      "name": {
+        "en": "Pouch",
+        "ru": "Расширяющаяся сумка"
+      },
+      "kind": "chain",
+      "confidence": "hard",
+      "members": [
+        "AdditionalInventory_001",
+        "AdditionalInventory_002",
+        "AdditionalInventory_003",
+        "AdditionalInventory_004"
+      ]
+    },
+    {
+      "id": "automealpouch",
+      "group": "essential",
+      "name": {
+        "en": "Feed Bag",
+        "ru": "Мешочек с кормом"
+      },
+      "kind": "chain",
+      "confidence": "hard",
+      "members": [
+        "AutoMealPouch_Tier1",
+        "AutoMealPouch_Tier2",
+        "AutoMealPouch_Tier3",
+        "AutoMealPouch_Tier4",
+        "AutoMealPouch_Tier5"
+      ]
+    },
+    {
+      "id": "lantern",
+      "group": "essential",
+      "name": {
+        "en": "Hip Lantern",
+        "ru": "Поясной фонарь"
+      },
+      "kind": "chain",
+      "confidence": "hard",
+      "members": [
+        "Lantern",
+        "Lantern_High"
+      ]
+    },
+    {
+      "id": "unlock_picking",
+      "group": "essential",
+      "name": {
+        "en": "Lockpicking Tool v1",
+        "ru": "Отмычка"
+      },
+      "kind": "chain",
+      "confidence": "hard",
+      "members": [
+        "Unlock_Picking_Tier1",
+        "Unlock_Picking_Tier2",
+        "Unlock_Picking_Tier3"
+      ]
+    },
+    {
+      "id": "gliders",
+      "group": "glider",
+      "name": {
+        "ru": "Планеры",
+        "en": "Gliders"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Battle_Glider_Grade_01",
+        "Battle_Glider_Grade_02",
+        "Battle_Glider_Grade_03",
+        "Battle_Glider_Grade_04",
+        "WingGlider"
+      ]
+    },
+    {
+      "id": "board",
+      "group": "material",
+      "name": {
+        "en": "Wooden Board",
+        "ru": "Деревянная доска"
       },
       "kind": "chain",
       "confidence": "name",
       "members": [
-        "MakeshiftSubmachineGun",
-        "Battle_RangeWeapon_SubmachineGun",
-        "SkySubmachineGun"
+        "Processed_Wood",
+        "HighGrade_Processed_Wood"
+      ]
+    },
+    {
+      "id": "cloth",
+      "group": "material",
+      "name": {
+        "en": "Cloth",
+        "ru": "Ткань"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "Battle_Cloth",
+        "Cloth2"
+      ]
+    },
+    {
+      "id": "late-ingots",
+      "group": "material",
+      "name": {
+        "ru": "Поздние слитки",
+        "en": "Late Ingots"
+      },
+      "kind": "group",
+      "confidence": "manual",
+      "members": [
+        "ManganeseIngot",
+        "SkyislandIngot",
+        "WorldTreeIngot"
       ]
     },
     {
       "id": "sphere-modules",
-      "group": "gear",
+      "group": "sphere",
       "name": {
         "ru": "Модули сфер",
         "en": "Sphere Modules"
@@ -761,7 +331,7 @@
     },
     {
       "id": "spheres",
-      "group": "gear",
+      "group": "sphere",
       "name": {
         "ru": "Сферы",
         "en": "Pal Spheres"
@@ -782,23 +352,487 @@
       ]
     },
     {
-      "id": "unlock_picking",
-      "group": "gear",
+      "id": "chests",
+      "group": "structure",
       "name": {
-        "en": "Lockpicking Tool v1",
-        "ru": "Отмычка"
+        "ru": "Сундуки",
+        "en": "Chests"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Infra_ItemChest_Grade_01",
+        "Infra_ItemChest_Grade_02",
+        "Infra_ItemChest_Grade_03",
+        "ItemChest_04"
+      ]
+    },
+    {
+      "id": "clinic",
+      "group": "structure",
+      "name": {
+        "en": "Clinic",
+        "ru": "Клиника"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "Clinic",
+        "Ancient_Clinic"
+      ]
+    },
+    {
+      "id": "cooler",
+      "group": "structure",
+      "name": {
+        "en": "Cooler",
+        "ru": "Кулер"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "Cooler",
+        "ElectricCooler"
+      ]
+    },
+    {
+      "id": "crops",
+      "group": "structure",
+      "name": {
+        "ru": "Плантации",
+        "en": "Plantations"
+      },
+      "kind": "group",
+      "confidence": "manual",
+      "members": [
+        "Product_Farm_Berries",
+        "Product_Farm_wheat",
+        "Product_Farm_tomato",
+        "Product_Farm_Lettuce",
+        "Product_Farm_Potato",
+        "Product_Farm_Carrot",
+        "Product_Farm_Onion"
+      ]
+    },
+    {
+      "id": "crusher",
+      "group": "structure",
+      "name": {
+        "en": "Crusher",
+        "ru": "Дробилка"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "Crusher",
+        "IceCrusher"
+      ]
+    },
+    {
+      "id": "extractor",
+      "group": "structure",
+      "name": {
+        "en": "Crude Oil Extractor",
+        "ru": "Вышка"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "OilPump",
+        "OilPump02"
+      ]
+    },
+    {
+      "id": "fishingpond",
+      "group": "structure",
+      "name": {
+        "en": "Fishing Pond",
+        "ru": "Рыболовный пруд"
+      },
+      "kind": "chain",
+      "confidence": "stem",
+      "members": [
+        "FishingPond1",
+        "FishingPond2"
+      ]
+    },
+    {
+      "id": "furnace",
+      "group": "structure",
+      "name": {
+        "en": "Furnace",
+        "ru": "Печь"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "Product_Ingot_Grade_01_Copper",
+        "Product_Ingot_Grade_02_Iron",
+        "Product_Ingot_Grade_03_Steal",
+        "BlastFurnace4",
+        "AncientBlastFurnace"
+      ]
+    },
+    {
+      "id": "gate",
+      "group": "structure",
+      "name": {
+        "en": "Gate",
+        "ru": "Ворота"
+      },
+      "kind": "chain",
+      "confidence": "stem",
+      "members": [
+        "Wood_Gate",
+        "Stone_Gate",
+        "Metal_Gate"
+      ]
+    },
+    {
+      "id": "generators",
+      "group": "structure",
+      "name": {
+        "ru": "Генераторы",
+        "en": "Power Generators"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "ManualElectricGenerator",
+        "Infra_ElectricGenerator_Grade_01",
+        "ElectricGenerator_Large",
+        "AncientElectricGenerator"
+      ]
+    },
+    {
+      "id": "heater",
+      "group": "structure",
+      "name": {
+        "en": "Heater",
+        "ru": "Обогреватель"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "Heater",
+        "ElectricHeater"
+      ]
+    },
+    {
+      "id": "hot-springs",
+      "group": "structure",
+      "name": {
+        "ru": "Горячие источники",
+        "en": "Hot Springs"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Spa",
+        "Spa2",
+        "Spa3",
+        "Ancient_Spa"
+      ]
+    },
+    {
+      "id": "incubators",
+      "group": "structure",
+      "name": {
+        "ru": "Инкубаторы",
+        "en": "Incubators"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Special_HatchingPalEgg",
+        "Special_ElectricHatchingPalEgg",
+        "MultiHatchingPalEgg",
+        "MultiElectricHatchingPalEgg",
+        "MultiElectricHatchingPalEggWithBreed"
+      ]
+    },
+    {
+      "id": "infra_playerbed",
+      "group": "structure",
+      "name": {
+        "en": "Bed",
+        "ru": "Кровать"
+      },
+      "kind": "chain",
+      "confidence": "stem",
+      "members": [
+        "Infra_PlayerBed_Grade_01",
+        "Infra_PlayerBed_Grade_02"
+      ]
+    },
+    {
+      "id": "kitchen",
+      "group": "structure",
+      "name": {
+        "ru": "Кухня",
+        "en": "Cooking"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Product_Cooking_Grade_01",
+        "Product_Cooking_Grade_02",
+        "Product_Cooking_Grade_03",
+        "HugeKitchen",
+        "AncientCookingStove"
+      ]
+    },
+    {
+      "id": "lamps",
+      "group": "structure",
+      "name": {
+        "ru": "Лампы",
+        "en": "Lamps"
+      },
+      "kind": "group",
+      "confidence": "manual",
+      "members": [
+        "Lamp",
+        "CeilingLamp",
+        "LargeLamp",
+        "LargeCeilingLamp"
+      ]
+    },
+    {
+      "id": "logging-sites",
+      "group": "structure",
+      "name": {
+        "ru": "Лесопилки",
+        "en": "Logging Sites"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Product_StationDeforest",
+        "Product_StationDeforest2"
+      ]
+    },
+    {
+      "id": "medicine-benches",
+      "group": "structure",
+      "name": {
+        "ru": "Медицинские верстаки",
+        "en": "Medicine Workbenches"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Product_Medicine_Grade_01",
+        "Product_Medicine_Grade_02",
+        "MedicineFacility_03"
+      ]
+    },
+    {
+      "id": "mines",
+      "group": "structure",
+      "name": {
+        "ru": "Мины",
+        "en": "Mines"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Trap_MineAttack",
+        "Trap_MineElecShock",
+        "Trap_MineFreeze"
+      ]
+    },
+    {
+      "id": "monitoring-stands",
+      "group": "structure",
+      "name": {
+        "ru": "Наблюдательные вышки",
+        "en": "Monitoring Stands"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "BaseCampWorkHard",
+        "BaseCampWorkHard02",
+        "BaseCampWorkHard03"
+      ]
+    },
+    {
+      "id": "ore-sites",
+      "group": "structure",
+      "name": {
+        "ru": "Рудники",
+        "en": "Ore Sites"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Product_CoalPit",
+        "Product_SulfurPit",
+        "Product_QuartzPit",
+        "CrystalPit",
+        "SkyIslandOrePit"
+      ]
+    },
+    {
+      "id": "pal-beds",
+      "group": "structure",
+      "name": {
+        "ru": "Кровати палов",
+        "en": "Pal Beds"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Infra_PalBed_Grade_01",
+        "Infra_PalBed_Grade_02",
+        "MedicalPalBed_04",
+        "MedicalPalBed_05",
+        "Ancient_MedicalPalBed"
+      ]
+    },
+    {
+      "id": "palboxes",
+      "group": "structure",
+      "name": {
+        "ru": "Палбоксы",
+        "en": "Palboxes"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "PALBOX",
+        "GlobalPalStorage"
+      ]
+    },
+    {
+      "id": "product_copperpit",
+      "group": "structure",
+      "name": {
+        "en": "Site",
+        "ru": "Рудник"
       },
       "kind": "chain",
       "confidence": "hard",
       "members": [
-        "Unlock_Picking_Tier1",
-        "Unlock_Picking_Tier2",
-        "Unlock_Picking_Tier3"
+        "Product_CopperPit",
+        "Product_CopperPit_2"
+      ]
+    },
+    {
+      "id": "signs",
+      "group": "structure",
+      "name": {
+        "ru": "Вывески",
+        "en": "Signs"
+      },
+      "kind": "group",
+      "confidence": "manual",
+      "members": [
+        "Signboard",
+        "WallSignboard"
+      ]
+    },
+    {
+      "id": "sphere-production",
+      "group": "structure",
+      "name": {
+        "ru": "Производство сфер",
+        "en": "Sphere Production"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Special_SphereFactory_Black_Grade_01",
+        "Special_SphereFactory_Black_Grade_02",
+        "Special_SphereFactory_Black_Grade_03",
+        "SphereFactory_Black_04"
+      ]
+    },
+    {
+      "id": "structure-sets",
+      "group": "structure",
+      "name": {
+        "ru": "Наборы для строительства",
+        "en": "Structure Sets"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Wooden_houseset",
+        "Stone_houseset",
+        "Metal_houseset",
+        "Glass_houseset",
+        "JapaneseStyle_houseset",
+        "SF_houseset"
+      ]
+    },
+    {
+      "id": "torches",
+      "group": "structure",
+      "name": {
+        "ru": "Факелы",
+        "en": "Torches"
+      },
+      "kind": "group",
+      "confidence": "manual",
+      "members": [
+        "HandTorch",
+        "Torch",
+        "WallTorch"
+      ]
+    },
+    {
+      "id": "wall",
+      "group": "structure",
+      "name": {
+        "en": "Defensive Wall",
+        "ru": "Защитная стена"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "DefenseWall_Wood",
+        "DefenseWall",
+        "DefenseWall_Metal"
+      ]
+    },
+    {
+      "id": "weapon-production",
+      "group": "structure",
+      "name": {
+        "ru": "Производство оружия",
+        "en": "Weapon Production"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Product_WeaponFactory_Dirty_Grade_01",
+        "Product_WeaponFactory_Dirty_Grade_02",
+        "Product_WeaponFactory_Dirty_Grade_03",
+        "WeaponFactory_Dirty_04"
+      ]
+    },
+    {
+      "id": "workbenches",
+      "group": "structure",
+      "name": {
+        "ru": "Верстаки",
+        "en": "Workbenches"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "Workbench",
+        "Product_Factory_Hard_Grade_01",
+        "Product_Factory_Hard_Grade_02",
+        "Product_Factory_Hard_Grade_03",
+        "Factory_Hard_04"
       ]
     },
     {
       "id": "axes",
-      "group": "tools",
+      "group": "weapon",
       "name": {
         "ru": "Топоры",
         "en": "Axes"
@@ -813,99 +847,17 @@
       ]
     },
     {
-      "id": "fishing-rods",
-      "group": "tools",
-      "name": {
-        "ru": "Удочки",
-        "en": "Fishing Rods"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "FishingSet1",
-        "FishingRod_02_1",
-        "FishingRod_03_1"
-      ]
-    },
-    {
-      "id": "gliders",
-      "group": "tools",
-      "name": {
-        "ru": "Планеры",
-        "en": "Gliders"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Battle_Glider_Grade_01",
-        "Battle_Glider_Grade_02",
-        "Battle_Glider_Grade_03",
-        "Battle_Glider_Grade_04",
-        "WingGlider"
-      ]
-    },
-    {
-      "id": "grappling-guns",
-      "group": "tools",
-      "name": {
-        "ru": "Крюк-кошка",
-        "en": "Grappling Guns"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "GrapplingGun",
-        "GrapplingGun2",
-        "GrapplingGun3",
-        "GrapplingGun4",
-        "GrapplingGun5"
-      ]
-    },
-    {
-      "id": "lantern",
-      "group": "tools",
-      "name": {
-        "en": "Hip Lantern",
-        "ru": "Поясной фонарь"
-      },
-      "kind": "chain",
-      "confidence": "hard",
-      "members": [
-        "Lantern",
-        "Lantern_High"
-      ]
-    },
-    {
-      "id": "pickaxes",
-      "group": "tools",
-      "name": {
-        "ru": "Кирки",
-        "en": "Pickaxes"
-      },
-      "kind": "chain",
-      "confidence": "manual",
-      "members": [
-        "Product_Pickaxe_Grade_01",
-        "Product_Pickaxe_Grade_02",
-        "Product_Pickaxe_Grade_03",
-        "Battle_MeleeWeapon_Pickaxe_Steal"
-      ]
-    },
-    {
-      "id": "arrow",
+      "id": "bat",
       "group": "weapon",
       "name": {
-        "en": "Arrow",
-        "ru": "Стрела"
+        "en": "Bat",
+        "ru": "Бита"
       },
       "kind": "chain",
       "confidence": "name",
       "members": [
-        "Arrow",
-        "Arrow_Fire",
-        "Arrow_Poison",
-        "ReinforcedArrow",
-        "SFArrow"
+        "Battle_MeleeWeapon_Bat2",
+        "Bat3"
       ]
     },
     {
@@ -923,6 +875,38 @@
         "Battle_RangeWeapon_CompoundBow",
         "SFBow",
         "SkyBow"
+      ]
+    },
+    {
+      "id": "fishing-rods",
+      "group": "weapon",
+      "name": {
+        "ru": "Удочки",
+        "en": "Fishing Rods"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "FishingSet1",
+        "FishingRod_02_1",
+        "FishingRod_03_1"
+      ]
+    },
+    {
+      "id": "grappling-guns",
+      "group": "weapon",
+      "name": {
+        "ru": "Крюк-кошка",
+        "en": "Grappling Guns"
+      },
+      "kind": "chain",
+      "confidence": "manual",
+      "members": [
+        "GrapplingGun",
+        "GrapplingGun2",
+        "GrapplingGun3",
+        "GrapplingGun4",
+        "GrapplingGun5"
       ]
     },
     {
@@ -954,18 +938,19 @@
       ]
     },
     {
-      "id": "mines",
+      "id": "pickaxes",
       "group": "weapon",
       "name": {
-        "ru": "Мины",
-        "en": "Mines"
+        "ru": "Кирки",
+        "en": "Pickaxes"
       },
       "kind": "chain",
       "confidence": "manual",
       "members": [
-        "Trap_MineAttack",
-        "Trap_MineElecShock",
-        "Trap_MineFreeze"
+        "Product_Pickaxe_Grade_01",
+        "Product_Pickaxe_Grade_02",
+        "Product_Pickaxe_Grade_03",
+        "Battle_MeleeWeapon_Pickaxe_Steal"
       ]
     },
     {
@@ -1019,6 +1004,21 @@
         "Battle_RangeWeapon_SemiAutoShotgun",
         "EnergyShotgun",
         "SkyShotgun"
+      ]
+    },
+    {
+      "id": "smg",
+      "group": "weapon",
+      "name": {
+        "en": "SMG",
+        "ru": "Пистолет пулемёт"
+      },
+      "kind": "chain",
+      "confidence": "name",
+      "members": [
+        "MakeshiftSubmachineGun",
+        "Battle_RangeWeapon_SubmachineGun",
+        "SkySubmachineGun"
       ]
     },
     {
@@ -1267,50 +1267,36 @@
         "MeatCutterKnife",
         "Battle_RangeWeapon_BowGun",
         "Musket",
-        "RoughBullet",
+        "ElecBaton",
         "PalDopingShot",
-        "PalDopingShotBullet",
         "FragGrenade",
         "FragGrenade_Elec",
-        "HandgunBullet",
         "FragGrenade_Ice",
+        "YakushimaBlade",
         "FragGrenade_Fire",
         "PalHealingGrenade",
+        "Battle_RangeWeapon_OldRevolver",
         "FragGrenade_Water",
         "FragGrenade_Leaf",
-        "RifleBullet",
         "Launcher_Meteor",
         "FragGrenade_Ground",
-        "ShotGunBullet",
         "FragGrenade_Dark",
         "FragGrenade_Dragon",
-        "DecalGunSet",
-        "AssaultRifleBullet",
-        "GrenadeBullet",
+        "Katana",
+        "Battle_RangeWeapon_FlameThrower",
         "FragGrenade_Super",
+        "LaserMiningTool",
         "Battle_RangeWeapon_GatlingGun",
-        "GatlingBullet",
-        "MissileBullet",
         "LaserGatlingGun",
-        "EnergyShotgunBullet",
+        "EnergyRocketLauncher",
         "PalDopingShot_2",
-        "OverheatRifleBullet",
-        "LauncherBullet",
-        "ChargeLaserRifleBullet",
-        "SkyBowArrow",
-        "SkySubmachineGunBullet",
-        "SkyShotgunBullet",
-        "SkyAssaultRifleBullet",
-        "SkyGrenadeLauncherBullet",
-        "WidePenetrateShotgunBullet",
+        "WidePenetrateShotgun",
         "DroneLauncher",
-        "ElectricArcAssaultRifleBullet",
-        "BeamLauncher",
-        "BeamLauncherBullet"
+        "BeamLauncher"
       ]
     },
     {
-      "group": "base",
+      "group": "structure",
       "members": [
         "RepairBench",
         "SkinChange",
@@ -1393,48 +1379,87 @@
       ]
     },
     {
-      "group": "gear",
+      "group": "material",
       "members": [
         "Infra_MachineParts",
-        "Accessory_Nonkilling",
         "Cement",
         "Battle_GunPowder_Grade_02",
-        "ElecBaton",
-        "Homeward",
-        "WaterBuildKit",
-        "UnlockEquipmentSlot_Weapon_01",
-        "Accessory_JumpPower_Increase",
-        "YakushimaBlade",
         "Bio_Coolant",
-        "OctaviaSet01",
-        "Battle_RangeWeapon_OldRevolver",
         "Polymer",
-        "Accessory_TalentChecker",
         "Infra_ElectronicCircuit",
         "CarbonFiber",
         "Corrosive_Solvent",
         "Bio_Battery",
-        "Katana",
         "Plastic",
         "Computer",
-        "Battle_RangeWeapon_FlameThrower",
-        "FlamethrowerBullet",
-        "LaserMiningTool",
-        "UnlockEquipmentSlot_Weapon_02",
-        "OctaviaSet02",
         "StainlessSteel",
-        "MetalDetector",
         "Thermal_Core",
-        "EnergyRocketLauncher",
-        "Potion_Extreme",
-        "PalRevive",
         "Salvage_TreasureBoxKey02",
         "AIcore",
-        "WidePenetrateShotgun",
-        "GasMask",
-        "Accessory_ExplosionResist",
-        "Supplement",
         "WingGlider_Fuel"
+      ]
+    },
+    {
+      "group": "accessory",
+      "members": [
+        "Accessory_Nonkilling",
+        "UnlockEquipmentSlot_Weapon_01",
+        "Accessory_JumpPower_Increase",
+        "Accessory_TalentChecker",
+        "UnlockEquipmentSlot_Weapon_02",
+        "GasMask",
+        "Accessory_ExplosionResist"
+      ]
+    },
+    {
+      "group": "ammo",
+      "members": [
+        "RoughBullet",
+        "PalDopingShotBullet",
+        "HandgunBullet",
+        "RifleBullet",
+        "ShotGunBullet",
+        "DecalGunSet",
+        "AssaultRifleBullet",
+        "FlamethrowerBullet",
+        "GrenadeBullet",
+        "GatlingBullet",
+        "MissileBullet",
+        "EnergyShotgunBullet",
+        "OverheatRifleBullet",
+        "LauncherBullet",
+        "ChargeLaserRifleBullet",
+        "SkyBowArrow",
+        "SkySubmachineGunBullet",
+        "SkyShotgunBullet",
+        "SkyAssaultRifleBullet",
+        "SkyGrenadeLauncherBullet",
+        "WidePenetrateShotgunBullet",
+        "ElectricArcAssaultRifleBullet",
+        "BeamLauncherBullet"
+      ]
+    },
+    {
+      "group": "consumable",
+      "members": [
+        "Homeward",
+        "Potion_Extreme",
+        "PalRevive",
+        "Supplement"
+      ]
+    },
+    {
+      "group": "essential",
+      "members": [
+        "WaterBuildKit",
+        "MetalDetector"
+      ]
+    },
+    {
+      "group": "armor",
+      "members": [
+        "OctaviaSet01",
+        "OctaviaSet02"
       ]
     }
   ]

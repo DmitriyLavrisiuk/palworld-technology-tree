@@ -11,6 +11,7 @@ import {
   TOTAL_TECHS,
   TOTAL_TECH_POINTS,
 } from "../src/lib/constants.ts"
+import { GROUP_NAMES, GROUP_ORDER } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
 
 /**
@@ -159,6 +160,42 @@ describe("заглушки локали", () => {
       }
     }
     expect(leaked).toEqual([])
+  })
+})
+
+describe("категория из классификации игры", () => {
+  it("у каждой технологии есть категория из известного набора", () => {
+    for (const tech of technologies) {
+      expect(GROUP_ORDER, tech.id).toContain(tech.group)
+    }
+  })
+
+  it("постройки по категории — это ровно постройки по данным DataTable", () => {
+    // Главное доказательство, что путь ассета несёт настоящую классификацию,
+    // а не наше толкование: два независимых источника дают одно множество.
+    const byGroup = technologies.filter((tech) => tech.group === "structure").map((t) => t.id)
+    const byCategory = technologies.filter((tech) => tech.category === "Structures").map((t) => t.id)
+    expect(byGroup.sort()).toEqual(byCategory.sort())
+  })
+
+  it("каждая категория переведена на оба языка", () => {
+    for (const group of GROUP_ORDER) {
+      expect(GROUP_NAMES[group].ru.length, group).toBeGreaterThan(0)
+      expect(GROUP_NAMES[group].en.length, group).toBeGreaterThan(0)
+    }
+  })
+
+  it("ни одна категория не пустует", () => {
+    // Пустая секция в интерфейсе — признак того, что таксономия разъехалась
+    // с данными после патча.
+    const used = new Set(technologies.map((tech) => tech.group))
+    expect([...GROUP_ORDER].filter((group) => !used.has(group))).toEqual([])
+  })
+
+  it("снаряжение палов совпадает с корзиной сёдел", () => {
+    const palgear = technologies.filter((tech) => tech.group === "palgear").length
+    const saddles = chains.buckets.find((bucket) => bucket.id === "saddles")?.members.length
+    expect(palgear).toBe(saddles)
   })
 })
 
