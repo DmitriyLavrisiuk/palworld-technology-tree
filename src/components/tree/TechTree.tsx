@@ -161,7 +161,7 @@ export function TechTree({
 
   if (view === "compact") {
     return (
-      <div className="flex flex-col gap-6 p-2 sm:p-3">
+      <div className="flex flex-col gap-2 p-2 sm:p-3">
         {sections.map((section) => {
           const isCollapsed = collapsed.has(section.key)
 
@@ -235,7 +235,7 @@ export function TechTree({
 
   if (view === "lanes") {
     return (
-      <div className="flex flex-col gap-6 p-1 sm:p-3" style={nodeVars(metrics.step)}>
+      <div className="flex flex-col gap-2 p-1 sm:p-3" style={nodeVars(metrics.step)}>
         {sections.map((section) => (
           <section key={section.key}>
             <SectionHeading
@@ -293,7 +293,7 @@ export function TechTree({
 
   // view === "levels"
   return (
-    <div className="flex flex-col gap-6 p-1 sm:p-3">
+    <div className="flex flex-col gap-2 p-1 sm:p-3">
       {sections.map((section) => (
         <section key={section.key}>
           <SectionHeading

@@ -8,6 +8,14 @@ import { nodeVars, type NodeMetrics } from "@/lib/nodeSize"
 import { chainSummary, connectorBetween, isSynthesised, type NodeStatus } from "@/lib/tree"
 import type { Chain, Locale, Technology } from "@/types/tech"
 
+/**
+ * Соединитель встаёт по центру плитки, а не по фиксированному отступу:
+ * у кнопки узла паддинг 4 px, дальше плитка высотой `--node`, сама
+ * иконка 16 px. Раньше здесь стояло `mt-6`, подобранное под один размер,
+ * и при увеличении иконок стрелки оставались на прежней высоте.
+ */
+const CONNECTOR_OFFSET = { marginTop: "calc(var(--node) / 2 - 4px)" }
+
 export interface ChainStep {
   tech: Technology
   /** Позиция в исходной цепочке: по ней видно, что фильтр вырезал середину. */
@@ -51,7 +59,7 @@ export function LaneRow({
   const synthesised = isSynthesised(chain.confidence)
 
   return (
-    <section className="border-b py-2 last:border-b-0 sm:flex sm:items-start sm:gap-3">
+    <section className="border-b px-2 py-2 last:border-b-0 sm:flex sm:items-start sm:gap-3">
       <div className="sm:w-44 sm:shrink-0">
         <CollapseHeader
           collapsed={collapsed}
@@ -79,7 +87,7 @@ export function LaneRow({
       </div>
 
       {!collapsed && (
-        <div className="flex flex-wrap items-start gap-0.5 px-1 sm:flex-1 sm:px-0">
+        <div className="flex flex-wrap items-start gap-0.5 sm:flex-1">
           {steps.map((step, position) => {
             const previous = steps[position - 1]
             const connector = previous
@@ -92,12 +100,14 @@ export function LaneRow({
                 {connector === "arrow" && (
                   <ChevronRightIcon
                     aria-hidden
-                    className="mt-6 size-4 shrink-0 self-start text-muted-foreground/60"
+                    className="size-4 shrink-0 self-start text-muted-foreground/60"
+                    style={CONNECTOR_OFFSET}
                   />
                 )}
                 {connector === "gap" && (
                   <MoreHorizontalIcon
-                    className="mt-6 size-4 shrink-0 self-start text-muted-foreground/60"
+                    className="size-4 shrink-0 self-start text-muted-foreground/60"
+                    style={CONNECTOR_OFFSET}
                     aria-label={t("stepsHidden", locale)}
                   />
                 )}
