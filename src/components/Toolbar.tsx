@@ -163,7 +163,9 @@ export function Toolbar({
       </div>
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t px-3 py-2">
-        <span className={cn(CONTROL, "flex shrink-0 items-center rounded-lg bg-muted p-0.5")}>
+        {/* Контейнер под пальцем выше обычного: сегменты внутри тянутся на всю
+            высоту минус паддинг, и при 44 px контейнера им доставалось бы 40. */}
+        <span className="flex h-9 shrink-0 items-center rounded-lg bg-muted p-0.5 pointer-coarse:h-12">
           {VIEWS.map((item) => {
             const Icon = item.icon
             const active = view === item.value
