@@ -30,6 +30,12 @@ export interface Progress {
   /** Показываемые категории. Пустой список означает «все» — так фильтр
    *  выключен по умолчанию и не требует перечислять всё при первом запуске. */
   groups: GroupKey[]
+  /**
+   * Ключи свёрнутых секций и цепочек. Хранятся именно свёрнутые: неизвестный
+   * ключ считается раскрытым, поэтому новые цепочки после патча появляются
+   * открытыми, а исчезнувшие просто перестают учитываться.
+   */
+  collapsed: string[]
 }
 
 const VIEWS: ViewMode[] = ["levels", "lanes", "compact"]
@@ -50,6 +56,7 @@ const DEFAULTS: Progress = {
   theme: "system",
   nodeSize: DEFAULT_NODE_SIZE,
   groups: [],
+  collapsed: [],
 }
 
 /**
@@ -79,6 +86,9 @@ function coerce(raw: unknown): Progress {
     view: VIEWS.includes(value.view as ViewMode) ? (value.view as ViewMode) : DEFAULTS.view,
     theme: THEMES.includes(value.theme as Theme) ? (value.theme as Theme) : DEFAULTS.theme,
     nodeSize: isNodeSizeKey(value.nodeSize) ? value.nodeSize : DEFAULTS.nodeSize,
+    collapsed: Array.isArray(value.collapsed)
+      ? value.collapsed.filter((key): key is string => typeof key === "string")
+      : DEFAULTS.collapsed,
     groups: Array.isArray(value.groups)
       ? value.groups.filter((group): group is GroupKey =>
           (GROUP_ORDER as string[]).includes(group as string),
@@ -118,6 +128,7 @@ export function useProgress() {
   }, [state])
 
   const researched = useMemo(() => new Set(state.researched), [state.researched])
+  const collapsed = useMemo(() => new Set(state.collapsed), [state.collapsed])
 
   const toggleResearched = useCallback((id: string) => {
     setState((previous) => {
@@ -165,9 +176,19 @@ export function useProgress() {
     setState((previous) => ({ ...previous, groups: [] }))
   }, [])
 
+  const toggleCollapsed = useCallback((key: string) => {
+    setState((previous) => {
+      const next = new Set(previous.collapsed)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return { ...previous, collapsed: [...next] }
+    })
+  }, [])
+
   return {
     ...state,
     researched,
+    collapsed,
     toggleResearched,
     setLevel,
     setLocale,
@@ -176,5 +197,6 @@ export function useProgress() {
     setNodeSize,
     toggleGroup,
     clearGroups,
+    toggleCollapsed,
   }
 }

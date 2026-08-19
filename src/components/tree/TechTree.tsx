@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react"
+import { useMemo } from "react"
 
 import { ChainCard } from "@/components/tree/ChainCard"
 import { ChainRow } from "@/components/tree/ChainRow"
@@ -30,6 +30,9 @@ interface TechTreeProps {
   /** Идентификаторы узлов проложенного маршрута — для подсветки. */
   routeIds: ReadonlySet<string>
   nodeSize: NodeSizeKey
+  /** Ключи свёрнутых секций и цепочек; живут в localStorage. */
+  collapsed: ReadonlySet<string>
+  onToggleCollapse: (key: string) => void
   onSelect: (id: string) => void
 }
 
@@ -59,26 +62,18 @@ export function TechTree({
   selectedId,
   routeIds,
   nodeSize,
+  collapsed,
+  onToggleCollapse,
   onSelect,
 }: TechTreeProps) {
   const metrics = nodeMetrics(nodeSize)
 
   /**
-   * Хранятся СВЁРНУТЫЕ ключи: неизвестный ключ раскрыт, поэтому смена
-   * фильтров ничего не воскрешает. Набор намеренно не входит в зависимости
-   * большого useMemo ниже — иначе каждый щелчок шевроном пересобирал бы все
-   * секции. Свёрнутость эфемерна: это жест навигации, а не настройка.
+   * Набор свёрнутых ключей намеренно НЕ входит в зависимости большого useMemo
+   * ниже — иначе каждый щелчок шевроном пересобирал бы все секции.
    */
-  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(() => new Set())
+  const toggle = onToggleCollapse
 
-  const toggle = useCallback((key: string) => {
-    setCollapsed((previous) => {
-      const next = new Set(previous)
-      if (next.has(key)) next.delete(key)
-      else next.add(key)
-      return next
-    })
-  }, [])
   const { sections, statusOf, total } = useMemo(() => {
     const statuses = new Map<string, NodeStatus>(visible.map((item) => [item.tech.id, item.status]))
     const shown = new Set(statuses.keys())

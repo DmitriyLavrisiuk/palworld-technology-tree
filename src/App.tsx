@@ -131,6 +131,8 @@ export default function App() {
           selectedId={selectedId}
           routeIds={routeIds}
           nodeSize={progress.nodeSize}
+          collapsed={progress.collapsed}
+          onToggleCollapse={progress.toggleCollapsed}
           onSelect={setSelectedId}
         />
       </main>
