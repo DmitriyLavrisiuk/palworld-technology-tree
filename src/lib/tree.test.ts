@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest"
 
 import {
   isGuessed,
+  chainSummary,
+  connectorBetween,
   researchedTotals,
   isSynthesised,
   matches,
@@ -271,5 +273,52 @@ describe("сводка по изученному", () => {
     // Технология, удалённая патчем, остаётся в localStorage навсегда —
     // счётчик не должен из-за неё показывать больше, чем есть в игре.
     expect(researchedTotals(list, new Set(["A", "УдалённаяПатчем"])).count).toBe(1)
+  })
+})
+
+describe("сводка по цепочке", () => {
+  it("диапазон уровней и очки раздельно", () => {
+    const line = [
+      tech("A", { level: 5, cost: 2 }),
+      tech("B", { level: 20, cost: 3 }),
+      tech("C", { level: 12, cost: 4, ancient: true }),
+    ]
+    expect(chainSummary(line)).toEqual({
+      count: 3,
+      minLevel: 5,
+      maxLevel: 20,
+      techPoints: 5,
+      ancientPoints: 4,
+    })
+  })
+
+  it("цепочка из одного узла даёт вырожденный диапазон", () => {
+    expect(chainSummary([tech("A", { level: 7, cost: 1 })])).toMatchObject({
+      count: 1,
+      minLevel: 7,
+      maxLevel: 7,
+    })
+  })
+
+  it("пустой вход даёт null, а не нули", () => {
+    expect(chainSummary([])).toBeNull()
+  })
+})
+
+describe("соединитель между ступенями", () => {
+  it("соседние ступени цепочки соединяются стрелкой", () => {
+    expect(connectorBetween(0, 1, "chain")).toBe("arrow")
+    expect(connectorBetween(4, 5, "chain")).toBe("arrow")
+  })
+
+  it("параллельные варианты стрелкой не соединяются никогда", () => {
+    // Семь культур и пять модулей сфер равноправны: стрелка соврала бы.
+    expect(connectorBetween(0, 1, "group")).toBe("none")
+    expect(connectorBetween(3, 4, "group")).toBe("none")
+  })
+
+  it("вырезанная фильтром середина показывается разрывом, а не стрелкой", () => {
+    expect(connectorBetween(0, 3, "chain")).toBe("gap")
+    expect(connectorBetween(0, 3, "group")).toBe("gap")
   })
 })

@@ -1,11 +1,13 @@
-import { useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 import { ChainRow } from "@/components/tree/ChainRow"
+import { CollapseHeader } from "@/components/tree/CollapseHeader"
 import { CompactCard } from "@/components/tree/CompactCard"
 import { LaneRow, type ChainStep } from "@/components/tree/LaneRow"
 import { LevelRuler } from "@/components/tree/LevelRuler"
 import { LooseRow } from "@/components/tree/LooseRow"
 import { TechNode } from "@/components/tree/TechNode"
+import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 import type { ViewMode } from "@/hooks/useProgress"
 import { GROUP_NAMES, GROUP_ORDER, MAX_LEVEL } from "@/lib/constants"
@@ -60,6 +62,23 @@ export function TechTree({
   onSelect,
 }: TechTreeProps) {
   const metrics = nodeMetrics(nodeSize)
+
+  /**
+   * Хранятся СВЁРНУТЫЕ ключи: неизвестный ключ раскрыт, поэтому смена
+   * фильтров ничего не воскрешает. Набор намеренно не входит в зависимости
+   * большого useMemo ниже — иначе каждый щелчок шевроном пересобирал бы все
+   * секции. Свёрнутость эфемерна: это жест навигации, а не настройка.
+   */
+  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(() => new Set())
+
+  const toggle = useCallback((key: string) => {
+    setCollapsed((previous) => {
+      const next = new Set(previous)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }, [])
   const { sections, statusOf, total } = useMemo(() => {
     const statuses = new Map<string, NodeStatus>(visible.map((item) => [item.tech.id, item.status]))
     const shown = new Set(statuses.keys())
@@ -163,7 +182,12 @@ export function TechTree({
 
           return (
             <section key={section.key}>
-              <h2 className="mb-2 text-sm font-semibold">{section.title}</h2>
+              <SectionHeading
+                section={section}
+                collapsed={collapsed.has(section.key)}
+                onToggle={() => toggle(section.key)}
+              />
+              {collapsed.has(section.key) ? null : (
               <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))] gap-1.5">
                 {all.map((tech) => (
                   <CompactCard
@@ -178,6 +202,7 @@ export function TechTree({
                   />
                 ))}
               </div>
+              )}
             </section>
           )
         })}
@@ -190,7 +215,12 @@ export function TechTree({
       <div className="flex flex-col gap-6 p-1 sm:p-3" style={nodeVars(metrics.step)}>
         {sections.map((section) => (
           <section key={section.key}>
-            <h2 className="mb-1 px-2 text-sm font-semibold">{section.title}</h2>
+            <SectionHeading
+              section={section}
+              collapsed={collapsed.has(section.key)}
+              onToggle={() => toggle(section.key)}
+            />
+            {collapsed.has(section.key) ? null : (
             <div className="rounded-md border">
               {section.chains.map((entry) => (
                 <LaneRow
@@ -203,6 +233,8 @@ export function TechTree({
                   selectedId={selectedId}
                   routeIds={routeIds}
                   metrics={metrics}
+                  collapsed={collapsed.has(entry.chain.id)}
+                  onToggleCollapse={() => toggle(entry.chain.id)}
                   onSelect={onSelect}
                 />
               ))}
@@ -229,6 +261,7 @@ export function TechTree({
                 </div>
               )}
             </div>
+            )}
           </section>
         ))}
       </div>
@@ -240,7 +273,12 @@ export function TechTree({
     <div className="flex flex-col gap-6 p-1 sm:p-3">
       {sections.map((section) => (
         <section key={section.key}>
-          <h2 className="mb-1 px-2 text-sm font-semibold">{section.title}</h2>
+          <SectionHeading
+            section={section}
+            collapsed={collapsed.has(section.key)}
+            onToggle={() => toggle(section.key)}
+          />
+          {collapsed.has(section.key) ? null : (
           <div className="overflow-x-auto rounded-md border">
             <div style={{ width: LABEL_WIDTH + MAX_LEVEL * metrics.levelStep }}>
               <LevelRuler
@@ -261,6 +299,8 @@ export function TechTree({
                   metrics={metrics}
                   labelWidth={LABEL_WIDTH}
                   playerLevel={playerLevel}
+                  collapsed={collapsed.has(entry.chain.id)}
+                  onToggleCollapse={() => toggle(entry.chain.id)}
                   onSelect={onSelect}
                 />
               ))}
@@ -279,8 +319,35 @@ export function TechTree({
               )}
             </div>
           </div>
+          )}
         </section>
       ))}
     </div>
+  )
+}
+
+/** Заголовок секции: шеврон, название и сколько узлов в ней осталось после фильтров. */
+function SectionHeading({
+  section,
+  collapsed,
+  onToggle,
+}: {
+  section: Section
+  collapsed: boolean
+  onToggle: () => void
+}) {
+  const count =
+    section.chains.reduce(
+      (sum, entry) => sum + entry.steps.length + [...entry.variants.values()].flat().length,
+      0,
+    ) + section.loose.length
+
+  return (
+    <CollapseHeader collapsed={collapsed} onToggle={onToggle} label={section.title} className="mb-1">
+      <span className="text-sm font-semibold">{section.title}</span>
+      <Badge variant="secondary" className="tabular-nums">
+        {count}
+      </Badge>
+    </CollapseHeader>
   )
 }

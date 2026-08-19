@@ -1,4 +1,4 @@
-import type { Chain, ChainConfidence, Technology } from "@/types/tech"
+import type { Chain, ChainConfidence, ChainKind, Technology } from "@/types/tech"
 
 /**
  * Чистая логика дерева: состояние узла, поиск и фильтры. Живёт отдельно от
@@ -175,4 +175,51 @@ export function researchedTotals(
   }
 
   return { count, techPoints, ancientPoints }
+}
+
+export interface ChainSummary {
+  count: number
+  minLevel: number
+  maxLevel: number
+  techPoints: number
+  ancientPoints: number
+}
+
+/** Сводка по цепочке для её заголовка. Очки — раздельно, как везде. */
+export function chainSummary(techs: readonly Technology[]): ChainSummary | null {
+  if (!techs.length) return null
+
+  let techPoints = 0
+  let ancientPoints = 0
+  let minLevel = Infinity
+  let maxLevel = -Infinity
+
+  for (const tech of techs) {
+    if (tech.ancient) ancientPoints += tech.cost
+    else techPoints += tech.cost
+    minLevel = Math.min(minLevel, tech.level)
+    maxLevel = Math.max(maxLevel, tech.level)
+  }
+
+  return { count: techs.length, minLevel, maxLevel, techPoints, ancientPoints }
+}
+
+/** Что рисовать между двумя соседними видимыми ступенями. */
+export type Connector = "arrow" | "gap" | "none"
+
+/**
+ * Правило продукта, а не оформления: стрелка утверждает порядок. У цепочки
+ * вида `group` члены равноправны, а вырезанная фильтром середина не даёт
+ * права соединять то, что осталось — в обоих случаях стрелка соврала бы.
+ *
+ * Живёт здесь, а не в компоненте: иначе при втором месте отрисовки правило
+ * скопируют, и одна из копий отстанет.
+ */
+export function connectorBetween(
+  previousIndex: number,
+  nextIndex: number,
+  kind: ChainKind,
+): Connector {
+  if (nextIndex - previousIndex !== 1) return "gap"
+  return kind === "chain" ? "arrow" : "none"
 }

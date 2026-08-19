@@ -1,3 +1,4 @@
+import { CollapseHeader } from "@/components/tree/CollapseHeader"
 import { TechNode } from "@/components/tree/TechNode"
 import { MAX_LEVEL } from "@/lib/constants"
 import { t } from "@/lib/i18n"
@@ -18,6 +19,8 @@ interface ChainRowProps {
   metrics: NodeMetrics
   labelWidth: number
   playerLevel: number
+  collapsed: boolean
+  onToggleCollapse: () => void
   onSelect: (id: string) => void
 }
 
@@ -37,31 +40,43 @@ export function ChainRow({
   metrics,
   labelWidth,
   playerLevel,
+  collapsed,
+  onToggleCollapse,
   onSelect,
 }: ChainRowProps) {
   const step = metrics.levelStep
   const allVariants = [...variants.values()].flat()
-  const height = metrics.rowHeight(allVariants.length > 0)
+  const height = collapsed ? 44 : metrics.rowHeight(allVariants.length > 0)
   const railTop = metrics.rowBase / 2
 
   return (
     <div className="flex border-b last:border-b-0">
       <div
-        className="sticky left-0 z-20 flex shrink-0 flex-col justify-center gap-0.5 border-r bg-card px-2 py-1"
+        className="sticky left-0 z-20 flex shrink-0 items-center border-r bg-card px-1"
         style={{ width: labelWidth }}
       >
-        <span className="truncate text-xs font-medium" title={chain.name[locale]}>
-          {chain.name[locale]}
-        </span>
-        {isSynthesised(chain.confidence) && (
-          <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
-            <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-synth" />
-            {t("synthShort", locale)}
+        <CollapseHeader
+          collapsed={collapsed}
+          onToggle={onToggleCollapse}
+          label={chain.name[locale]}
+        >
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-xs font-medium" title={chain.name[locale]}>
+              {chain.name[locale]}
+            </span>
+            {isSynthesised(chain.confidence) && (
+              <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+                <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-synth" />
+                {t("synthShort", locale)}
+              </span>
+            )}
           </span>
-        )}
+        </CollapseHeader>
       </div>
 
       <div className="relative" style={{ width: MAX_LEVEL * step, height }}>
+        {collapsed ? null : (
+        <>
         <div aria-hidden className={cn("absolute h-px bg-rail")} style={{ left: 0, right: 0, top: railTop }} />
         <div
           aria-hidden
@@ -109,6 +124,8 @@ export function ChainRow({
             </div>
           ))}
         </div>
+        </>
+        )}
       </div>
     </div>
   )
