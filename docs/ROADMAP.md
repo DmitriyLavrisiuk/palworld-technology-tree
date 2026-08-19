@@ -16,7 +16,7 @@
 Цель: развёрнута система работы — документация, правила для агента, настройки, git-процесс, GitHub MCP.
 
 - [x] Бутстрап проекта → проверка: `docs/` с контракт-шапками, `.claude/` с CLAUDE.md, settings.json и тремя агентами, pre-commit проверен вживую (gitleaks отработал на застейдженных файлах).
-- [ ] Первый коммит → проверка: `git log` содержит `chore: bootstrap project docs & claude setup`.
+- [x] Первый коммит → проверка: `git log` содержит `chore: bootstrap project docs & claude setup`.
 
 ## Фаза 1 — конвейер данных
 

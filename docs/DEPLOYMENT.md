@@ -12,8 +12,8 @@
 | Что | Где |
 |---|---|
 | Хостинг | GitHub Pages, ветка `gh-pages` |
-| Репозиторий | _Заполнить в Фазе 2: новый репозиторий, ещё не создан_ |
-| Прод-URL | _Заполнить в Фазе 2_ |
+| Репозиторий | `DmitriyLavrisiuk/palworld-technology-tree`, публичный |
+| Прод-URL | https://dmitriylavrisiuk.github.io/palworld-technology-tree/ — заработает после первой выкатки в Фазе 2 |
 | Сборка | локальная, `npm run build` → `dist/` |
 | Публикация | `gh-pages -d dist` |
 | Бэкенд, БД | нет — статика |

@@ -1,5 +1,5 @@
 {
-	"name": "palworld-tree",
+	"name": "palworld-technology-tree",
 	"private": true,
 	"version": "0.1.0",
 	"type": "module",
@@ -13,5 +13,6 @@
 		"typecheck": "tsc -b",
 		"scrape": "tsx scripts/scrape.ts",
 		"deploy": "npm run build && gh-pages -d dist"
-	}
+	},
+	"homepage": "https://dmitriylavrisiuk.github.io/palworld-technology-tree/"
 }
