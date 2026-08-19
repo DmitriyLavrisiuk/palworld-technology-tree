@@ -8,6 +8,12 @@
 
 - Конвейер данных перенесён из прототипа: парсер (`scripts/`, четыре источника), ручные цепочки, типы и константы игры, данные и 588 иконок. `npm run scrape` воспроизводит данные побайтно.
 - Документация конвейера: `docs/DATA_PIPELINE.md`, `docs/DATA_MODEL.md`, `docs/CHAINS.md`.
+- Каркас приложения: Vite 8, React 19, Tailwind v4, токены shadcn `base-nova`, шрифт Geist. Загрузка данных динамическим `import()` тремя отдельными чанками.
+- Первая выкатка на GitHub Pages: https://dmitriylavrisiuk.github.io/palworld-technology-tree/
+
+### Changed
+
+- React-плагин Vite — на SWC вместо babel-версии: `@vitejs/plugin-react@6` требует `@babel/core@8`, а `shadcn` тянет `@babel/core@7`, и дерево не разрешается.
 
 ### Fixed
 
