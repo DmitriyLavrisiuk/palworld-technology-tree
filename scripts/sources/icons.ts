@@ -4,18 +4,20 @@ import { join } from "node:path"
 import { fetchBuffer } from "../lib/http.ts"
 import { log } from "../lib/log.ts"
 
-const OUT_DIR = "public/icons"
-
 /**
  * Icons are named by technology id, not by the DataTable's IconName slug —
  * that slug does not reliably resolve on the CDN (roughly a fifth 404).
  * The URL is taken from the tech list page instead, which always resolves.
+ *
+ * Material icons go to their own directory: six material ids collide with
+ * technology ids and would otherwise overwrite them.
  */
 export async function downloadIcons(
   entries: { id: string; icon: string }[],
   fresh: boolean,
+  outDir = "public/icons",
 ): Promise<{ saved: number; failed: string[] }> {
-  await mkdir(OUT_DIR, { recursive: true })
+  await mkdir(outDir, { recursive: true })
 
   let saved = 0
   const failed: string[] = []
@@ -25,7 +27,7 @@ export async function downloadIcons(
     index++
     log.progress(index, entries.length, "icons")
 
-    const target = join(OUT_DIR, `${entry.id}.webp`)
+    const target = join(outDir, `${entry.id}.webp`)
     if (!fresh && existsSync(target)) {
       saved++
       continue

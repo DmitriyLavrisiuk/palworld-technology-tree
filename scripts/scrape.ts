@@ -23,7 +23,7 @@ const OUT = {
   chains: "src/data/chains.json",
 }
 
-const STAGES = ["techs", "icons", "recipes", "chains"] as const
+const STAGES = ["techs", "icons", "recipes", "materials", "chains"] as const
 type Stage = (typeof STAGES)[number]
 
 const args = process.argv.slice(2)
@@ -233,6 +233,40 @@ async function buildRecipes(technologies: Technology[]) {
 
 const OVERRIDES = "scripts/chain-overrides.json"
 
+/**
+ * Иконки материалов приезжают вместе со страницами рецептов — внутри ссылки
+ * на материал уже лежит `img`. Поэтому отдельных запросов к страницам нет,
+ * скачиваются только сами картинки, и то один раз: дальше их держит кэш.
+ *
+ * Каталог отдельный: шесть идентификаторов материалов совпадают с
+ * идентификаторами технологий и иначе перезаписали бы их иконки.
+ */
+async function buildMaterialIcons(technologies: Technology[]) {
+  log.step("Material icons")
+
+  const icons = new Map<string, string>()
+
+  for (const tech of technologies) {
+    let recipe: Awaited<ReturnType<typeof fetchRecipe>> = null
+    try {
+      recipe = await fetchRecipe(toSlug(tech.name.en), false)
+    } catch {
+      continue
+    }
+    if (!recipe) continue
+    for (const material of recipe.materials) {
+      if (material.icon && !icons.has(material.slug)) icons.set(material.slug, material.icon)
+    }
+  }
+
+  const entries = [...icons].map(([id, icon]) => ({ id, icon }))
+  log.detail(`${entries.length} distinct materials`)
+
+  const result = await downloadIcons(entries, fresh, "public/icons/materials")
+  log.done(`${result.saved} material icons → public/icons/materials`)
+  if (result.failed.length) log.warn(`${result.failed.length} failed: ${result.failed.slice(0, 5).join(", ")}`)
+}
+
 async function buildChainsFile(technologies: Technology[]) {
   log.step("Chains")
 
@@ -281,6 +315,7 @@ async function main() {
   }
 
   if (runs("recipes")) await buildRecipes(technologies)
+  if (runs("materials")) await buildMaterialIcons(technologies)
   if (runs("chains")) await buildChainsFile(technologies)
 
   console.log()

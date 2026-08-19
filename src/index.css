@@ -170,6 +170,13 @@
     --rail-hard: oklch(0.6 0.1 75);
 }
 
+/* Оверлей у shadcn — 10% чёрного, он почти не виден и не отделяет панель
+   от дерева. Правим по атрибуту, а не в src/components/ui: файлы shadcn не
+   редактируем, а поведение должно быть единым у всех листов. */
+[data-slot="sheet-overlay"] {
+  background-color: color-mix(in oklab, black 45%, transparent);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

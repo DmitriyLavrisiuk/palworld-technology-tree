@@ -1,5 +1,6 @@
 import { CheckIcon, RouteIcon, SparklesIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 
+import { MaterialList } from "@/components/tree/MaterialList"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -131,21 +132,18 @@ export function DetailSheet({
             ) : (
               <>
                 {recipe.stations.length > 0 && (
-                  <p className="text-sm">
-                    <span className="text-muted-foreground">{t("stations", locale)}: </span>
-                    {recipe.stations.map((station) => station[locale]).join(", ")}
-                  </p>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-xs text-muted-foreground">{t("stations", locale)}</p>
+                    <div className="flex flex-wrap gap-1">
+                      {recipe.stations.map((station) => (
+                        <Badge key={station.en} variant="outline" className="font-normal">
+                          {station[locale]}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
                 )}
-                <ul className="flex flex-col gap-1">
-                  {recipe.materials.map((material) => (
-                    <li key={material.id} className="flex justify-between gap-2 text-sm">
-                      <span className="min-w-0 truncate">{material.name[locale]}</span>
-                      <span className="shrink-0 tabular-nums text-muted-foreground">
-                        {material.count}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <MaterialList materials={recipe.materials} locale={locale} className="mt-1" />
               </>
             )}
           </section>

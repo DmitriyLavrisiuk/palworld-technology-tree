@@ -58,3 +58,11 @@ export async function loadTechData(): Promise<TechData> {
 export function iconUrl(techId: string): string {
   return `${import.meta.env.BASE_URL}icons/${techId}.webp`
 }
+
+/**
+ * Материалы держатся в отдельном каталоге: шесть их идентификаторов
+ * совпадают с идентификаторами технологий и в общем каталоге затёрли бы их.
+ */
+export function materialIconUrl(materialId: string): string {
+  return `${import.meta.env.BASE_URL}icons/materials/${materialId}.webp`
+}

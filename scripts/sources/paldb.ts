@@ -85,7 +85,7 @@ export async function fetchItemNames(locale: Locale, fresh: boolean): Promise<Ma
 export interface PaldbRecipe {
   /** Workbenches the item can be produced at. Empty for structures. */
   stations: string[]
-  materials: { slug: string; name: string; count: number }[]
+  materials: { slug: string; name: string; icon: string; count: number }[]
 }
 
 /** paldb slugs are the display name with spaces turned into underscores. */
@@ -145,6 +145,9 @@ export async function fetchRecipe(slug: string, fresh: boolean): Promise<PaldbRe
     materials.push({
       slug: slugRef,
       name: anchor.text().trim(),
+      // Иконка лежит прямо внутри ссылки на материал, поэтому за ней не нужно
+      // ходить на отдельную страницу — она приезжает вместе с рецептом.
+      icon: anchor.find("img").first().attr("src") ?? "",
       count: Number.isFinite(count) && count > 0 ? count : 1,
     })
   })

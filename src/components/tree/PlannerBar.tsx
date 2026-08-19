@@ -1,8 +1,17 @@
-import { useState } from "react"
-import { ChevronDownIcon, ChevronUpIcon, TriangleAlertIcon, XIcon } from "lucide-react"
+import { ChevronUpIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 
+import { MaterialList } from "@/components/tree/MaterialList"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import { iconUrl } from "@/lib/data"
 import { pointsLabel, stepsLabel, t } from "@/lib/i18n"
 import type { Route } from "@/lib/planner"
@@ -22,12 +31,11 @@ interface PlannerBarProps {
  * вопрос — сколько очков и какой уровень.
  */
 export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: PlannerBarProps) {
-  const [open, setOpen] = useState(false)
   const remaining = route.steps.filter((step) => !step.researched)
   const levelShort = t("levelShort", locale)
 
-  return (
-    <aside className="sticky bottom-0 z-40 border-t bg-background/95 backdrop-blur">
+  const bar = (
+    <aside className="sticky bottom-0 z-40 border-t bg-background/95 shadow-lg backdrop-blur">
       <div className="flex items-center gap-2 p-2">
         <img
           src={iconUrl(route.target.id)}
@@ -80,16 +88,14 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
           </p>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-11 shrink-0"
-          aria-label={t(open ? "collapse" : "expand", locale)}
-          aria-expanded={open}
-          onClick={() => setOpen((value) => !value)}
-        >
-          {open ? <ChevronDownIcon /> : <ChevronUpIcon />}
-        </Button>
+        <SheetTrigger
+          render={
+            <Button variant="ghost" size="icon" className="size-11 shrink-0">
+              <ChevronUpIcon />
+            </Button>
+          }
+          aria-label={t("expand", locale)}
+        />
         <Button
           variant="ghost"
           size="icon"
@@ -101,8 +107,29 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
         </Button>
       </div>
 
-      {open && (
-        <div className="max-h-[45dvh] overflow-y-auto border-t px-2 pt-2 pb-4">
+    </aside>
+  )
+
+  return (
+    <Sheet>
+      {bar}
+
+      <SheetContent side="bottom" className="max-h-[75dvh] overflow-y-auto" showCloseButton={false}>
+        <SheetHeader className="pr-12">
+          <SheetTitle className="truncate">{route.target.name[locale]}</SheetTitle>
+          <SheetDescription className="sr-only">{t("routeTitle", locale)}</SheetDescription>
+        </SheetHeader>
+        <SheetClose
+          render={
+            <Button variant="ghost" size="icon" className="absolute top-2 right-2 size-11">
+              <XIcon />
+            </Button>
+          }
+          aria-label={t("close", locale)}
+        />
+
+        <div className="px-4 pb-6">
+
           {route.synthesisedSteps > 0 && (
             <p className="mb-2 flex items-start gap-2 rounded-md border border-synth/40 bg-synth-surface p-2 text-xs">
               <TriangleAlertIcon className="mt-px size-4 shrink-0 text-synth" />
@@ -177,20 +204,11 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
               <p className="mb-1 text-[10px] text-muted-foreground">
                 {t("routeMaterialsHint", locale)}
               </p>
-              <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,14rem),1fr))] gap-x-4">
-                {route.materials.map((material) => (
-                  <li key={material.id} className="flex justify-between gap-2 text-xs">
-                    <span className="min-w-0 truncate">{material.name[locale]}</span>
-                    <span className="shrink-0 text-muted-foreground tabular-nums">
-                      {material.count}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <MaterialList materials={route.materials} locale={locale} />
             </section>
           )}
         </div>
-      )}
-    </aside>
+      </SheetContent>
+    </Sheet>
   )
 }
