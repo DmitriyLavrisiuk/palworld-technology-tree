@@ -8,14 +8,14 @@ import { LooseRow } from "@/components/tree/LooseRow"
 import { TechNode } from "@/components/tree/TechNode"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 import type { ViewMode } from "@/hooks/useProgress"
-import { GRID, GROUP_NAMES, GROUP_ORDER } from "@/lib/constants"
+import { GROUP_NAMES, GROUP_ORDER, MAX_LEVEL } from "@/lib/constants"
 import type { TechData } from "@/lib/data"
 import { t } from "@/lib/i18n"
+import { nodeMetrics, nodeVars, type NodeSizeKey } from "@/lib/nodeSize"
 import type { NodeStatus, VisibleTech } from "@/lib/tree"
 import type { Chain, ChainConfidence, GroupKey, Locale, Technology } from "@/types/tech"
 
 const LABEL_WIDTH = 144
-const NODE_SIZE = 44
 
 interface TechTreeProps {
   data: TechData
@@ -27,6 +27,7 @@ interface TechTreeProps {
   selectedId: string | null
   /** Идентификаторы узлов проложенного маршрута — для подсветки. */
   routeIds: ReadonlySet<string>
+  nodeSize: NodeSizeKey
   onSelect: (id: string) => void
 }
 
@@ -55,8 +56,10 @@ export function TechTree({
   visible,
   selectedId,
   routeIds,
+  nodeSize,
   onSelect,
 }: TechTreeProps) {
+  const metrics = nodeMetrics(nodeSize)
   const { sections, statusOf, total } = useMemo(() => {
     const statuses = new Map<string, NodeStatus>(visible.map((item) => [item.tech.id, item.status]))
     const shown = new Set(statuses.keys())
@@ -139,7 +142,7 @@ export function TechTree({
 
   if (view === "compact") {
     return (
-      <div className="flex flex-col gap-6 p-3">
+      <div className="flex flex-col gap-6 p-3" style={nodeVars(metrics.mini)}>
         {sections.map((section) => {
           const chained = section.chains.flatMap((entry) => [
             ...entry.steps.map((step) => step.tech),
@@ -184,7 +187,7 @@ export function TechTree({
 
   if (view === "lanes") {
     return (
-      <div className="flex flex-col gap-6 p-1 sm:p-3">
+      <div className="flex flex-col gap-6 p-1 sm:p-3" style={nodeVars(metrics.step)}>
         {sections.map((section) => (
           <section key={section.key}>
             <h2 className="mb-1 px-2 text-sm font-semibold">{section.title}</h2>
@@ -199,6 +202,7 @@ export function TechTree({
                   statusOf={statusOf}
                   selectedId={selectedId}
                   routeIds={routeIds}
+                  metrics={metrics}
                   onSelect={onSelect}
                 />
               ))}
@@ -217,7 +221,6 @@ export function TechTree({
                         selected={selectedId === tech.id}
                         onRoute={routeIds.has(tech.id)}
                         confidence={null}
-                        size={44}
                         showLabel
                         onSelect={onSelect}
                       />
@@ -239,9 +242,9 @@ export function TechTree({
         <section key={section.key}>
           <h2 className="mb-1 px-2 text-sm font-semibold">{section.title}</h2>
           <div className="overflow-x-auto rounded-md border">
-            <div style={{ width: LABEL_WIDTH + 80 * GRID.levelStep }}>
+            <div style={{ width: LABEL_WIDTH + MAX_LEVEL * metrics.levelStep }}>
               <LevelRuler
-                step={GRID.levelStep}
+                step={metrics.levelStep}
                 playerLevel={playerLevel}
                 labelWidth={LABEL_WIDTH}
               />
@@ -255,7 +258,7 @@ export function TechTree({
                   statusOf={statusOf}
                   selectedId={selectedId}
                   routeIds={routeIds}
-                  step={GRID.levelStep}
+                  metrics={metrics}
                   labelWidth={LABEL_WIDTH}
                   playerLevel={playerLevel}
                   onSelect={onSelect}
@@ -269,9 +272,8 @@ export function TechTree({
                   statusOf={statusOf}
                   selectedId={selectedId}
                   routeIds={routeIds}
-                  step={GRID.levelStep}
                   labelWidth={LABEL_WIDTH}
-                  size={NODE_SIZE}
+                  metrics={metrics}
                   onSelect={onSelect}
                 />
               )}

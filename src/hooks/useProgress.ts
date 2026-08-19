@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { MAX_LEVEL } from "@/lib/constants"
+import { DEFAULT_NODE_SIZE, isNodeSizeKey, type NodeSizeKey } from "@/lib/nodeSize"
 import type { Locale } from "@/types/tech"
 
 const STORAGE_KEY = "palworld-technology-tree"
@@ -24,6 +25,7 @@ export interface Progress {
   locale: Locale
   view: ViewMode
   theme: Theme
+  nodeSize: NodeSizeKey
 }
 
 const VIEWS: ViewMode[] = ["levels", "lanes", "compact"]
@@ -42,6 +44,7 @@ const DEFAULTS: Progress = {
   locale: "ru",
   view: "levels",
   theme: "system",
+  nodeSize: DEFAULT_NODE_SIZE,
 }
 
 /**
@@ -70,6 +73,7 @@ function coerce(raw: unknown): Progress {
       : DEFAULTS.locale,
     view: VIEWS.includes(value.view as ViewMode) ? (value.view as ViewMode) : DEFAULTS.view,
     theme: THEMES.includes(value.theme as Theme) ? (value.theme as Theme) : DEFAULTS.theme,
+    nodeSize: isNodeSizeKey(value.nodeSize) ? value.nodeSize : DEFAULTS.nodeSize,
   }
 }
 
@@ -134,6 +138,10 @@ export function useProgress() {
     setState((previous) => ({ ...previous, theme }))
   }, [])
 
+  const setNodeSize = useCallback((nodeSize: NodeSizeKey) => {
+    setState((previous) => ({ ...previous, nodeSize }))
+  }, [])
+
   return {
     ...state,
     researched,
@@ -142,5 +150,6 @@ export function useProgress() {
     setLocale,
     setView,
     setTheme,
+    setNodeSize,
   }
 }

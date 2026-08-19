@@ -1,6 +1,7 @@
 import { TechNode } from "@/components/tree/TechNode"
 import { MAX_LEVEL } from "@/lib/constants"
 import { t } from "@/lib/i18n"
+import { nodeVars, type NodeMetrics } from "@/lib/nodeSize"
 import { packRows, type NodeStatus } from "@/lib/tree"
 import type { Locale, Technology } from "@/types/tech"
 
@@ -12,9 +13,8 @@ interface LooseRowProps {
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
   routeIds: ReadonlySet<string>
-  step: number
   labelWidth: number
-  size: number
+  metrics: NodeMetrics
   onSelect: (id: string) => void
 }
 
@@ -25,12 +25,12 @@ export function LooseRow({
   statusOf,
   selectedId,
   routeIds,
-  step,
   labelWidth,
-  size,
+  metrics,
   onSelect,
 }: LooseRowProps) {
-  const rows = packRows(members, Math.max(1, Math.ceil(size / step)))
+  const step = metrics.levelStep
+  const rows = packRows(members, Math.max(1, Math.ceil(metrics.dense.tile / step)))
 
   return (
     <div className="flex border-b last:border-b-0">
@@ -43,9 +43,13 @@ export function LooseRow({
         </span>
       </div>
 
-      <div style={{ width: MAX_LEVEL * step }}>
+      <div style={{ width: MAX_LEVEL * step, ...nodeVars(metrics.dense) }}>
         {rows.map((row, index) => (
-          <div key={index} className="relative h-16 border-b border-dashed last:border-b-0">
+          <div
+            key={index}
+            className="relative border-b border-dashed last:border-b-0"
+            style={{ height: metrics.rowBase }}
+          >
             {row.map((tech) => (
               <div
                 key={tech.id}
@@ -59,7 +63,6 @@ export function LooseRow({
                   selected={selectedId === tech.id}
                   onRoute={routeIds.has(tech.id)}
                   confidence={null}
-                  size={size}
                   onSelect={onSelect}
                 />
               </div>

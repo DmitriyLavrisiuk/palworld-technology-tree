@@ -18,8 +18,6 @@ interface TechNodeProps {
    * булев флаг: забыть пометку, передав `false`, больше не получится незаметно.
    */
   confidence: ChainConfidence | null
-  /** Сторона плитки в пикселях. Не меньше 44 — это цель касания. */
-  size?: number
   showLabel?: boolean
   onSelect: (id: string) => void
 }
@@ -28,6 +26,11 @@ interface TechNodeProps {
  * Состояние узла передаётся тремя независимыми каналами сразу — поверхностью,
  * рамкой и значком, — чтобы плитка читалась и без подписи, и в тёмной теме,
  * и при дальтонизме. Цвет в одиночку не несёт ни одного смысла.
+ *
+ * Размер приходит переменной `--node` с контейнера, а не пропом: до этого он
+ * жил шестью разными литералами и успел разъехаться между режимами. Вся
+ * мелочь считается в `em` от `--node-text`, поэтому бейджи не становятся
+ * игрушечными на крупной плитке и не заедают на мелкой.
  */
 export function TechNode({
   tech,
@@ -36,7 +39,6 @@ export function TechNode({
   selected,
   onRoute = false,
   confidence,
-  size = 48,
   showLabel = false,
   onSelect,
 }: TechNodeProps) {
@@ -50,54 +52,71 @@ export function TechNode({
       type="button"
       onClick={() => onSelect(tech.id)}
       aria-pressed={selected}
+      aria-label={`${tech.name[locale]}, ${t("levelShort", locale)} ${tech.level}`}
       title={`${tech.name[locale]} · ${t("levelShort", locale)} ${tech.level} · ${tech.cost}`}
-      className={cn(
-        "group flex min-h-11 min-w-11 shrink-0 flex-col items-center justify-start gap-1 p-1",
-        "rounded-md focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-      )}
-      style={{ width: showLabel ? Math.max(size + 28, 76) : undefined }}
+      className="group flex min-h-11 min-w-11 shrink-0 flex-col items-center justify-start gap-1 rounded-md p-1 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+      style={showLabel ? { width: "var(--node-label)" } : undefined}
     >
       <span
         className={cn(
-          "relative grid shrink-0 place-items-center rounded-md border bg-card shadow-xs transition-all",
-          "group-hover:z-10 group-hover:scale-110 group-hover:shadow-md",
+          "relative grid size-[var(--node)] shrink-0 place-items-center rounded-md border bg-card text-[length:var(--node-text)] shadow-sm transition-all",
+          "group-hover:z-10 group-hover:-translate-y-px group-hover:border-ring group-hover:shadow-md",
           tech.ancient && "border-ancient/60 bg-ancient-surface",
           researched && "border-researched/70 bg-researched-surface",
           onRoute && "border-route ring-[3px] ring-route/30",
           selected && "border-ring ring-[3px] ring-ring/30",
         )}
-        style={{ width: size, height: size }}
       >
         <img
           src={iconUrl(tech.id)}
           alt=""
-          width={size}
-          height={size}
+          width={64}
+          height={64}
           loading="lazy"
           decoding="async"
-          className={cn("object-contain transition", locked && "opacity-55 grayscale")}
-          style={{ width: size * 0.76, height: size * 0.76 }}
+          className={cn("size-3/4 object-contain transition", locked && "opacity-55 grayscale")}
         />
+
+        {/* Уровень открытия. Заливка отличается от бейджа стоимости, иначе
+            «12» читалось бы как цена. Точка внутри — пометка достоверности. */}
+        <span
+          className="absolute top-0 left-0 flex items-center gap-[0.2em] rounded-tl-md rounded-br-md bg-muted-foreground/15 px-[0.3em] leading-[1.5em] font-medium text-foreground/70 tabular-nums"
+          title={synthesised ? t("chainSynthesised", locale) : undefined}
+        >
+          {synthesised && (
+            <span
+              role="img"
+              aria-label={t(guessed ? "guessedShort" : "synthShort", locale)}
+              className={cn(
+                "size-[0.45em] shrink-0 rounded-full bg-synth",
+                guessed && "ring-1 ring-synth/50",
+              )}
+            />
+          )}
+          {tech.level}
+        </span>
 
         <span
           className={cn(
-            "absolute -right-1.5 -bottom-1.5 flex min-w-4 items-center gap-px rounded-full border-2 border-background px-1 font-mono text-[10px] leading-4 font-semibold tabular-nums",
+            "absolute -right-[0.15em] -bottom-[0.15em] grid h-[1.7em] min-w-[1.7em] place-items-center rounded-full border-2 border-background px-[0.3em] leading-none font-semibold tabular-nums",
             tech.ancient ? "bg-ancient text-background" : "bg-primary text-primary-foreground",
           )}
         >
-          {tech.ancient && <SparklesIcon className="size-2" strokeWidth={3} />}
-          {tech.cost}
+          <span className="flex items-center gap-[0.1em]">
+            {tech.ancient && <SparklesIcon className="size-[0.9em]" strokeWidth={3} />}
+            {tech.cost}
+          </span>
         </span>
 
         {researched && (
-          <span className="absolute -top-1.5 -right-1.5 grid size-4 place-items-center rounded-full border-2 border-background bg-researched text-background">
-            <CheckIcon className="size-2.5" strokeWidth={4} />
+          <span className="absolute -top-[0.15em] -right-[0.15em] grid size-[1.5em] place-items-center rounded-full border-2 border-background bg-researched text-background">
+            <CheckIcon className="size-[0.9em]" strokeWidth={4} />
           </span>
         )}
 
         {locked && (
-          <span className="absolute -top-1.5 -right-1.5 grid size-4 place-items-center rounded-full border-2 border-background bg-muted text-muted-foreground">
-            <LockIcon className="size-2" strokeWidth={3} />
+          <span className="absolute -top-[0.15em] -right-[0.15em] grid size-[1.5em] place-items-center rounded-full border-2 border-background bg-muted text-muted-foreground">
+            <LockIcon className="size-[0.8em]" strokeWidth={3} />
           </span>
         )}
 
@@ -106,22 +125,10 @@ export function TechNode({
             role="img"
             aria-label={t("onRoute", locale)}
             title={t("onRoute", locale)}
-            className="absolute -bottom-1.5 -left-1.5 grid size-4 place-items-center rounded-full border-2 border-background bg-route text-background"
+            className="absolute -bottom-[0.15em] -left-[0.15em] grid size-[1.5em] place-items-center rounded-full border-2 border-background bg-route text-background"
           >
-            <RouteIcon className="size-2" strokeWidth={3} />
+            <RouteIcon className="size-[0.8em]" strokeWidth={3} />
           </span>
-        )}
-
-        {synthesised && (
-          <span
-            role="img"
-            aria-label={t(guessed ? "confidenceNote" : "chainSynthesised", locale)}
-            title={t(guessed ? "confidenceNote" : "chainSynthesised", locale)}
-            className={cn(
-              "absolute -top-1 -left-1 size-2.5 rounded-full border-2 border-background bg-synth",
-              guessed && "ring-2 ring-synth/50",
-            )}
-          />
         )}
       </span>
 

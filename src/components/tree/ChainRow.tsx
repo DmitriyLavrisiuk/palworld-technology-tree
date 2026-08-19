@@ -1,6 +1,7 @@
 import { TechNode } from "@/components/tree/TechNode"
-import { GRID, MAX_LEVEL } from "@/lib/constants"
+import { MAX_LEVEL } from "@/lib/constants"
 import { t } from "@/lib/i18n"
+import { nodeVars, type NodeMetrics } from "@/lib/nodeSize"
 import { isSynthesised, type NodeStatus } from "@/lib/tree"
 import { cn } from "@/lib/utils"
 import type { Chain, Locale, Technology } from "@/types/tech"
@@ -14,7 +15,7 @@ interface ChainRowProps {
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
   routeIds: ReadonlySet<string>
-  step: number
+  metrics: NodeMetrics
   labelWidth: number
   playerLevel: number
   onSelect: (id: string) => void
@@ -33,14 +34,15 @@ export function ChainRow({
   statusOf,
   selectedId,
   routeIds,
-  step,
+  metrics,
   labelWidth,
   playerLevel,
   onSelect,
 }: ChainRowProps) {
-  const size = Math.min(GRID.node / 2.5, step * 0.9)
+  const step = metrics.levelStep
   const allVariants = [...variants.values()].flat()
-  const height = allVariants.length ? 112 : 64
+  const height = metrics.rowHeight(allVariants.length > 0)
+  const railTop = metrics.rowBase / 2
 
   return (
     <div className="flex border-b last:border-b-0">
@@ -60,51 +62,53 @@ export function ChainRow({
       </div>
 
       <div className="relative" style={{ width: MAX_LEVEL * step, height }}>
-        <div aria-hidden className={cn("absolute h-px bg-rail")} style={{ left: 0, right: 0, top: 32 }} />
+        <div aria-hidden className={cn("absolute h-px bg-rail")} style={{ left: 0, right: 0, top: railTop }} />
         <div
           aria-hidden
           className="absolute inset-y-0 w-px bg-synth/40"
           style={{ left: (playerLevel - 0.5) * step }}
         />
 
-        {members.map((tech) => (
-          <div
-            key={tech.id}
-            className="absolute -translate-x-1/2 -translate-y-1/2"
-            style={{ left: (tech.level - 0.5) * step, top: 32 }}
-          >
-            <TechNode
-              tech={tech}
-              locale={locale}
-              status={statusOf(tech)}
-              selected={selectedId === tech.id}
-              onRoute={routeIds.has(tech.id)}
-              confidence={chain.confidence}
-              size={size}
-              onSelect={onSelect}
-            />
-          </div>
-        ))}
+        <div style={nodeVars(metrics.dense)}>
+          {members.map((tech) => (
+            <div
+              key={tech.id}
+              className="absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: (tech.level - 0.5) * step, top: railTop }}
+            >
+              <TechNode
+                tech={tech}
+                locale={locale}
+                status={statusOf(tech)}
+                selected={selectedId === tech.id}
+                onRoute={routeIds.has(tech.id)}
+                confidence={chain.confidence}
+                onSelect={onSelect}
+              />
+            </div>
+          ))}
+        </div>
 
-        {allVariants.map((tech) => (
-          <div
-            key={tech.id}
-            className="absolute -translate-x-1/2"
-            style={{ left: (tech.level - 0.5) * step, top: 68 }}
-            title={t("variantsOf", locale)}
-          >
-            <TechNode
-              tech={tech}
-              locale={locale}
-              status={statusOf(tech)}
-              selected={selectedId === tech.id}
-              onRoute={routeIds.has(tech.id)}
-              confidence={chain.confidence}
-              size={Math.max(32, size * 0.7)}
-              onSelect={onSelect}
-            />
-          </div>
-        ))}
+        <div style={nodeVars(metrics.mini)}>
+          {allVariants.map((tech) => (
+            <div
+              key={tech.id}
+              className="absolute -translate-x-1/2"
+              style={{ left: (tech.level - 0.5) * step, top: metrics.rowBase + 4 }}
+              title={t("variantsOf", locale)}
+            >
+              <TechNode
+                tech={tech}
+                locale={locale}
+                status={statusOf(tech)}
+                selected={selectedId === tech.id}
+                onRoute={routeIds.has(tech.id)}
+                confidence={chain.confidence}
+                onSelect={onSelect}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

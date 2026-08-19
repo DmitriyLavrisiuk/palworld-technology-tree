@@ -86,6 +86,13 @@
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
     --radius: 0.625rem;
+
+    /* Умолчания размера плитки. Контейнер переопределяет их у себя; здесь
+       они стоят, чтобы забытый контейнер не давал плитку нулевого размера
+       молча — это была бы не ошибка сборки, а пустое место на экране. */
+    --node: 56px;
+    --node-text: 10px;
+    --node-label: 76px;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -166,6 +173,12 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    }
+  /* Tailwind в preflight курсор кнопкам не ставит, а раскладывать
+     cursor-pointer по дюжине мест — дюжина мест, где его забудут. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
     }
   body {
     @apply bg-background text-foreground;

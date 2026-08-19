@@ -111,6 +111,7 @@ export default function App() {
           visible={visible}
           selectedId={selectedId}
           routeIds={routeIds}
+          nodeSize={progress.nodeSize}
           onSelect={setSelectedId}
         />
       </main>

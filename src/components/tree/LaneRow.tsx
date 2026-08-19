@@ -3,6 +3,7 @@ import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 import { TechNode } from "@/components/tree/TechNode"
 import { t } from "@/lib/i18n"
+import { nodeVars, type NodeMetrics } from "@/lib/nodeSize"
 import { isSynthesised, type NodeStatus } from "@/lib/tree"
 import type { Chain, Locale, Technology } from "@/types/tech"
 
@@ -21,6 +22,7 @@ interface LaneRowProps {
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
   routeIds: ReadonlySet<string>
+  metrics: NodeMetrics
   onSelect: (id: string) => void
 }
 
@@ -42,6 +44,7 @@ export function LaneRow({
   statusOf,
   selectedId,
   routeIds,
+  metrics,
   onSelect,
 }: LaneRowProps) {
   const isChain = chain.kind === "chain"
@@ -91,7 +94,6 @@ export function LaneRow({
                 selected={selectedId === step.tech.id}
                 onRoute={routeIds.has(step.tech.id)}
                 confidence={chain.confidence}
-                size={48}
                 showLabel
                 onSelect={onSelect}
               />
@@ -100,6 +102,7 @@ export function LaneRow({
                 <span
                   className="flex flex-wrap items-start gap-0.5 self-start rounded-md border border-dashed px-0.5"
                   title={t("variantsOf", locale)}
+                  style={nodeVars(metrics.variant)}
                 >
                   {stepVariants.map((tech) => (
                     <TechNode
@@ -110,7 +113,6 @@ export function LaneRow({
                       selected={selectedId === tech.id}
                       onRoute={routeIds.has(tech.id)}
                       confidence={chain.confidence}
-                      size={36}
                       showLabel
                       onSelect={onSelect}
                     />
