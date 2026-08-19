@@ -70,8 +70,12 @@ function idSuffix(id: string): string {
   return parts.length > 1 ? parts[parts.length - 1].toLowerCase() : ""
 }
 
+/**
+ * Апостроф остаётся частью слова: без этого "Lily's Spear" распадается на
+ * три слова и цепочка получает имя "Lily s Spear". Таких названий 19.
+ */
 function words(name: string): string[] {
-  return name.replace(/[^\p{L}\p{N}\s]/gu, " ").trim().split(/\s+/).filter(Boolean)
+  return name.replace(/[^\p{L}\p{N}\s'\u2019]/gu, " ").trim().split(/\s+/).filter(Boolean)
 }
 
 function noun(name: string): string {
@@ -136,7 +140,9 @@ export interface ChainBuildResult {
   stats: {
     total: number
     bucketed: number
+    /** Ступени и варианты вместе: слагаемое разбиения всех технологий. */
     inChains: number
+    /** Сколько из inChains — варианты, а не ступени. Информационно. */
     variants: number
     ungrouped: number
     byConfidence: Record<ChainConfidence, number>
@@ -368,8 +374,16 @@ export function buildChains(
   }
   const loose = [...looseByGroup.entries()].map(([group, members]) => ({ group, members }))
 
+  /**
+   * Вариант (жара/холод/вес) — такой же узел цепочки, как и её ступень,
+   * просто стоит сбоку. Не считать его значит потерять 19 узлов: сумма
+   * inChains + bucketed + ungrouped обязана давать total.
+   */
+  const nodesIn = (chain: Chain) =>
+    chain.members.length + Object.values(chain.variants ?? {}).flat().length
+
   const byConfidence: Record<ChainConfidence, number> = { hard: 0, stem: 0, name: 0, manual: 0 }
-  for (const chain of chains) byConfidence[chain.confidence] += chain.members.length
+  for (const chain of chains) byConfidence[chain.confidence] += nodesIn(chain)
 
   return {
     chains: chains.sort((a, b) => a.group.localeCompare(b.group) || a.id.localeCompare(b.id)),
@@ -378,7 +392,7 @@ export function buildChains(
     stats: {
       total: technologies.length,
       bucketed: buckets.reduce((sum, bucket) => sum + bucket.members.length, 0),
-      inChains: chains.reduce((sum, chain) => sum + chain.members.length, 0),
+      inChains: chains.reduce((sum, chain) => sum + nodesIn(chain), 0),
       variants: variantCount,
       ungrouped: looseTechs.length,
       byConfidence,

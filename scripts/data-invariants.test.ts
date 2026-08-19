@@ -102,6 +102,29 @@ describe("технологии: инварианты", () => {
   })
 })
 
+describe("заглушки локали", () => {
+  const PLACEHOLDER = /^[a-z]{2}_Text$/i
+
+  it("не доехали ни до названий станций, ни до материалов", () => {
+    // paldb отдаёт `ru_Text` там, где перевода нет. Раньше фильтр стоял
+    // только на названиях технологий, и три станции ушли в данные как есть.
+    const leaked: string[] = []
+    for (const recipe of recipes) {
+      for (const station of recipe.stations) {
+        if (PLACEHOLDER.test(station.ru) || PLACEHOLDER.test(station.en)) {
+          leaked.push(`${recipe.techId}: станция ${station.en}/${station.ru}`)
+        }
+      }
+      for (const material of recipe.materials) {
+        if (PLACEHOLDER.test(material.name.ru) || PLACEHOLDER.test(material.name.en)) {
+          leaked.push(`${recipe.techId}: материал ${material.id}`)
+        }
+      }
+    }
+    expect(leaked).toEqual([])
+  })
+})
+
 describe("иконки", () => {
   it("для каждой технологии есть файл иконки", () => {
     const missing = technologies

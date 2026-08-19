@@ -159,6 +159,30 @@ async function buildRecipes(technologies: Technology[]) {
   const previous = (await readExisting<Recipe[]>(OUT.recipes)) ?? []
   const known = new Map(previous.map((recipe) => [recipe.techId, recipe]))
 
+  /**
+   * Русские имена станций и материалов выводятся из карты имён на КАЖДОМ
+   * прогоне, а не берутся из прошлого файла. Иначе заглушка `ru_Text`,
+   * однажды записанная, живёт в данных вечно: рецепты переиспользуются
+   * целиком и их локализация больше не пересматривается.
+   */
+  const localise = (recipe: Recipe): Recipe => ({
+    techId: recipe.techId,
+    stations: recipe.stations.map((station) => ({
+      en: station.en,
+      ru: usable(itemNamesRu.get(toSlug(station.en))) ?? usable(station.ru) ?? station.en,
+    })),
+    materials: recipe.materials.map((material) => ({
+      ...material,
+      name: {
+        en: material.name.en,
+        ru:
+          usable(itemNamesRu.get(material.id)) ??
+          usable(material.name.ru) ??
+          material.name.en,
+      },
+    })),
+  })
+
   const recipes: Recipe[] = []
   const misses: string[] = []
   let index = 0
@@ -169,7 +193,7 @@ async function buildRecipes(technologies: Technology[]) {
     log.progress(index, Math.min(technologies.length, limit), "recipes")
 
     if (!fresh && known.has(tech.id)) {
-      recipes.push(known.get(tech.id)!)
+      recipes.push(localise(known.get(tech.id)!))
       continue
     }
 
@@ -185,18 +209,18 @@ async function buildRecipes(technologies: Technology[]) {
       continue
     }
 
-    recipes.push({
-      techId: tech.id,
-      stations: recipe.stations.map((station) => ({
-        en: station,
-        ru: itemNamesRu.get(toSlug(station)) ?? station,
-      })),
-      materials: recipe.materials.map((material) => ({
-        id: material.slug,
-        name: { en: material.name, ru: itemNamesRu.get(material.slug) ?? material.name },
-        count: material.count,
-      })),
-    })
+    // Русские имена проставляет localise — один источник правды на оба пути.
+    recipes.push(
+      localise({
+        techId: tech.id,
+        stations: recipe.stations.map((station) => ({ en: station, ru: station })),
+        materials: recipe.materials.map((material) => ({
+          id: material.slug,
+          name: { en: material.name, ru: material.name },
+          count: material.count,
+        })),
+      }),
+    )
   }
 
   await writeJson(OUT.recipes, recipes)

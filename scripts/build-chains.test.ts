@@ -162,17 +162,42 @@ describe("порядок и статистика", () => {
     expect(result.chains[0].members).toEqual(["Bow_Grade_01", "Bow_Grade_02", "Bow_Grade_03"])
   })
 
-  it("статистика раскладывает все узлы без потерь", () => {
+  it("статистика раскладывает все узлы без потерь, включая варианты", () => {
+    // Вариант в фикстуре обязателен: без него разбиение сходилось бы даже
+    // при потерянных вариантах — ровно так проверка и была слепой.
     const techs = [
       tech("Blade_Grade_01", "Iron Blade"),
       tech("Blade_Grade_02", "Steel Blade", { level: 2 }),
+      tech("Blade_Grade_01_Heat", "Iron Blade Heat"),
       tech("SkillUnlock_Alpaca", "Alpaca Saddle"),
       tech("Lonely_Thing", "Something Else"),
     ]
     const { stats } = buildChains(techs, { chains: [] })
 
-    expect(stats.total).toBe(4)
+    expect(stats.total).toBe(5)
+    expect(stats.variants).toBe(1)
     expect(stats.inChains + stats.bucketed + stats.ungrouped).toBe(stats.total)
-    expect(stats.byConfidence.stem).toBe(2)
+  })
+
+  it("узлы по достоверности в сумме дают inChains", () => {
+    const techs = [
+      tech("Blade_Grade_01", "Iron Blade"),
+      tech("Blade_Grade_02", "Steel Blade", { level: 2 }),
+      tech("Blade_Grade_01_Heat", "Iron Blade Heat"),
+    ]
+    const { stats } = buildChains(techs, { chains: [] })
+
+    const total = Object.values(stats.byConfidence).reduce((sum, n) => sum + n, 0)
+    expect(total).toBe(stats.inChains)
+    expect(stats.inChains).toBe(3)
+  })
+
+  it("апостроф остаётся частью слова в имени цепочки", () => {
+    const techs = [
+      tech("Spear_Boss", "Lily's Spear"),
+      tech("Spear_Boss2", "Enhanced Lily's Spear", { level: 2 }),
+    ]
+    const result = buildChains(techs, { chains: [] })
+    expect(result.chains[0].name.en).toBe("Lily's Spear")
   })
 })
