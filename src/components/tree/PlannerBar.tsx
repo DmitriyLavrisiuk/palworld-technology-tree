@@ -35,7 +35,9 @@ export function PlannerBar({ route, locale, playerLevel, onSelect, onClear }: Pl
   const levelShort = t("levelShort", locale)
 
   const bar = (
-    <aside className="sticky bottom-0 z-40 border-t bg-background/95 shadow-lg backdrop-blur">
+    // Тень направлена ВВЕРХ: панель прижата к низу, и обычный shadow-lg
+    // ушёл бы за край экрана — отделять её от дерева было бы нечем.
+    <aside className="sticky bottom-0 z-40 border-t bg-background/95 shadow-[0_-8px_24px_-12px_rgb(0_0_0/0.45)] backdrop-blur">
       <div className="flex items-center gap-2 p-2">
         <img
           src={iconUrl(route.target.id)}

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import {
   LayoutGridIcon,
   NetworkIcon,
@@ -98,8 +99,26 @@ export function Toolbar({
   onToggleGroup,
   onClearGroups,
 }: ToolbarProps) {
+  /**
+   * Тень появляется только когда под шапкой что-то уехало наверх: у самого
+   * верха страницы отделять нечего, и постоянная тень читалась бы как рамка.
+   */
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 4)
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+    return () => window.removeEventListener("scroll", update)
+  }, [])
+
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
+    <header
+      className={cn(
+        "sticky top-0 z-40 border-b bg-background/95 backdrop-blur transition-shadow duration-200",
+        scrolled && "shadow-[0_8px_24px_-12px_rgb(0_0_0/0.45)]",
+      )}
+    >
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2">
         {/* На узком экране заголовок съедает целую строку шапки, а название
             приложения и так стоит во вкладке браузера. */}
