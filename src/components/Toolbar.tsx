@@ -1,20 +1,19 @@
 import {
-  LaptopIcon,
   LayoutGridIcon,
-  MoonIcon,
   NetworkIcon,
   Rows3Icon,
   RulerIcon,
   SearchIcon,
   SparklesIcon,
-  SunIcon,
 } from "lucide-react"
 
+import { SettingsSheet } from "@/components/SettingsSheet"
 import { Badge } from "@/components/ui/badge"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import type { Theme, ViewMode } from "@/hooks/useProgress"
 import { MAX_LEVEL } from "@/lib/constants"
 import { t } from "@/lib/i18n"
+import type { NodeSizeKey } from "@/lib/nodeSize"
 import type { Filters, ResearchedTotals } from "@/lib/tree"
 import { cn } from "@/lib/utils"
 import type { Locale } from "@/types/tech"
@@ -49,10 +48,6 @@ const LEGEND: { label: UiKey; className: string }[] = [
   { label: "legendLocked", className: "bg-muted-foreground/60" },
 ]
 
-const THEME_ORDER: Theme[] = ["system", "light", "dark"]
-const THEME_ICON = { system: LaptopIcon, light: SunIcon, dark: MoonIcon }
-const THEME_LABEL = { system: "themeSystem", light: "themeLight", dark: "themeDark" } as const
-
 interface ToolbarProps {
   locale: Locale
   view: ViewMode
@@ -63,12 +58,14 @@ interface ToolbarProps {
   shown: number
   total: number
   totals: ResearchedTotals
+  nodeSize: NodeSizeKey
   onQuery: (value: string) => void
   onView: (view: ViewMode) => void
   onLevel: (level: number) => void
   onLocale: (locale: Locale) => void
   onTheme: (theme: Theme) => void
   onFilters: (filters: Filters) => void
+  onNodeSize: (size: NodeSizeKey) => void
 }
 
 export function Toolbar({
@@ -81,16 +78,15 @@ export function Toolbar({
   shown,
   total,
   totals,
+  nodeSize,
   onQuery,
   onView,
   onLevel,
   onLocale,
   onTheme,
   onFilters,
+  onNodeSize,
 }: ToolbarProps) {
-  const ThemeIcon = THEME_ICON[theme]
-  const nextTheme = THEME_ORDER[(THEME_ORDER.indexOf(theme) + 1) % THEME_ORDER.length]
-
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2">
@@ -155,38 +151,15 @@ export function Toolbar({
           </span>
         </span>
 
-        <span className={cn(CONTROL, "flex shrink-0 items-center rounded-lg bg-muted p-0.5")}>
-          {(["ru", "en"] as const).map((code) => (
-            <button
-              key={code}
-              type="button"
-              onClick={() => onLocale(code)}
-              aria-pressed={locale === code}
-              className={cn(
-                "grid h-full w-9 place-items-center rounded-md font-mono text-xs transition-colors",
-                locale === code
-                  ? "bg-background text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {code.toUpperCase()}
-            </button>
-          ))}
-        </span>
-
-        <button
-          type="button"
-          title={t(THEME_LABEL[theme], locale)}
-          aria-label={t(THEME_LABEL[theme], locale)}
-          onClick={() => onTheme(nextTheme)}
-          className={cn(
-            CONTROL,
-            "grid aspect-square shrink-0 place-items-center rounded-lg text-muted-foreground transition-colors",
-            "hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-          )}
-        >
-          <ThemeIcon className="size-4" />
-        </button>
+        <SettingsSheet
+          locale={locale}
+          theme={theme}
+          nodeSize={nodeSize}
+          triggerClassName={CONTROL}
+          onLocale={onLocale}
+          onTheme={onTheme}
+          onNodeSize={onNodeSize}
+        />
       </div>
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t px-3 py-2">

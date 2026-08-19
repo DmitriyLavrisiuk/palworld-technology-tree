@@ -93,12 +93,14 @@ export default function App() {
         shown={visible.length}
         total={data.technologies.length}
         totals={totals}
+        nodeSize={progress.nodeSize}
         onQuery={setQuery}
         onView={progress.setView}
         onLevel={progress.setLevel}
         onLocale={progress.setLocale}
         onTheme={progress.setTheme}
         onFilters={setFilters}
+        onNodeSize={progress.setNodeSize}
       />
 
       <main>
