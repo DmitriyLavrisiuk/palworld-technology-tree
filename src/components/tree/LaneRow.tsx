@@ -20,6 +20,7 @@ interface LaneRowProps {
   locale: Locale
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
+  routeIds: ReadonlySet<string>
   onSelect: (id: string) => void
 }
 
@@ -40,6 +41,7 @@ export function LaneRow({
   locale,
   statusOf,
   selectedId,
+  routeIds,
   onSelect,
 }: LaneRowProps) {
   const isChain = chain.kind === "chain"
@@ -87,6 +89,7 @@ export function LaneRow({
                 locale={locale}
                 status={statusOf(step.tech)}
                 selected={selectedId === step.tech.id}
+                onRoute={routeIds.has(step.tech.id)}
                 confidence={chain.confidence}
                 size={48}
                 showLabel
@@ -105,6 +108,7 @@ export function LaneRow({
                       locale={locale}
                       status={statusOf(tech)}
                       selected={selectedId === tech.id}
+                      onRoute={routeIds.has(tech.id)}
                       confidence={chain.confidence}
                       size={36}
                       showLabel

@@ -25,6 +25,8 @@ interface TechTreeProps {
   /** Уже отобранные и размеченные узлы: отбор живёт в App, здесь — раскладка. */
   visible: VisibleTech[]
   selectedId: string | null
+  /** Идентификаторы узлов проложенного маршрута — для подсветки. */
+  routeIds: ReadonlySet<string>
   onSelect: (id: string) => void
 }
 
@@ -52,6 +54,7 @@ export function TechTree({
   playerLevel,
   visible,
   selectedId,
+  routeIds,
   onSelect,
 }: TechTreeProps) {
   const { sections, statusOf, total } = useMemo(() => {
@@ -166,6 +169,7 @@ export function TechTree({
                     locale={locale}
                     status={statusOf(tech)}
                     selected={selectedId === tech.id}
+                    onRoute={routeIds.has(tech.id)}
                     confidence={confidenceOf.get(tech.id) ?? null}
                     onSelect={onSelect}
                   />
@@ -194,6 +198,7 @@ export function TechTree({
                   locale={locale}
                   statusOf={statusOf}
                   selectedId={selectedId}
+                  routeIds={routeIds}
                   onSelect={onSelect}
                 />
               ))}
@@ -210,6 +215,7 @@ export function TechTree({
                         locale={locale}
                         status={statusOf(tech)}
                         selected={selectedId === tech.id}
+                        onRoute={routeIds.has(tech.id)}
                         confidence={null}
                         size={44}
                         showLabel
@@ -248,6 +254,7 @@ export function TechTree({
                   locale={locale}
                   statusOf={statusOf}
                   selectedId={selectedId}
+                  routeIds={routeIds}
                   step={GRID.levelStep}
                   labelWidth={LABEL_WIDTH}
                   playerLevel={playerLevel}
@@ -261,6 +268,7 @@ export function TechTree({
                   locale={locale}
                   statusOf={statusOf}
                   selectedId={selectedId}
+                  routeIds={routeIds}
                   step={GRID.levelStep}
                   labelWidth={LABEL_WIDTH}
                   size={NODE_SIZE}

@@ -11,6 +11,8 @@ interface TechNodeProps {
   locale: Locale
   status: NodeStatus
   selected: boolean
+  /** Узел входит в проложенный маршрут. */
+  onRoute?: boolean
   /**
    * Достоверность цепочки узла; `null` — узел вне цепочек. Именно тип, а не
    * булев флаг: забыть пометку, передав `false`, больше не получится незаметно.
@@ -32,6 +34,7 @@ export function TechNode({
   locale,
   status,
   selected,
+  onRoute = false,
   confidence,
   size = 48,
   showLabel = false,
@@ -60,6 +63,7 @@ export function TechNode({
           "group-hover:z-10 group-hover:scale-110 group-hover:shadow-md",
           tech.ancient && "border-ancient/60 bg-ancient-surface",
           researched && "border-researched/70 bg-researched-surface",
+          onRoute && "border-route ring-[3px] ring-route/30",
           selected && "border-ring ring-[3px] ring-ring/30",
         )}
         style={{ width: size, height: size }}

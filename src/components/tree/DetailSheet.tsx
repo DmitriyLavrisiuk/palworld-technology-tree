@@ -1,4 +1,4 @@
-import { CheckIcon, SparklesIcon, TriangleAlertIcon, XIcon } from "lucide-react"
+import { CheckIcon, RouteIcon, SparklesIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -18,6 +18,7 @@ interface DetailSheetProps {
   playerLevel: number
   onClose: () => void
   onToggleResearched: (id: string) => void
+  onPlanRoute: (id: string) => void
 }
 
 /** Панель деталей: что это, чем гейтится, из чего делается и насколько мы уверены в цепочке. */
@@ -29,6 +30,7 @@ export function DetailSheet({
   playerLevel,
   onClose,
   onToggleResearched,
+  onPlanRoute,
 }: DetailSheetProps) {
   if (!tech) return null
 
@@ -83,14 +85,20 @@ export function DetailSheet({
             <p className="text-sm text-muted-foreground">{tech.description[locale]}</p>
           )}
 
-          <Button
-            variant={isDone ? "outline" : "default"}
-            className="h-11"
-            onClick={() => onToggleResearched(tech.id)}
-          >
-            {isDone ? null : <CheckIcon />}
-            {t(isDone ? "unmark" : "markResearched", locale)}
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button
+              variant={isDone ? "outline" : "default"}
+              className="h-11"
+              onClick={() => onToggleResearched(tech.id)}
+            >
+              {isDone ? null : <CheckIcon />}
+              {t(isDone ? "unmark" : "markResearched", locale)}
+            </Button>
+            <Button variant="outline" className="h-11" onClick={() => onPlanRoute(tech.id)}>
+              <RouteIcon />
+              {t("planRoute", locale)}
+            </Button>
+          </div>
 
           {chain && isSynthesised(chain.confidence) && (
             <div className="flex gap-2 rounded-md border border-synth/40 bg-synth-surface p-3 text-xs">

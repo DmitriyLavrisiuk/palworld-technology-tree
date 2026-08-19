@@ -11,6 +11,7 @@ interface CompactCardProps {
   locale: Locale
   status: NodeStatus
   selected: boolean
+  onRoute?: boolean
   confidence: ChainConfidence | null
   onSelect: (id: string) => void
 }
@@ -24,6 +25,7 @@ export function CompactCard({
   locale,
   status,
   selected,
+  onRoute = false,
   confidence,
   onSelect,
 }: CompactCardProps) {
@@ -41,6 +43,7 @@ export function CompactCard({
         "hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
         tech.ancient && "border-ancient/50 bg-ancient-surface",
         researched && "border-researched/60 bg-researched-surface",
+        onRoute && "border-route ring-[3px] ring-route/30",
         selected && "border-ring ring-[3px] ring-ring/30",
       )}
     >

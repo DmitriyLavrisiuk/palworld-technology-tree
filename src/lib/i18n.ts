@@ -29,6 +29,21 @@ export const UI = {
   markResearched: { ru: "Отметить изученным", en: "Mark researched" },
   unmark: { ru: "Снять отметку", en: "Unmark" },
   close: { ru: "Закрыть", en: "Close" },
+
+  planRoute: { ru: "Проложить путь", en: "Plan route" },
+  clearRoute: { ru: "Убрать маршрут", en: "Clear route" },
+  routeTitle: { ru: "Путь до цели", en: "Route to target" },
+  routeSteps: { ru: "шагов", en: "steps" },
+  routeNeedLevel: { ru: "нужен уровень", en: "level needed" },
+  routeDone: { ru: "Всё изучено", en: "All researched" },
+  routeMaterials: { ru: "Суммарно материалов", en: "Materials in total" },
+  routeBlockers: { ru: "Очками не покупается", en: "Points cannot buy this" },
+  routeSynthesised: {
+    ru: "шагов маршрута достроены нами, а не взяты из игры",
+    en: "route steps are our reconstruction, not game data",
+  },
+  expand: { ru: "Развернуть", en: "Expand" },
+  collapse: { ru: "Свернуть", en: "Collapse" },
   switchLanguage: { ru: "Переключить на английский", en: "Switch to Russian" },
   localeCode: { ru: "RU", en: "EN" },
 

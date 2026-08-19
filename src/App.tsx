@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from "react"
 
 import { Toolbar } from "@/components/Toolbar"
 import { DetailSheet } from "@/components/tree/DetailSheet"
+import { PlannerBar } from "@/components/tree/PlannerBar"
 import { TechTree } from "@/components/tree/TechTree"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useProgress } from "@/hooks/useProgress"
 import { useTheme } from "@/hooks/useTheme"
 import { loadTechData, type TechData } from "@/lib/data"
+import { buildRoute } from "@/lib/planner"
 import { t } from "@/lib/i18n"
 import { NO_FILTERS, visibleTechs, type Filters } from "@/lib/tree"
 
@@ -19,6 +21,8 @@ export default function App() {
   const [query, setQuery] = useState("")
   const [filters, setFilters] = useState<Filters>(NO_FILTERS)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  /** Цель маршрута живёт только в сессии: в localStorage её не кладём. */
+  const [routeTargetId, setRouteTargetId] = useState<string | null>(null)
 
   useEffect(() => {
     document.documentElement.lang = progress.locale
@@ -36,6 +40,16 @@ export default function App() {
         ? visibleTechs(data.technologies, progress.researched, progress.level, query, filters)
         : [],
     [data, progress.researched, progress.level, query, filters],
+  )
+
+  const route = useMemo(
+    () => (data && routeTargetId ? buildRoute(routeTargetId, data, progress.researched) : null),
+    [data, routeTargetId, progress.researched],
+  )
+
+  const routeIds = useMemo(
+    () => new Set(route?.steps.map((step) => step.tech.id) ?? []),
+    [route],
   )
 
   if (error) {
@@ -81,7 +95,9 @@ export default function App() {
         onFilters={setFilters}
       />
 
-      <main>
+      {/* Панель маршрута липнет к низу, поэтому под неё резервируется место:
+          иначе она закрывала бы последние ряды дерева. */}
+      <main className={route ? "pb-20" : undefined}>
         <h1 className="sr-only">{t("appName", progress.locale)}</h1>
         <TechTree
           data={data}
@@ -90,9 +106,20 @@ export default function App() {
           playerLevel={progress.level}
           visible={visible}
           selectedId={selectedId}
+          routeIds={routeIds}
           onSelect={setSelectedId}
         />
       </main>
+
+      {route && (
+        <PlannerBar
+          route={route}
+          locale={progress.locale}
+          playerLevel={progress.level}
+          onSelect={setSelectedId}
+          onClear={() => setRouteTargetId(null)}
+        />
+      )}
 
       <DetailSheet
         tech={selectedId ? (data.byId.get(selectedId) ?? null) : null}
@@ -102,6 +129,10 @@ export default function App() {
         playerLevel={progress.level}
         onClose={() => setSelectedId(null)}
         onToggleResearched={progress.toggleResearched}
+        onPlanRoute={(id) => {
+          setRouteTargetId(id)
+          setSelectedId(null)
+        }}
       />
     </div>
   )

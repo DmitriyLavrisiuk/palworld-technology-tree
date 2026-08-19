@@ -11,6 +11,7 @@ interface LooseRowProps {
   locale: Locale
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
+  routeIds: ReadonlySet<string>
   step: number
   labelWidth: number
   size: number
@@ -23,6 +24,7 @@ export function LooseRow({
   locale,
   statusOf,
   selectedId,
+  routeIds,
   step,
   labelWidth,
   size,
@@ -55,6 +57,7 @@ export function LooseRow({
                   locale={locale}
                   status={statusOf(tech)}
                   selected={selectedId === tech.id}
+                  onRoute={routeIds.has(tech.id)}
                   confidence={null}
                   size={size}
                   onSelect={onSelect}

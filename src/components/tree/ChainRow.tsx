@@ -13,6 +13,7 @@ interface ChainRowProps {
   locale: Locale
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
+  routeIds: ReadonlySet<string>
   step: number
   labelWidth: number
   playerLevel: number
@@ -31,6 +32,7 @@ export function ChainRow({
   locale,
   statusOf,
   selectedId,
+  routeIds,
   step,
   labelWidth,
   playerLevel,
@@ -76,6 +78,7 @@ export function ChainRow({
               locale={locale}
               status={statusOf(tech)}
               selected={selectedId === tech.id}
+              onRoute={routeIds.has(tech.id)}
               confidence={chain.confidence}
               size={size}
               onSelect={onSelect}
@@ -95,6 +98,7 @@ export function ChainRow({
               locale={locale}
               status={statusOf(tech)}
               selected={selectedId === tech.id}
+              onRoute={routeIds.has(tech.id)}
               confidence={chain.confidence}
               size={Math.max(32, size * 0.7)}
               onSelect={onSelect}
