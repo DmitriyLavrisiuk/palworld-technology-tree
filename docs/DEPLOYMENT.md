@@ -13,7 +13,7 @@
 |---|---|
 | Хостинг | GitHub Pages, ветка `gh-pages` |
 | Репозиторий | `DmitriyLavrisiuk/palworld-technology-tree`, публичный |
-| Прод-URL | https://dmitriylavrisiuk.github.io/palworld-technology-tree/ — заработает после первой выкатки в Фазе 2 |
+| Прод-URL | https://dmitriylavrisiuk.github.io/palworld-technology-tree/ — выкачен и работает |
 | Сборка | локальная, `npm run build` → `dist/` |
 | Публикация | `gh-pages -d dist` |
 | Бэкенд, БД | нет — статика |
@@ -42,7 +42,7 @@ npm run deploy                       # build + публикация ветки g
 1. **Страница открывается, но пустая или без иконок** — почти всегда сломан базовый путь. Проверь `base` в конфиге Vite и то, что все пути к ассетам идут через `import.meta.env.BASE_URL`. На дев-сервере эта ошибка не воспроизводится.
 2. **Старая версия после выкатки** — Pages кэширует; проверь коммит в ветке `gh-pages` (`git log origin/gh-pages -1`), затем обнови страницу без кэша.
 3. **Деплой падает на аутентификации** — проверь `gh auth status` и что `GITHUB_PERSONAL_ACCESS_TOKEN` жив.
-4. **Сборка падает после `npm run scrape`** — данные пересобрались с изменённой схемой; смотри `npm run typecheck`, источник правды по схеме — `docs/DATA_MODEL.md` (появится в Фазе 1).
+4. **Сборка падает после `npm run scrape`** — данные пересобрались с изменённой схемой; смотри `npm run typecheck`, источник правды по схеме — `docs/DATA_MODEL.md`.
 
 ## Типовые проблемы
 

@@ -10,6 +10,7 @@
 - Документация конвейера: `docs/DATA_PIPELINE.md`, `docs/DATA_MODEL.md`, `docs/CHAINS.md`.
 - Каркас приложения: Vite 8, React 19, Tailwind v4, токены shadcn `base-nova`, шрифт Geist. Загрузка данных динамическим `import()` тремя отдельными чанками.
 - Первая выкатка на GitHub Pages: https://dmitriylavrisiuk.github.io/palworld-technology-tree/
+- Тесты (Vitest): инварианты сгенерированных данных и правила сборки цепочек, 34 штуки без сети. Приёмка фазы — `npm test` плюс агент `phase-qa` — вшита в процесс и в ROADMAP.
 
 ### Changed
 

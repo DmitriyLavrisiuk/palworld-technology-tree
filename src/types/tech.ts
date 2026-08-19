@@ -20,7 +20,7 @@ export type GroupKey = "gear" | "armor" | "tools" | "weapon" | "base"
 /**
  * How a chain link was established.
  * `hard` links come from the game's own RequireTechnology field (17 exist).
- * Everything else is synthesised by us and may be wrong — see spec F16.
+ * Everything else is synthesised by us and may be wrong — see docs/CHAINS.md.
  */
 export type ChainConfidence = "hard" | "stem" | "name" | "manual"
 
@@ -36,7 +36,7 @@ export interface Technology {
   /** IsBossTechnology — costs Ancient Technology Points. */
   ancient: boolean
   category: TechCategory
-  /** Icon slug. Does NOT reliably match the CDN path — see spec, scraping notes. */
+  /** Icon slug. Does NOT reliably match the CDN path — see docs/DATA_MODEL.md. */
   iconName: string
   /** RequireTechnology — the only real tech-to-tech edges the game defines. */
   reqTech: string | null
@@ -70,7 +70,7 @@ export interface Chain {
   variants?: Record<string, string[]>
 }
 
-/** Bulk with no upgrade semantics — 107 saddles, 32 furniture sets. */
+/** Bulk with no upgrade semantics — 124 saddles, 33 furniture sets. */
 export interface Bucket {
   id: string
   name: Localized

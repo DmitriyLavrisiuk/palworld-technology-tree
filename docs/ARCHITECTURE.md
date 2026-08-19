@@ -15,8 +15,8 @@
 | UI | React 19 + TypeScript | Проверено на этой задаче в прототипе |
 | React-плагин | `@vitejs/plugin-react-swc` | см. ниже — babel-версия не встаёт рядом с `shadcn` |
 | Стили | Tailwind v4 (`@theme inline`) | Токены прямо в CSS, без отдельного конфига |
-| Компоненты | shadcn/ui, стиль `base-nova`, база Base UI | Требование к дизайну; 13 компонентов реально несущие |
-| Иконки интерфейса | lucide-react | Библиотека по умолчанию у shadcn |
+| Компоненты | shadcn/ui, стиль `base-nova` | Требование к дизайну. Заведены токены и `components.json`; сами компоненты добавляются по мере надобности через `npx shadcn@latest add` |
+| Иконки интерфейса | lucide-react | Библиотека по умолчанию у shadcn. Приедет с первым компонентом, который её потребует |
 | Линтер | oxlint | Быстрый, конфиг в `.oxlintrc.json` |
 | Тесты | Vitest | Конфиг `vitest.config.ts`; тесты рядом с кодом, без сети и без DOM |
 | Парсер | tsx + cheerio | Запуск TS без сборки, надёжный разбор HTML |
@@ -26,7 +26,7 @@
 
 ## Структура каталогов
 
-Существует сейчас (после Фазы 1):
+Существует сейчас (после Фазы 2):
 
 ```
 scripts/
@@ -37,13 +37,19 @@ scripts/
   sources/              datatable, paldb, l10n, icons
 src/
   types/tech.ts         типы предметной области
-  lib/constants.ts      числа игры, геометрия сетки, порядок групп
   data/                 ГЕНЕРИРУЕТСЯ парсером, руками не трогать
+  lib/
+    constants.ts        числа игры, геометрия сетки, порядок групп
+    data.ts             загрузка данных чанками и построение индексов
+    i18n.ts             словарь RU/EN
+    utils.ts            cn() от shadcn
+  App.tsx               пока плоский список — заменяется целиком в Фазе 3
+  main.tsx, index.css   точка входа и токены дизайн-системы
 public/icons/           ГЕНЕРИРУЕТСЯ парсером, 588 файлов
 .cache/                 сырые страницы источников, вне git
 ```
 
-Появится в Фазе 2 и далее: `src/hooks/` (`useProgress`, `useTheme`), `src/lib/` (`data.ts`, `planner.ts`, `i18n.ts`), `src/components/ui/` (shadcn) и `src/components/tree/` (узлы, режимы, шкала, панели).
+Появится в Фазе 3 и далее: `src/hooks/` (`useProgress`, `useTheme`), `src/lib/planner.ts`, `src/components/ui/` (shadcn) и `src/components/tree/` (узлы, режимы, шкала, панели).
 
 ## Ключевые технические решения
 
@@ -61,7 +67,7 @@ public/icons/           ГЕНЕРИРУЕТСЯ парсером, 588 файл�
 
 **TypeScript разделён на два проекта:** `src/` (bundler resolution, `tsconfig.app.json`) и `scripts/` + конфиг Vite (nodenext, `tsconfig.node.json`). Разные системы модулей — из-за nodenext в скриптах алиас `@/` не разрешается, там относительные пути с расширением `.ts`. `npm run typecheck` (`tsc -b`) проверяет всё, что подключено в `tsconfig.json`.
 
-Сейчас подключён только `tsconfig.node.json`: приложения ещё нет. Ссылка на `tsconfig.app.json` и строка `vite.config.ts` в `include` добавляются в Фазе 2 — до тех пор `tsc -b` проверяет парсер и те файлы `src/`, которые парсер импортирует.
+Подключены оба проекта; `vite.config.ts` входит в `include` узлового. Тестовые файлы попадают в тот же проект, что и код рядом с ними, поэтому `npm run typecheck` проверяет и тесты.
 
 ## Наследство прототипа
 
