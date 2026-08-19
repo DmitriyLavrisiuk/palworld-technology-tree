@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react"
 
+import { ChainCard } from "@/components/tree/ChainCard"
 import { ChainRow } from "@/components/tree/ChainRow"
 import { CollapseHeader } from "@/components/tree/CollapseHeader"
-import { CompactCard } from "@/components/tree/CompactCard"
 import { LaneRow, type ChainStep } from "@/components/tree/LaneRow"
 import { LevelRuler } from "@/components/tree/LevelRuler"
 import { LooseRow } from "@/components/tree/LooseRow"
@@ -15,7 +15,7 @@ import type { TechData } from "@/lib/data"
 import { t } from "@/lib/i18n"
 import { nodeMetrics, nodeVars, type NodeSizeKey } from "@/lib/nodeSize"
 import type { NodeStatus, VisibleTech } from "@/lib/tree"
-import type { Chain, ChainConfidence, GroupKey, Locale, Technology } from "@/types/tech"
+import type { Chain, GroupKey, Locale, Technology } from "@/types/tech"
 
 const LABEL_WIDTH = 144
 
@@ -161,47 +161,70 @@ export function TechTree({
 
   if (view === "compact") {
     return (
-      <div className="flex flex-col gap-6 p-3" style={nodeVars(metrics.mini)}>
+      <div className="flex flex-col gap-6 p-2 sm:p-3">
         {sections.map((section) => {
-          const chained = section.chains.flatMap((entry) => [
-            ...entry.steps.map((step) => step.tech),
-            ...[...entry.variants.values()].flat(),
-          ])
-          const all = [...chained, ...section.loose].sort(
-            (a, b) => a.level - b.level || a.cost - b.cost,
-          )
-          const confidenceOf = new Map<string, ChainConfidence>()
-          for (const entry of section.chains) {
-            for (const tech of [
-              ...entry.steps.map((step) => step.tech),
-              ...[...entry.variants.values()].flat(),
-            ]) {
-              confidenceOf.set(tech.id, entry.chain.confidence)
-            }
-          }
+          const isCollapsed = collapsed.has(section.key)
 
           return (
             <section key={section.key}>
               <SectionHeading
                 section={section}
-                collapsed={collapsed.has(section.key)}
+                collapsed={isCollapsed}
                 onToggle={() => toggle(section.key)}
               />
-              {collapsed.has(section.key) ? null : (
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))] gap-1.5">
-                {all.map((tech) => (
-                  <CompactCard
-                    key={tech.id}
-                    tech={tech}
-                    locale={locale}
-                    status={statusOf(tech)}
-                    selected={selectedId === tech.id}
-                    onRoute={routeIds.has(tech.id)}
-                    confidence={confidenceOf.get(tech.id) ?? null}
-                    onSelect={onSelect}
-                  />
-                ))}
-              </div>
+
+              {!isCollapsed && (
+                <div className="flex flex-col gap-3">
+                  {section.chains.length > 0 && (
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] gap-2">
+                      {section.chains.map((entry) => (
+                        <ChainCard
+                          key={entry.chain.id}
+                          chain={entry.chain}
+                          steps={entry.steps}
+                          variants={entry.variants}
+                          locale={locale}
+                          statusOf={statusOf}
+                          selectedId={selectedId}
+                          routeIds={routeIds}
+                          metrics={metrics}
+                          collapsed={collapsed.has(entry.chain.id)}
+                          onToggleCollapse={() => toggle(entry.chain.id)}
+                          onSelect={onSelect}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Одиночки и корзины — блоком во всю ширину, а не карточкой
+                      в сетке: вне цепочек живут 319 узлов из 588, и 124 седла
+                      в колонке 320 px превратились бы в километр. */}
+                  {section.loose.length > 0 && (
+                    <div className="rounded-md border p-2">
+                      <p className="px-1 pb-1 text-xs font-medium text-muted-foreground">
+                        {section.looseLabel ?? t("ungrouped", locale)}
+                        <span className="ml-2 tabular-nums">{section.loose.length}</span>
+                      </p>
+                      <div
+                        className="flex flex-wrap items-center gap-0.5"
+                        style={nodeVars(metrics.mini)}
+                      >
+                        {section.loose.map((tech) => (
+                          <TechNode
+                            key={tech.id}
+                            tech={tech}
+                            locale={locale}
+                            status={statusOf(tech)}
+                            selected={selectedId === tech.id}
+                            onRoute={routeIds.has(tech.id)}
+                            confidence={null}
+                            onSelect={onSelect}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </section>
           )
