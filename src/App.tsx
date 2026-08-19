@@ -96,7 +96,9 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-dvh">
+    // Колонка с растущим main: без неё при коротком контенте липкая панель
+    // маршрута встаёт сразу под последней карточкой, а не у низа экрана.
+    <div className="flex min-h-dvh flex-col">
       <Toolbar
         locale={progress.locale}
         view={progress.view}
@@ -120,7 +122,7 @@ export default function App() {
         onNodeSize={progress.setNodeSize}
       />
 
-      <main>
+      <main className="flex-1">
         <h1 className="sr-only">{t("appName", progress.locale)}</h1>
         <TechTree
           data={data}
