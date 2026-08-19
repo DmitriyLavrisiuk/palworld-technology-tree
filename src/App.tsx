@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
-import { iconUrl, loadTechData, type TechData } from "@/lib/data"
+import { Toolbar } from "@/components/Toolbar"
+import { DetailSheet } from "@/components/tree/DetailSheet"
+import { TechTree } from "@/components/tree/TechTree"
+import { Skeleton } from "@/components/ui/skeleton"
+import { useProgress } from "@/hooks/useProgress"
+import { useTheme } from "@/hooks/useTheme"
+import { loadTechData, type TechData } from "@/lib/data"
 import { t } from "@/lib/i18n"
-import type { Locale } from "@/types/tech"
-
-/** Переключатель языка приедет в Фазе 3 вместе с useProgress. */
-const LOCALE: Locale = "ru"
+import { NO_FILTERS, visibleTechs, type Filters } from "@/lib/tree"
 
 export default function App() {
+  const progress = useProgress()
+  useTheme(progress.theme)
+
   const [data, setData] = useState<TechData | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [query, setQuery] = useState("")
+  const [filters, setFilters] = useState<Filters>(NO_FILTERS)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
   useEffect(() => {
     loadTechData().then(setData, (cause: unknown) => {
@@ -17,10 +26,18 @@ export default function App() {
     })
   }, [])
 
+  const visible = useMemo(
+    () =>
+      data
+        ? visibleTechs(data.technologies, progress.researched, progress.level, query, filters)
+        : [],
+    [data, progress.researched, progress.level, query, filters],
+  )
+
   if (error) {
     return (
-      <main className="mx-auto max-w-5xl p-4 text-sm">
-        <p className="text-destructive">{t("loadFailed", LOCALE)}</p>
+      <main className="mx-auto max-w-3xl p-4 text-sm">
+        <p className="text-destructive">{t("loadFailed", progress.locale)}</p>
         <pre className="mt-2 overflow-x-auto text-muted-foreground">{error}</pre>
       </main>
     )
@@ -28,42 +45,60 @@ export default function App() {
 
   if (!data) {
     return (
-      <main className="mx-auto max-w-5xl p-4 text-sm text-muted-foreground">
-        {t("loading", LOCALE)}
+      <main className="flex flex-col gap-2 p-4" aria-busy>
+        <span className="sr-only">{t("loading", progress.locale)}</span>
+        <Skeleton className="h-11 w-full" />
+        <Skeleton className="h-11 w-2/3" />
+        <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))] gap-1.5">
+          {Array.from({ length: 12 }, (_, index) => (
+            <Skeleton key={index} className="h-14" />
+          ))}
+        </div>
       </main>
     )
   }
 
   return (
-    <main className="mx-auto max-w-5xl p-4">
-      <h1 className="text-xl font-semibold">{t("appName", LOCALE)}</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {data.technologies.length} {t("technologies", LOCALE)} ·{" "}
-        {data.chains.chains.length} {t("chains", LOCALE)} · {data.recipes.size}{" "}
-        {t("recipes", LOCALE)}
-      </p>
+    <div className="min-h-dvh">
+      <Toolbar
+        locale={progress.locale}
+        view={progress.view}
+        theme={progress.theme}
+        level={progress.level}
+        query={query}
+        filters={filters}
+        shown={visible.length}
+        total={data.technologies.length}
+        onQuery={setQuery}
+        onView={progress.setView}
+        onLevel={progress.setLevel}
+        onLocale={progress.setLocale}
+        onTheme={progress.setTheme}
+        onFilters={setFilters}
+      />
 
-      <ul className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(min(100%,15rem),1fr))] gap-2">
-        {data.technologies.map((tech) => (
-          <li key={tech.id} className="flex items-center gap-2 rounded-md border p-2">
-            <img
-              src={iconUrl(tech.id)}
-              alt=""
-              width={32}
-              height={32}
-              loading="lazy"
-              className="size-8 shrink-0"
-            />
-            <span className="min-w-0">
-              <span className="block truncate text-sm">{tech.name[LOCALE]}</span>
-              <span className="block text-xs text-muted-foreground">
-                {t("levelShort", LOCALE)} {tech.level}
-                {tech.ancient ? ` · ${t("ancient", LOCALE)}` : ""}
-              </span>
-            </span>
-          </li>
-        ))}
-      </ul>
-    </main>
+      <main>
+        <h1 className="sr-only">{t("appName", progress.locale)}</h1>
+        <TechTree
+          data={data}
+          locale={progress.locale}
+          view={progress.view}
+          playerLevel={progress.level}
+          visible={visible}
+          selectedId={selectedId}
+          onSelect={setSelectedId}
+        />
+      </main>
+
+      <DetailSheet
+        tech={selectedId ? (data.byId.get(selectedId) ?? null) : null}
+        data={data}
+        locale={progress.locale}
+        researched={progress.researched}
+        playerLevel={progress.level}
+        onClose={() => setSelectedId(null)}
+        onToggleResearched={progress.toggleResearched}
+      />
+    </div>
   )
 }

@@ -5,9 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Каналы состояний узла (изучено / древняя / в маршруте) добавятся в Фазе 3
-   вместе с компонентом TechNode, который их использует. См. docs/UI_UX.md. */
-
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
@@ -42,6 +39,16 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
+    --color-researched: var(--researched);
+    --color-researched-foreground: var(--researched-foreground);
+    --color-researched-surface: var(--researched-surface);
+    --color-ancient: var(--ancient);
+    --color-ancient-foreground: var(--ancient-foreground);
+    --color-ancient-surface: var(--ancient-surface);
+    --color-synth: var(--synth);
+    --color-synth-surface: var(--synth-surface);
+    --color-rail: var(--rail);
+    --color-rail-hard: var(--rail-hard);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -84,6 +91,19 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+
+    /* --- Каналы состояний узла: не часть shadcn, см. docs/UI_UX.md --- */
+    --researched: oklch(0.596 0.145 163.2);
+    --researched-foreground: oklch(0.508 0.132 163.2);
+    --researched-surface: oklch(0.975 0.025 165);
+    --ancient: oklch(0.706 0.163 70.1);
+    --ancient-foreground: oklch(0.555 0.145 62);
+    --ancient-surface: oklch(0.98 0.03 88);
+    /* Синтезированная связь: канал пометки достоверности. */
+    --synth: oklch(0.606 0.118 300);
+    --synth-surface: oklch(0.97 0.02 300);
+    --rail: oklch(0.87 0 0);
+    --rail-hard: oklch(0.79 0.11 75);
 }
 
 .dark {
@@ -118,6 +138,18 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+
+    /* --- Каналы состояний узла: не часть shadcn, см. docs/UI_UX.md --- */
+    --researched: oklch(0.765 0.153 163.2);
+    --researched-foreground: oklch(0.83 0.13 165);
+    --researched-surface: oklch(0.28 0.055 165);
+    --ancient: oklch(0.828 0.161 82.7);
+    --ancient-foreground: oklch(0.88 0.14 88);
+    --ancient-surface: oklch(0.3 0.06 72);
+    --synth: oklch(0.75 0.11 300);
+    --synth-surface: oklch(0.29 0.05 300);
+    --rail: oklch(1 0 0 / 16%);
+    --rail-hard: oklch(0.6 0.1 75);
 }
 
 @layer base {
