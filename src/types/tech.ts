@@ -117,13 +117,19 @@ export interface RecipeMaterial {
   count: number
 }
 
+/** Верстак или станок. `id` — слаг страницы предмета, по нему лежит иконка. */
+export interface RecipeStation {
+  id: string
+  name: Localized
+}
+
 export interface Recipe {
   techId: string
   /**
    * Every station the thing can be produced at, in the order paldb lists them.
    * Empty for structures, which are built directly rather than crafted.
    */
-  stations: Localized[]
+  stations: RecipeStation[]
   materials: RecipeMaterial[]
 }
 

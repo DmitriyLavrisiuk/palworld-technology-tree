@@ -66,3 +66,8 @@ export function iconUrl(techId: string): string {
 export function materialIconUrl(materialId: string): string {
   return `${import.meta.env.BASE_URL}icons/materials/${materialId}.webp`
 }
+
+/** Верстаки и станки — свой каталог по той же причине, что и материалы. */
+export function stationIconUrl(stationId: string): string {
+  return `${import.meta.env.BASE_URL}icons/stations/${stationId}.webp`
+}

@@ -140,6 +140,44 @@ describe("ручные правки цепочек", () => {
   })
 })
 
+describe("станции", () => {
+  const stations = new Map(
+    recipes.flatMap((recipe) => recipe.stations.map((station) => [station.id, station] as const)),
+  )
+
+  it("их 23 и у каждой есть идентификатор", () => {
+    expect(stations.size).toBe(23)
+    for (const recipe of recipes) {
+      for (const station of recipe.stations) {
+        expect(station.id.length, recipe.techId).toBeGreaterThan(0)
+      }
+    }
+  })
+
+  it("у каждой станции есть иконка на диске", () => {
+    // Каталог отдельный: слаги станций и технологий могут совпасть.
+    const missing = [...stations.keys()].filter(
+      (id) => !existsSync(join(ROOT, "public/icons/stations", `${id}.webp`)),
+    )
+    expect(missing).toEqual([])
+  })
+
+  it("название станции переведено на оба языка", () => {
+    for (const station of stations.values()) {
+      expect(station.name.ru.length, station.id).toBeGreaterThan(0)
+      expect(station.name.en.length, station.id).toBeGreaterThan(0)
+    }
+  })
+
+  it("у постройки станций нет — её строят, а не крафтят", () => {
+    const byId = new Map(technologies.map((tech) => [tech.id, tech]))
+    const wrong = recipes.filter(
+      (recipe) => byId.get(recipe.techId)?.category === "Structures" && recipe.stations.length > 0,
+    )
+    expect(wrong.map((recipe) => recipe.techId).slice(0, 5)).toEqual([])
+  })
+})
+
 describe("заглушки локали", () => {
   const PLACEHOLDER = /^[a-z]{2}_Text$/i
 
@@ -149,8 +187,8 @@ describe("заглушки локали", () => {
     const leaked: string[] = []
     for (const recipe of recipes) {
       for (const station of recipe.stations) {
-        if (PLACEHOLDER.test(station.ru) || PLACEHOLDER.test(station.en)) {
-          leaked.push(`${recipe.techId}: станция ${station.en}/${station.ru}`)
+        if (PLACEHOLDER.test(station.name.ru) || PLACEHOLDER.test(station.name.en)) {
+          leaked.push(`${recipe.techId}: станция ${station.name.en}/${station.name.ru}`)
         }
       }
       for (const material of recipe.materials) {

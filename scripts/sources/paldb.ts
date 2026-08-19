@@ -121,7 +121,7 @@ export async function fetchItemNames(locale: Locale, fresh: boolean): Promise<Ma
 
 export interface PaldbRecipe {
   /** Workbenches the item can be produced at. Empty for structures. */
-  stations: string[]
+  stations: { slug: string; name: string; icon: string }[]
   materials: { slug: string; name: string; icon: string; count: number }[]
 }
 
@@ -162,11 +162,15 @@ export async function fetchRecipe(slug: string, fresh: boolean): Promise<PaldbRe
   const table = card.find("table").first()
   if (!table.length) return null
 
-  const stations = card
-    .find(".row a.itemname")
-    .map((_, element) => $(element).text().trim())
-    .get()
-    .filter(Boolean)
+  // У ссылки на станцию есть и слаг, и картинка — как у материалов.
+  const stations: PaldbRecipe["stations"] = []
+  card.find(".row a.itemname").each((_, element) => {
+    const anchor = $(element)
+    const slug = anchor.attr("href")
+    const name = anchor.text().trim()
+    if (!slug || !name) return
+    stations.push({ slug, name, icon: anchor.find("img").first().attr("src") ?? "" })
+  })
 
   const cell = table.find("tbody tr").first().find("td").first()
   const materials: PaldbRecipe["materials"] = []

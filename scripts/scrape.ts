@@ -161,6 +161,16 @@ async function buildRecipes(technologies: Technology[]) {
   const known = new Map(previous.map((recipe) => [recipe.techId, recipe]))
 
   /**
+   * Прошлый файл мог быть записан по старой схеме — например, когда у станции
+   * ещё не было идентификатора. Такую запись переиспользовать нельзя: смена
+   * схемы должна сама обесценивать кэш, иначе парсер падает на первом же
+   * рецепте. Разбор идёт из `.cache`, поэтому пересборка ничего не стоит.
+   */
+  const currentShape = (recipe: Recipe) =>
+    recipe.stations.every((station) => typeof station?.id === "string") &&
+    recipe.materials.every((material) => typeof material?.id === "string")
+
+  /**
    * Русские имена станций и материалов выводятся из карты имён на КАЖДОМ
    * прогоне, а не берутся из прошлого файла. Иначе заглушка `ru_Text`,
    * однажды записанная, живёт в данных вечно: рецепты переиспользуются
@@ -169,8 +179,16 @@ async function buildRecipes(technologies: Technology[]) {
   const localise = (recipe: Recipe): Recipe => ({
     techId: recipe.techId,
     stations: recipe.stations.map((station) => ({
-      en: station.en,
-      ru: usable(itemNamesRu.get(toSlug(station.en))) ?? usable(station.ru) ?? station.en,
+      id: station.id,
+      name: {
+        en: station.name.en,
+        // Русское имя ищется по слагу станции, а не по слагу её английского
+        // названия: слаг приходит из ссылки и совпадает с ключом карты имён.
+        ru:
+          usable(itemNamesRu.get(station.id)) ??
+          usable(station.name.ru) ??
+          station.name.en,
+      },
     })),
     materials: recipe.materials.map((material) => ({
       ...material,
@@ -193,8 +211,9 @@ async function buildRecipes(technologies: Technology[]) {
     index++
     log.progress(index, Math.min(technologies.length, limit), "recipes")
 
-    if (!fresh && known.has(tech.id)) {
-      recipes.push(localise(known.get(tech.id)!))
+    const cached = known.get(tech.id)
+    if (!fresh && cached && currentShape(cached)) {
+      recipes.push(localise(cached))
       continue
     }
 
@@ -214,7 +233,10 @@ async function buildRecipes(technologies: Technology[]) {
     recipes.push(
       localise({
         techId: tech.id,
-        stations: recipe.stations.map((station) => ({ en: station, ru: station })),
+        stations: recipe.stations.map((station) => ({
+          id: station.slug,
+          name: { en: station.name, ru: station.name },
+        })),
         materials: recipe.materials.map((material) => ({
           id: material.slug,
           name: { en: material.name, ru: material.name },
@@ -243,9 +265,10 @@ const OVERRIDES = "scripts/chain-overrides.json"
  * идентификаторами технологий и иначе перезаписали бы их иконки.
  */
 async function buildMaterialIcons(technologies: Technology[]) {
-  log.step("Material icons")
+  log.step("Material and station icons")
 
-  const icons = new Map<string, string>()
+  const materials = new Map<string, string>()
+  const stations = new Map<string, string>()
 
   for (const tech of technologies) {
     let recipe: Awaited<ReturnType<typeof fetchRecipe>> = null
@@ -256,16 +279,25 @@ async function buildMaterialIcons(technologies: Technology[]) {
     }
     if (!recipe) continue
     for (const material of recipe.materials) {
-      if (material.icon && !icons.has(material.slug)) icons.set(material.slug, material.icon)
+      if (material.icon && !materials.has(material.slug)) materials.set(material.slug, material.icon)
+    }
+    for (const station of recipe.stations) {
+      if (station.icon && !stations.has(station.slug)) stations.set(station.slug, station.icon)
     }
   }
 
-  const entries = [...icons].map(([id, icon]) => ({ id, icon }))
-  log.detail(`${entries.length} distinct materials`)
-
-  const result = await downloadIcons(entries, fresh, "public/icons/materials")
-  log.done(`${result.saved} material icons → public/icons/materials`)
-  if (result.failed.length) log.warn(`${result.failed.length} failed: ${result.failed.slice(0, 5).join(", ")}`)
+  for (const [label, icons, dir] of [
+    ["materials", materials, "public/icons/materials"],
+    ["stations", stations, "public/icons/stations"],
+  ] as const) {
+    const entries = [...icons].map(([id, icon]) => ({ id, icon }))
+    log.detail(`${entries.length} distinct ${label}`)
+    const result = await downloadIcons(entries, fresh, dir)
+    log.done(`${result.saved} ${label} icons → ${dir}`)
+    if (result.failed.length) {
+      log.warn(`${result.failed.length} failed: ${result.failed.slice(0, 5).join(", ")}`)
+    }
+  }
 }
 
 async function buildChainsFile(technologies: Technology[]) {
