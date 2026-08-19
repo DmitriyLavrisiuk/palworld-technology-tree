@@ -8,6 +8,15 @@ export const UI = {
 
   search: { ru: "Поиск технологии…", en: "Search technology…" },
   myLevel: { ru: "Мой уровень", en: "My level" },
+  appShort: { ru: "Древо технологий", en: "Technology Tree" },
+  statResearched: { ru: "Изучено", en: "Researched" },
+  statPoints: { ru: "Очки", en: "Points" },
+
+  legendResearched: { ru: "изучено", en: "researched" },
+  legendAncient: { ru: "древняя", en: "ancient" },
+  legendRoute: { ru: "в маршруте", en: "on route" },
+  legendLocked: { ru: "по уровню", en: "level-gated" },
+  legendSynth: { ru: "достроено", en: "reconstructed" },
 
   viewLevels: { ru: "Шкала уровней", en: "Level axis" },
   viewLanes: { ru: "Дорожки", en: "Lanes" },
@@ -16,6 +25,10 @@ export const UI = {
   filterAvailable: { ru: "Только доступные", en: "Available only" },
   filterAncient: { ru: "Только древние", en: "Ancient only" },
   filterHideDone: { ru: "Скрыть изученные", en: "Hide researched" },
+  /* Короткие подписи для узкого экрана: полные не влезают в одну строку. */
+  filterAvailableShort: { ru: "Доступные", en: "Available" },
+  filterAncientShort: { ru: "Древние", en: "Ancient" },
+  filterHideDoneShort: { ru: "Без изученных", en: "Not researched" },
 
   themeLight: { ru: "Светлая тема", en: "Light theme" },
   themeDark: { ru: "Тёмная тема", en: "Dark theme" },

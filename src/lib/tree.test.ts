@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   isGuessed,
+  researchedTotals,
   isSynthesised,
   matches,
   nodeStatus,
@@ -240,5 +241,35 @@ describe("склонение шагов", () => {
   it("английскому хватает двух", () => {
     expect(stepsLabel(1, "en")).toBe("step")
     expect(stepsLabel(3, "en")).toBe("steps")
+  })
+})
+
+describe("сводка по изученному", () => {
+  const list = [
+    tech("A", { cost: 2 }),
+    tech("B", { cost: 3 }),
+    tech("C", { cost: 4, ancient: true }),
+  ]
+
+  it("считает только отмеченное и раздельно по видам очков", () => {
+    expect(researchedTotals(list, new Set(["A", "C"]))).toEqual({
+      count: 2,
+      techPoints: 2,
+      ancientPoints: 4,
+    })
+  })
+
+  it("пустой набор даёт нули", () => {
+    expect(researchedTotals(list, new Set())).toEqual({
+      count: 0,
+      techPoints: 0,
+      ancientPoints: 0,
+    })
+  })
+
+  it("посторонние идентификаторы в хранилище не ломают счёт", () => {
+    // Технология, удалённая патчем, остаётся в localStorage навсегда —
+    // счётчик не должен из-за неё показывать больше, чем есть в игре.
+    expect(researchedTotals(list, new Set(["A", "УдалённаяПатчем"])).count).toBe(1)
   })
 })

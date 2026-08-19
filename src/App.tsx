@@ -10,7 +10,7 @@ import { useTheme } from "@/hooks/useTheme"
 import { loadTechData, type TechData } from "@/lib/data"
 import { buildRoute } from "@/lib/planner"
 import { t } from "@/lib/i18n"
-import { NO_FILTERS, visibleTechs, type Filters } from "@/lib/tree"
+import { NO_FILTERS, researchedTotals, visibleTechs, type Filters } from "@/lib/tree"
 
 export default function App() {
   const progress = useProgress()
@@ -45,6 +45,11 @@ export default function App() {
   const route = useMemo(
     () => (data && routeTargetId ? buildRoute(routeTargetId, data, progress.researched) : null),
     [data, routeTargetId, progress.researched],
+  )
+
+  const totals = useMemo(
+    () => researchedTotals(data?.technologies ?? [], progress.researched),
+    [data, progress.researched],
   )
 
   const routeIds = useMemo(
@@ -87,6 +92,7 @@ export default function App() {
         filters={filters}
         shown={visible.length}
         total={data.technologies.length}
+        totals={totals}
         onQuery={setQuery}
         onView={progress.setView}
         onLevel={progress.setLevel}

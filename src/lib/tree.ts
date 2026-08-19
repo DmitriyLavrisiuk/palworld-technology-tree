@@ -151,3 +151,28 @@ export function packRows(members: Technology[], spanInLevels: number): Technolog
 
   return rows.map((row) => row.items)
 }
+
+export interface ResearchedTotals {
+  count: number
+  techPoints: number
+  ancientPoints: number
+}
+
+/** Сколько уже изучено и во сколько очков это обошлось. Очки — раздельно. */
+export function researchedTotals(
+  technologies: readonly Technology[],
+  researched: ReadonlySet<string>,
+): ResearchedTotals {
+  let count = 0
+  let techPoints = 0
+  let ancientPoints = 0
+
+  for (const tech of technologies) {
+    if (!researched.has(tech.id)) continue
+    count++
+    if (tech.ancient) ancientPoints += tech.cost
+    else techPoints += tech.cost
+  }
+
+  return { count, techPoints, ancientPoints }
+}
