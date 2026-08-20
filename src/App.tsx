@@ -132,6 +132,7 @@ export default function App() {
           visible={visible}
           selectedId={selectedId}
           routeIds={routeIds}
+          favoriteIds={progress.favorites}
           nodeSize={progress.nodeSize}
           collapsed={progress.collapsed}
           onToggleCollapse={progress.toggleCollapsed}

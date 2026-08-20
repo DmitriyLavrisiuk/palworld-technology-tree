@@ -17,6 +17,7 @@ export const UI = {
   legendRoute: { ru: "в маршруте", en: "on route" },
   legendLocked: { ru: "по уровню", en: "level-gated" },
   legendSynth: { ru: "достроено", en: "reconstructed" },
+  legendFavorite: { ru: "избранное", en: "favorite" },
 
   viewLevels: { ru: "Шкала уровней", en: "Level axis" },
   viewLanes: { ru: "Дорожки", en: "Lanes" },
@@ -63,6 +64,20 @@ export const UI = {
     en: "The game gives these technologies no prerequisites — the order is our reconstruction.",
   },
   onRoute: { ru: "в маршруте", en: "on route" },
+
+  favorites: { ru: "Избранное", en: "Favorites" },
+  favoriteAdd: { ru: "В избранное", en: "Add to favorites" },
+  favoriteRemove: { ru: "Убрать из избранного", en: "Remove from favorites" },
+  inFavorites: { ru: "в избранном", en: "in favorites" },
+  favoritesEmpty: { ru: "В избранном пусто", en: "No favorites yet" },
+  favoritesEmptyHint: {
+    ru: "Откройте технологию и нажмите «В избранное» — она появится здесь",
+    en: "Open a technology and press “Add to favorites” — it will show up here",
+  },
+  favoritesMaterials: {
+    ru: "Материалы на крафт избранного",
+    en: "Materials to craft the favorites",
+  },
   expand: { ru: "Развернуть", en: "Expand" },
   collapse: { ru: "Свернуть", en: "Collapse" },
   switchLanguage: { ru: "Переключить на английский", en: "Switch to Russian" },

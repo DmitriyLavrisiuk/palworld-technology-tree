@@ -1,4 +1,4 @@
-import { CheckIcon, LockIcon, RouteIcon, SparklesIcon } from "lucide-react"
+import { CheckIcon, LockIcon, RouteIcon, SparklesIcon, StarIcon } from "lucide-react"
 
 import { iconUrl } from "@/lib/data"
 import { t } from "@/lib/i18n"
@@ -13,6 +13,8 @@ interface TechNodeProps {
   selected: boolean
   /** Узел входит в проложенный маршрут. */
   onRoute?: boolean
+  /** Узел отмечен звездой. Отметка снимается в деталях и в списке избранного. */
+  favorite?: boolean
   /**
    * Достоверность цепочки узла; `null` — узел вне цепочек. Именно тип, а не
    * булев флаг: забыть пометку, передав `false`, больше не получится незаметно.
@@ -38,6 +40,7 @@ export function TechNode({
   status,
   selected,
   onRoute = false,
+  favorite = false,
   confidence,
   showLabel = false,
   onSelect,
@@ -117,6 +120,21 @@ export function TechNode({
         {locked && (
           <span className="absolute -top-[0.15em] -right-[0.15em] grid size-[1.5em] place-items-center rounded-full border-2 border-background bg-muted text-muted-foreground">
             <LockIcon className="size-[0.8em]" strokeWidth={3} />
+          </span>
+        )}
+
+        {/* Отметка игрока стоит не в углу: все четыре угла заняты данными самой
+            игры, и пятый факт рядом с ними читался бы как ещё одно её свойство.
+            Середина левой грани — единственная полоса, свободная на всех пяти
+            ступенях размера. */}
+        {favorite && (
+          <span
+            role="img"
+            aria-label={t("inFavorites", locale)}
+            title={t("inFavorites", locale)}
+            className="absolute top-1/2 -left-[0.15em] grid size-[1.35em] -translate-y-1/2 place-items-center rounded-full border-2 border-background bg-favorite text-background"
+          >
+            <StarIcon className="size-[0.75em]" strokeWidth={3} fill="currentColor" />
           </span>
         )}
 

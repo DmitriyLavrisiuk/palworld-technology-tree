@@ -13,6 +13,7 @@ interface LooseRowProps {
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
   routeIds: ReadonlySet<string>
+  favoriteIds: ReadonlySet<string>
   labelWidth: number
   metrics: NodeMetrics
   onSelect: (id: string) => void
@@ -25,6 +26,7 @@ export function LooseRow({
   statusOf,
   selectedId,
   routeIds,
+  favoriteIds,
   labelWidth,
   metrics,
   onSelect,
@@ -62,6 +64,7 @@ export function LooseRow({
                   status={statusOf(tech)}
                   selected={selectedId === tech.id}
                   onRoute={routeIds.has(tech.id)}
+                  favorite={favoriteIds.has(tech.id)}
                   confidence={null}
                   onSelect={onSelect}
                 />

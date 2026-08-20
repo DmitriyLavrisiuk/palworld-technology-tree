@@ -29,6 +29,7 @@ interface TechTreeProps {
   selectedId: string | null
   /** Идентификаторы узлов проложенного маршрута — для подсветки. */
   routeIds: ReadonlySet<string>
+  favoriteIds: ReadonlySet<string>
   nodeSize: NodeSizeKey
   /** Ключи свёрнутых секций и цепочек; живут в localStorage. */
   collapsed: ReadonlySet<string>
@@ -61,6 +62,7 @@ export function TechTree({
   visible,
   selectedId,
   routeIds,
+  favoriteIds,
   nodeSize,
   collapsed,
   onToggleCollapse,
@@ -182,6 +184,7 @@ export function TechTree({
                           statusOf={statusOf}
                           selectedId={selectedId}
                           routeIds={routeIds}
+                          favoriteIds={favoriteIds}
                           metrics={metrics}
                           collapsed={collapsed.has(entry.chain.id)}
                           onToggleCollapse={() => toggle(entry.chain.id)}
@@ -212,6 +215,7 @@ export function TechTree({
                             status={statusOf(tech)}
                             selected={selectedId === tech.id}
                             onRoute={routeIds.has(tech.id)}
+                            favorite={favoriteIds.has(tech.id)}
                             confidence={null}
                             onSelect={onSelect}
                           />
@@ -250,6 +254,7 @@ export function TechTree({
                   statusOf={statusOf}
                   selectedId={selectedId}
                   routeIds={routeIds}
+                  favoriteIds={favoriteIds}
                   metrics={metrics}
                   collapsed={collapsed.has(entry.chain.id)}
                   onToggleCollapse={() => toggle(entry.chain.id)}
@@ -270,6 +275,7 @@ export function TechTree({
                         status={statusOf(tech)}
                         selected={selectedId === tech.id}
                         onRoute={routeIds.has(tech.id)}
+                        favorite={favoriteIds.has(tech.id)}
                         confidence={null}
                         showLabel
                         onSelect={onSelect}
@@ -314,6 +320,7 @@ export function TechTree({
                   statusOf={statusOf}
                   selectedId={selectedId}
                   routeIds={routeIds}
+                  favoriteIds={favoriteIds}
                   metrics={metrics}
                   labelWidth={LABEL_WIDTH}
                   playerLevel={playerLevel}
@@ -330,6 +337,7 @@ export function TechTree({
                   statusOf={statusOf}
                   selectedId={selectedId}
                   routeIds={routeIds}
+                  favoriteIds={favoriteIds}
                   labelWidth={LABEL_WIDTH}
                   metrics={metrics}
                   onSelect={onSelect}

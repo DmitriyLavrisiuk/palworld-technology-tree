@@ -36,6 +36,12 @@ export interface Progress {
    * открытыми, а исчезнувшие просто перестают учитываться.
    */
   collapsed: string[]
+  /**
+   * Отмеченное звездой — план игрока на крафт, а не данные игры. Технология,
+   * исчезнувшая после патча, остаётся здесь навсегда и просто не находится
+   * при отрисовке: хранилище про каталог технологий не знает.
+   */
+  favorites: string[]
 }
 
 const VIEWS: ViewMode[] = ["levels", "lanes", "compact"]
@@ -57,6 +63,7 @@ const DEFAULTS: Progress = {
   nodeSize: DEFAULT_NODE_SIZE,
   groups: [],
   collapsed: [],
+  favorites: [],
 }
 
 /**
@@ -89,6 +96,9 @@ function coerce(raw: unknown): Progress {
     collapsed: Array.isArray(value.collapsed)
       ? value.collapsed.filter((key): key is string => typeof key === "string")
       : DEFAULTS.collapsed,
+    favorites: Array.isArray(value.favorites)
+      ? value.favorites.filter((id): id is string => typeof id === "string")
+      : DEFAULTS.favorites,
     groups: Array.isArray(value.groups)
       ? value.groups.filter((group): group is GroupKey =>
           (GROUP_ORDER as string[]).includes(group as string),
@@ -129,6 +139,7 @@ export function useProgress() {
 
   const researched = useMemo(() => new Set(state.researched), [state.researched])
   const collapsed = useMemo(() => new Set(state.collapsed), [state.collapsed])
+  const favorites = useMemo(() => new Set(state.favorites), [state.favorites])
 
   const toggleResearched = useCallback((id: string) => {
     setState((previous) => {
@@ -185,10 +196,20 @@ export function useProgress() {
     })
   }, [])
 
+  const toggleFavorite = useCallback((id: string) => {
+    setState((previous) => {
+      const next = new Set(previous.favorites)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return { ...previous, favorites: [...next] }
+    })
+  }, [])
+
   return {
     ...state,
     researched,
     collapsed,
+    favorites,
     toggleResearched,
     setLevel,
     setLocale,
@@ -198,5 +219,6 @@ export function useProgress() {
     toggleGroup,
     clearGroups,
     toggleCollapsed,
+    toggleFavorite,
   }
 }

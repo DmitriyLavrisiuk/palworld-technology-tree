@@ -16,6 +16,7 @@ interface ChainRowProps {
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
   routeIds: ReadonlySet<string>
+  favoriteIds: ReadonlySet<string>
   metrics: NodeMetrics
   labelWidth: number
   playerLevel: number
@@ -37,6 +38,7 @@ export function ChainRow({
   statusOf,
   selectedId,
   routeIds,
+  favoriteIds,
   metrics,
   labelWidth,
   playerLevel,
@@ -97,6 +99,7 @@ export function ChainRow({
                 status={statusOf(tech)}
                 selected={selectedId === tech.id}
                 onRoute={routeIds.has(tech.id)}
+                favorite={favoriteIds.has(tech.id)}
                 confidence={chain.confidence}
                 onSelect={onSelect}
               />
@@ -118,6 +121,7 @@ export function ChainRow({
                 status={statusOf(tech)}
                 selected={selectedId === tech.id}
                 onRoute={routeIds.has(tech.id)}
+                favorite={favoriteIds.has(tech.id)}
                 confidence={chain.confidence}
                 onSelect={onSelect}
               />

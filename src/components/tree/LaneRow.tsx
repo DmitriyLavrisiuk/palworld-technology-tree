@@ -31,6 +31,7 @@ interface LaneRowProps {
   statusOf: (tech: Technology) => NodeStatus
   selectedId: string | null
   routeIds: ReadonlySet<string>
+  favoriteIds: ReadonlySet<string>
   metrics: NodeMetrics
   collapsed: boolean
   onToggleCollapse: () => void
@@ -50,6 +51,7 @@ export function LaneRow({
   statusOf,
   selectedId,
   routeIds,
+  favoriteIds,
   metrics,
   collapsed,
   onToggleCollapse,
@@ -118,6 +120,7 @@ export function LaneRow({
                   status={statusOf(step.tech)}
                   selected={selectedId === step.tech.id}
                   onRoute={routeIds.has(step.tech.id)}
+                  favorite={favoriteIds.has(step.tech.id)}
                   confidence={chain.confidence}
                   showLabel
                   onSelect={onSelect}
@@ -137,6 +140,7 @@ export function LaneRow({
                         status={statusOf(tech)}
                         selected={selectedId === tech.id}
                         onRoute={routeIds.has(tech.id)}
+                        favorite={favoriteIds.has(tech.id)}
                         confidence={chain.confidence}
                         showLabel
                         onSelect={onSelect}
