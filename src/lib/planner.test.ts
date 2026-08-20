@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { loadTechData, type TechData } from "@/lib/data"
-import { buildRoute } from "./planner.ts"
+import { buildRoute, sumMaterials } from "./planner.ts"
 import type { Chain, ChainsFile, Recipe, Technology } from "@/types/tech"
 
 function tech(id: string, over: Partial<Technology> = {}): Technology {
@@ -393,5 +393,61 @@ describe("на настоящих данных", () => {
     const second = buildRoute("Special_PalSphere_Grade_07", data, new Set())!
 
     expect(second.materials).toEqual(first.materials)
+  })
+})
+
+describe("суммирование материалов", () => {
+  const wood = { id: "wood", name: { en: "Wood", ru: "Дерево" }, count: 5 }
+  const stone = { id: "stone", name: { en: "Stone", ru: "Камень" }, count: 5 }
+
+  function dataWith(...recipes: Recipe[]) {
+    return makeData([tech("T1"), tech("T2"), tech("T3")], [], recipes)
+  }
+
+  it("одинаковые материалы разных рецептов складываются", () => {
+    const data = dataWith(
+      { techId: "T1", stations: [], materials: [{ ...wood, count: 5 }] },
+      { techId: "T2", stations: [], materials: [{ ...wood, count: 3 }] },
+    )
+
+    expect(sumMaterials(["T1", "T2"], data)).toEqual([{ ...wood, count: 8 }])
+  })
+
+  it("технология без рецепта пропускается, а не роняет счёт", () => {
+    const data = dataWith({ techId: "T1", stations: [], materials: [{ ...wood, count: 5 }] })
+
+    expect(sumMaterials(["T1", "T2", "нет-такой"], data)).toEqual([{ ...wood, count: 5 }])
+  })
+
+  it("пустой список даёт пустую сводку", () => {
+    expect(sumMaterials([], dataWith())).toEqual([])
+  })
+
+  it("порядок — по убыванию количества, при равенстве по идентификатору", () => {
+    const data = dataWith({
+      techId: "T1",
+      stations: [],
+      materials: [
+        { ...stone, count: 5 },
+        { ...wood, count: 5 },
+        { id: "ore", name: { en: "Ore", ru: "Руда" }, count: 9 },
+      ],
+    })
+
+    expect(sumMaterials(["T1"], data).map((material) => material.id)).toEqual([
+      "ore",
+      "stone",
+      "wood",
+    ])
+  })
+
+  it("не портит сам рецепт: второй вызов даёт те же числа", () => {
+    const data = dataWith({ techId: "T1", stations: [], materials: [{ ...wood, count: 5 }] })
+
+    const first = sumMaterials(["T1"], data)
+    const second = sumMaterials(["T1"], data)
+
+    expect(second).toEqual(first)
+    expect(data.recipes.get("T1")?.materials[0].count).toBe(5)
   })
 })

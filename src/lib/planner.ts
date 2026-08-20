@@ -40,6 +40,31 @@ export interface Route {
 }
 
 /**
+ * Складывает материалы рецептов по набору технологий.
+ *
+ * Материал копируется, а не берётся ссылкой: иначе счётчик рос бы прямо
+ * в загруженном рецепте, и второй вызов выдал бы удвоенные числа.
+ *
+ * Считаются прямые материалы рецепта — промежуточные компоненты не
+ * разворачиваются: «Слиток ×47» не значит «47 руды».
+ */
+export function sumMaterials(techIds: Iterable<string>, data: TechData): RecipeMaterial[] {
+  const materials = new Map<string, RecipeMaterial>()
+
+  for (const id of techIds) {
+    const recipe = data.recipes.get(id)
+    if (!recipe) continue
+    for (const material of recipe.materials) {
+      const seen = materials.get(material.id)
+      if (seen) seen.count += material.count
+      else materials.set(material.id, { ...material })
+    }
+  }
+
+  return [...materials.values()].sort((a, b) => b.count - a.count || a.id.localeCompare(b.id))
+}
+
+/**
  * Строит маршрут до цели: всё, что нужно изучить раньше неё.
  *
  * Пререквизиты бывают двух видов. `RequireTechnology` — настоящий, из игры,
@@ -111,17 +136,6 @@ export function buildRoute(
 
   const remaining = steps.filter((step) => !step.researched)
 
-  const materials = new Map<string, RecipeMaterial>()
-  for (const step of remaining) {
-    const recipe = data.recipes.get(step.tech.id)
-    if (!recipe) continue
-    for (const material of recipe.materials) {
-      const seen = materials.get(material.id)
-      if (seen) seen.count += material.count
-      else materials.set(material.id, { ...material })
-    }
-  }
-
   return {
     target,
     steps,
@@ -133,7 +147,10 @@ export function buildRoute(
     requiredLevel: remaining.length
       ? Math.max(...remaining.map((step) => step.tech.level))
       : null,
-    materials: [...materials.values()].sort((a, b) => b.count - a.count || a.id.localeCompare(b.id)),
+    materials: sumMaterials(
+      remaining.map((step) => step.tech.id),
+      data,
+    ),
     blockers: remaining
       .filter((step) => step.tech.reqBoss || step.tech.reqResearch)
       .map((step) => ({
