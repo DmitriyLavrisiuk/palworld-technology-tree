@@ -51,6 +51,7 @@
     --color-route-foreground: var(--route-foreground);
     --color-route-surface: var(--route-surface);
     --color-favorite: var(--favorite);
+    --color-favorite-foreground: var(--favorite-foreground);
     --color-rail: var(--rail);
     --color-rail-hard: var(--rail-hard);
     --radius-sm: calc(var(--radius) * 0.6);
@@ -118,6 +119,7 @@
     --route-foreground: oklch(0.512 0.198 259.3);
     --route-surface: oklch(0.97 0.02 256);
     --favorite: oklch(0.62 0.2 348);
+    --favorite-foreground: oklch(0.514 0.196 348);
     --rail: oklch(0.87 0 0);
     --rail-hard: oklch(0.79 0.11 75);
 }
@@ -169,6 +171,7 @@
     --route-foreground: oklch(0.79 0.12 256);
     --route-surface: oklch(0.28 0.07 258);
     --favorite: oklch(0.78 0.16 348);
+    --favorite-foreground: oklch(0.84 0.13 348);
     --rail: oklch(1 0 0 / 16%);
     --rail-hard: oklch(0.6 0.1 75);
 }

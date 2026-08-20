@@ -104,7 +104,7 @@ export function DetailSheet({
             </Button>
             <Button
               variant="outline"
-              className={cn("h-11", isFavorite && "border-favorite/60 text-favorite")}
+              className={cn("h-11", isFavorite && "border-favorite/60 text-favorite-foreground")}
               onClick={() => onToggleFavorite(tech.id)}
             >
               <StarIcon fill={isFavorite ? "currentColor" : "none"} />

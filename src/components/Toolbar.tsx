@@ -193,13 +193,21 @@ export function Toolbar({
         <button
           type="button"
           onClick={onOpenFavorites}
-          aria-label={t("favorites", locale)}
+          aria-label={
+            favoritesCount > 0
+              ? `${t("favorites", locale)}: ${favoritesCount}`
+              : t("favorites", locale)
+          }
           title={t("favorites", locale)}
           className={cn(
             CONTROL,
-            "flex shrink-0 items-center gap-1 rounded-lg px-2 text-xs transition-colors",
+            // Ширина задаётся так же, как высота в CONTROL: у кнопки нет
+            // подписи, и по содержимому она выходит уже цели касания.
+            "flex min-w-9 shrink-0 items-center justify-center gap-1 rounded-lg px-2 text-xs transition-colors pointer-coarse:min-w-11",
             "hover:bg-muted focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-            favoritesCount > 0 ? "text-favorite" : "text-muted-foreground hover:text-foreground",
+            favoritesCount > 0
+              ? "text-favorite-foreground"
+              : "text-muted-foreground hover:text-foreground",
           )}
         >
           <StarIcon className="size-4" fill={favoritesCount > 0 ? "currentColor" : "none"} />
