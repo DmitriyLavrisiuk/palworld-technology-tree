@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react"
 
 import { Toolbar } from "@/components/Toolbar"
 import { DetailSheet } from "@/components/tree/DetailSheet"
+import { FavoritesSheet } from "@/components/tree/FavoritesSheet"
 import { PlannerBar } from "@/components/tree/PlannerBar"
 import { TechTree } from "@/components/tree/TechTree"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useProgress } from "@/hooks/useProgress"
 import { useTheme } from "@/hooks/useTheme"
 import { loadTechData, type TechData } from "@/lib/data"
+import type { Technology } from "@/types/tech"
 import { buildRoute } from "@/lib/planner"
 import { t } from "@/lib/i18n"
 import {
@@ -30,6 +32,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   /** Цель маршрута живёт только в сессии: в localStorage её не кладём. */
   const [routeTargetId, setRouteTargetId] = useState<string | null>(null)
+  const [favoritesOpen, setFavoritesOpen] = useState(false)
 
   useEffect(() => {
     document.documentElement.lang = progress.locale
@@ -70,6 +73,25 @@ export default function App() {
     () => new Set(route?.steps.map((step) => step.tech.id) ?? []),
     [route],
   )
+
+  /**
+   * Отметки разрешаются в технологии здесь, а не в панели: технология,
+   * исчезнувшая после патча игры, остаётся в хранилище навсегда, и счётчик
+   * по размеру множества разошёлся бы со списком. Порядок — по уровню, то
+   * есть в том, в котором до них можно дойти.
+   */
+  const favoriteTechs = useMemo(() => {
+    if (!data) return []
+    return [...progress.favorites]
+      .map((id) => data.byId.get(id))
+      .filter((tech): tech is Technology => Boolean(tech))
+      .sort(
+        (a, b) =>
+          a.level - b.level ||
+          a.cost - b.cost ||
+          a.name[progress.locale].localeCompare(b.name[progress.locale]),
+      )
+  }, [data, progress.favorites, progress.locale])
 
   if (error) {
     return (
@@ -119,6 +141,8 @@ export default function App() {
         groupCounts={groupCounts}
         onToggleGroup={progress.toggleGroup}
         onClearGroups={progress.clearGroups}
+        favoritesCount={favoriteTechs.length}
+        onOpenFavorites={() => setFavoritesOpen(true)}
         onNodeSize={progress.setNodeSize}
       />
 
@@ -150,14 +174,32 @@ export default function App() {
         />
       )}
 
+      <FavoritesSheet
+        open={favoritesOpen}
+        techs={favoriteTechs}
+        data={data}
+        locale={progress.locale}
+        researched={progress.researched}
+        onOpenChange={setFavoritesOpen}
+        onToggleFavorite={progress.toggleFavorite}
+        onSelect={(id) => {
+          // Оба листа выезжают справа и перекрыли бы друг друга: смена
+          // содержимого без движения читалась бы как «ничего не произошло».
+          setSelectedId(id)
+          setFavoritesOpen(false)
+        }}
+      />
+
       <DetailSheet
         tech={selectedId ? (data.byId.get(selectedId) ?? null) : null}
         data={data}
         locale={progress.locale}
         researched={progress.researched}
+        favorites={progress.favorites}
         playerLevel={progress.level}
         onClose={() => setSelectedId(null)}
         onToggleResearched={progress.toggleResearched}
+        onToggleFavorite={progress.toggleFavorite}
         onPlanRoute={(id) => {
           setRouteTargetId(id)
           setSelectedId(null)

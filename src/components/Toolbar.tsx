@@ -6,6 +6,7 @@ import {
   RulerIcon,
   SearchIcon,
   SparklesIcon,
+  StarIcon,
 } from "lucide-react"
 
 import { CategoryFilter } from "@/components/CategoryFilter"
@@ -51,6 +52,7 @@ const LEGEND: { label: UiKey; className: string }[] = [
   { label: "legendAncient", className: "bg-ancient" },
   { label: "legendRoute", className: "bg-route" },
   { label: "legendSynth", className: "bg-synth" },
+  { label: "legendFavorite", className: "bg-favorite" },
   { label: "legendLocked", className: "bg-muted-foreground/60" },
 ]
 
@@ -65,6 +67,7 @@ interface ToolbarProps {
   total: number
   totals: ResearchedTotals
   nodeSize: NodeSizeKey
+  favoritesCount: number
   onQuery: (value: string) => void
   onView: (view: ViewMode) => void
   onLevel: (level: number) => void
@@ -75,6 +78,7 @@ interface ToolbarProps {
   groupCounts: ReadonlyMap<GroupKey, number>
   onToggleGroup: (group: GroupKey) => void
   onClearGroups: () => void
+  onOpenFavorites: () => void
 }
 
 export function Toolbar({
@@ -88,6 +92,7 @@ export function Toolbar({
   total,
   totals,
   nodeSize,
+  favoritesCount,
   onQuery,
   onView,
   onLevel,
@@ -98,6 +103,7 @@ export function Toolbar({
   groupCounts,
   onToggleGroup,
   onClearGroups,
+  onOpenFavorites,
 }: ToolbarProps) {
   /**
    * Тень появляется только когда под шапкой что-то уехало наверх: у самого
@@ -180,6 +186,25 @@ export function Toolbar({
             )}
           </span>
         </span>
+
+        {/* Вход в раздел, а не фильтр: поэтому кнопка стоит рядом с настройками,
+            а не среди пилюль второго ряда. Видна и при нуле — иначе после
+            первой же отметки будет неясно, куда смотреть. */}
+        <button
+          type="button"
+          onClick={onOpenFavorites}
+          aria-label={t("favorites", locale)}
+          title={t("favorites", locale)}
+          className={cn(
+            CONTROL,
+            "flex shrink-0 items-center gap-1 rounded-lg px-2 text-xs transition-colors",
+            "hover:bg-muted focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
+            favoritesCount > 0 ? "text-favorite" : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          <StarIcon className="size-4" fill={favoritesCount > 0 ? "currentColor" : "none"} />
+          {favoritesCount > 0 && <span className="tabular-nums">{favoritesCount}</span>}
+        </button>
 
         <SettingsSheet
           locale={locale}

@@ -1,4 +1,4 @@
-import { CheckIcon, RouteIcon, SparklesIcon, TriangleAlertIcon, XIcon } from "lucide-react"
+import { CheckIcon, RouteIcon, SparklesIcon, StarIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 
 import { MaterialList } from "@/components/tree/MaterialList"
 import { StationList } from "@/components/tree/StationList"
@@ -10,6 +10,7 @@ import type { TechData } from "@/lib/data"
 import { iconUrl } from "@/lib/data"
 import { pointsLabel, t } from "@/lib/i18n"
 import { isSynthesised, nodeStatus } from "@/lib/tree"
+import { cn } from "@/lib/utils"
 import type { Locale, Technology } from "@/types/tech"
 
 interface DetailSheetProps {
@@ -17,9 +18,11 @@ interface DetailSheetProps {
   data: TechData
   locale: Locale
   researched: ReadonlySet<string>
+  favorites: ReadonlySet<string>
   playerLevel: number
   onClose: () => void
   onToggleResearched: (id: string) => void
+  onToggleFavorite: (id: string) => void
   onPlanRoute: (id: string) => void
 }
 
@@ -29,15 +32,18 @@ export function DetailSheet({
   data,
   locale,
   researched,
+  favorites,
   playerLevel,
   onClose,
   onToggleResearched,
+  onToggleFavorite,
   onPlanRoute,
 }: DetailSheetProps) {
   if (!tech) return null
 
   const status = nodeStatus(tech, researched, playerLevel)
   const isDone = status === "researched"
+  const isFavorite = favorites.has(tech.id)
   const recipe = data.recipes.get(tech.id)
   const chain = data.chainOf.get(tech.id)
   const requires = tech.reqTech ? data.byId.get(tech.reqTech) : null
@@ -95,6 +101,14 @@ export function DetailSheet({
             >
               {isDone ? null : <CheckIcon />}
               {t(isDone ? "unmark" : "markResearched", locale)}
+            </Button>
+            <Button
+              variant="outline"
+              className={cn("h-11", isFavorite && "border-favorite/60 text-favorite")}
+              onClick={() => onToggleFavorite(tech.id)}
+            >
+              <StarIcon fill={isFavorite ? "currentColor" : "none"} />
+              {t(isFavorite ? "favoriteRemove" : "favoriteAdd", locale)}
             </Button>
             <Button variant="outline" className="h-11" onClick={() => onPlanRoute(tech.id)}>
               <RouteIcon />

@@ -132,9 +132,9 @@ export function TechNode({
             role="img"
             aria-label={t("inFavorites", locale)}
             title={t("inFavorites", locale)}
-            className="absolute top-1/2 -left-[0.15em] grid size-[1.35em] -translate-y-1/2 place-items-center rounded-full border-2 border-background bg-favorite text-background"
+            className="absolute top-1/2 -left-[0.15em] grid size-[1.2em] -translate-y-1/2 place-items-center rounded-full border-2 border-background bg-favorite text-background"
           >
-            <StarIcon className="size-[0.75em]" strokeWidth={3} fill="currentColor" />
+            <StarIcon className="size-[0.7em]" strokeWidth={3} fill="currentColor" />
           </span>
         )}
 
