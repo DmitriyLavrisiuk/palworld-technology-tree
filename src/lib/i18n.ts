@@ -2,13 +2,37 @@ import type { Locale, Localized } from "@/types/tech"
 
 /** Два языка, один пользователь — словарь выигрывает у i18n-библиотеки. */
 export const UI = {
-  appName: { ru: "Древо технологий Palworld", en: "Palworld Technology Tree" },
+  appName: { ru: "Шпаргалки Palworld", en: "Palworld Cheatsheets" },
   loading: { ru: "Загрузка данных…", en: "Loading data…" },
   loadFailed: { ru: "Не удалось загрузить данные", en: "Failed to load data" },
 
   search: { ru: "Поиск технологии…", en: "Search technology…" },
   myLevel: { ru: "Мой уровень", en: "My level" },
+  /** Имя раздела, а не сайта: сайт теперь шире дерева. */
   appShort: { ru: "Древо технологий", en: "Technology Tree" },
+  titleResearch: {
+    ru: "Древо технологий — Шпаргалки Palworld",
+    en: "Technology Tree — Palworld Cheatsheets",
+  },
+
+  sectionsIntro: { ru: "Выберите раздел", en: "Choose a section" },
+  sectionResearch: { ru: "Исследования", en: "Research" },
+  sectionResearchHint: {
+    ru: "Древо технологий: цепочки апгрейдов, путь до нужного предмета и отметки изученного",
+    en: "Technology tree: upgrade chains, a route to any target and what you have researched",
+  },
+  sectionPalSkills: { ru: "Навыки палов", en: "Pal skills" },
+  sectionPalSkillsHint: {
+    ru: "Активные и пассивные навыки: что делают и у кого встречаются",
+    en: "Active and passive skills: what they do and which pals have them",
+  },
+  sectionBreeding: { ru: "Разведение палов", en: "Pal breeding" },
+  sectionBreedingHint: {
+    ru: "Пары родителей и кто из них вылупляется",
+    en: "Parent pairs and what they hatch into",
+  },
+  soon: { ru: "Скоро", en: "Soon" },
+  backToSections: { ru: "К разделам", en: "All sections" },
   statResearched: { ru: "Изучено", en: "Researched" },
   statPoints: { ru: "Очки", en: "Points" },
 

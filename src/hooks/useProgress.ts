@@ -122,6 +122,9 @@ function read(): Progress {
   }
 }
 
+/** Всё, что отдаёт хук. Страницы получают это объектом — см. useProgress ниже. */
+export type ProgressState = ReturnType<typeof useProgress>
+
 /**
  * Единственный источник постоянного состояния: отметки изученного, уровень
  * персонажа, язык, режим и тема. Других записей в localStorage в проекте нет.
