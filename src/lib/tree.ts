@@ -1,4 +1,4 @@
-import type { Chain, ChainConfidence, ChainKind, GroupKey, Technology } from "@/types/tech"
+import type { Chain, ChainConfidence, ChainKind, GroupKey, Localized, Technology } from "@/types/tech"
 
 /**
  * Чистая логика дерева: состояние узла, поиск и фильтры. Живёт отдельно от
@@ -75,10 +75,19 @@ function matchesName(name: string, needle: string): boolean {
   return wordsOf(text).some((word) => word.startsWith(stem))
 }
 
-export function matches(tech: Technology, query: string): boolean {
+/**
+ * Поиск по паре названий. Вынесен из `matches`, потому что те же правила
+ * нужны разделу палов: правила поиска должны жить в одном месте, иначе
+ * русское склонение однажды заработает в дереве и не заработает у палов.
+ */
+export function matchesLocalized(name: Localized, query: string): boolean {
   const needle = normalise(query)
   if (!needle) return true
-  return matchesName(tech.name.ru, needle) || matchesName(tech.name.en, needle)
+  return matchesName(name.ru, needle) || matchesName(name.en, needle)
+}
+
+export function matches(tech: Technology, query: string): boolean {
+  return matchesLocalized(tech.name, query)
 }
 
 export function passesFilters(
