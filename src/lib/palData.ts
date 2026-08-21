@@ -30,3 +30,7 @@ export function palIconUrl(id: string): string {
 export function workIconUrl(key: string): string {
   return `${import.meta.env.BASE_URL}icons/work/${key}.webp`
 }
+
+export function elementIconUrl(key: string): string {
+  return `${import.meta.env.BASE_URL}icons/elements/${key}.webp`
+}

@@ -1,48 +1,146 @@
 import { matchesLocalized } from "@/lib/tree"
 import type { Locale } from "@/types/tech"
-import { WORK_ORDER, type Pal, type WorkKey } from "@/types/pal"
+import { WORK_ORDER, type ElementKey, type Pal, type WorkKey } from "@/types/pal"
+
+/** Закрытый диапазон уровней или еды. */
+export interface Range {
+  min: number
+  max: number
+}
+
+export const inRange = (value: number, range: Range | null): boolean =>
+  range === null || (value >= range.min && value <= range.max)
 
 /**
- * Подбор пала под работы базы.
+ * Жест выбора диапазона: первый клик — «от», второй — «до».
  *
- * Требование — это «не ниже», а не «ровно»: игрок закрывает работу, и пал с
- * запасом ему подходит. Требования складываются по «и»: выбрав добычу и рубку,
- * игрок ищет одного пала, который умеет и то и другое, а не двух разных.
+ * Клик по одиночному выбранному значению снимает выбор; клик внутри уже
+ * растянутого диапазона начинает новый с этого места — иначе диапазон
+ * невозможно было бы сузить.
  */
-export type WorkRequirement = ReadonlyMap<WorkKey, number>
-
-export function matchesWork(pal: Pal, required: WorkRequirement): boolean {
-  for (const [key, level] of required) {
-    if ((pal.work[key] ?? 0) < level) return false
+export function hitRange(range: Range | null, n: number): Range | null {
+  if (!range) return { min: n, max: n }
+  if (range.min === range.max) {
+    if (n === range.min) return null
+    return n > range.min ? { min: range.min, max: n } : { min: n, max: range.min }
   }
+  return { min: n, max: n }
+}
+
+/**
+ * Группы усилителей — наша таксономия поверх 23 игровых пассивок, нужная
+ * только фильтру. Карта намеренно явная и полная: новая пассивка после патча
+ * роняет тест полноты в data-invariants, и её классифицируют осознанно, а не
+ * эвристикой по имени.
+ */
+export type BuffGroup = "element" | "attack" | "defense" | "legend" | "penalty"
+
+export const BUFF_GROUP_ORDER: BuffGroup[] = ["element", "attack", "defense", "legend", "penalty"]
+
+export const BUFF_GROUP_OF: Record<string, BuffGroup> = {
+  ElementBoost_Aqua_2_PAL: "element",
+  ElementBoost_Dark_2_PAL: "element",
+  ElementBoost_Dragon_2_PAL: "element",
+  ElementBoost_Earth_2_PAL: "element",
+  ElementBoost_Fire_2_PAL: "element",
+  ElementBoost_Ice_2_PAL: "element",
+  ElementBoost_Leaf_2_PAL: "element",
+  ElementBoost_Normal_2_PAL: "element",
+  ElementBoost_Thunder_2_PAL: "element",
+  // Двухстихийные усилители урона — «Вечное пламя», «Захватчик», «Ведьма»,
+  // «Спаситель»; «Царь-рыба» добавляет защиту, но носит его водный босс —
+  // стихийная суть первична.
+  EternalFlame: "element",
+  Invader: "element",
+  Witch: "element",
+  Salvation: "element",
+  Nushi: "element",
+  // «Грубый» и «Садист» платят за атаку штрафом, но берут их ради атаки.
+  PAL_rude: "attack",
+  PAL_sadist: "attack",
+  Alien: "attack",
+  Deffence_up1: "defense",
+  Deffence_up2_2: "defense",
+  ElementResist_Normal_1_PAL: "defense",
+  Legend: "legend",
+  // Чистые штрафы: не усилители, но их носителей полезно знать в лицо.
+  PAL_ALLAttack_down1: "penalty",
+  PAL_FullStomach_Up_1: "penalty",
+}
+
+export const buffGroupOf = (passiveId: string): BuffGroup | null =>
+  BUFF_GROUP_OF[passiveId] ?? null
+
+/** «Любой усилитель» — любая пассивка, кроме чистого штрафа. */
+export type BuffFilterKey = BuffGroup | "any"
+
+export interface PalFilters {
+  /** Значение `null` у ключа — «умеет, уровень любой». */
+  works: ReadonlyMap<WorkKey, Range | null>
+  /** Пал подходит, если есть хотя бы одна из выбранных стихий. */
+  elements: ReadonlySet<ElementKey>
+  food: Range | null
+  buffs: ReadonlySet<BuffFilterKey>
+}
+
+export const NO_PAL_FILTERS: PalFilters = {
+  works: new Map(),
+  elements: new Set(),
+  food: null,
+  buffs: new Set(),
+}
+
+export function matchesPal(pal: Pal, filters: PalFilters): boolean {
+  for (const [key, range] of filters.works) {
+    const level = pal.work[key] ?? 0
+    if (level === 0 || !inRange(level, range)) return false
+  }
+
+  if (filters.elements.size > 0 && !pal.elements.some((key) => filters.elements.has(key))) {
+    return false
+  }
+
+  if (!inRange(pal.food, filters.food)) return false
+
+  if (filters.buffs.size > 0) {
+    const groups = pal.passives
+      .map(buffGroupOf)
+      .filter((group): group is BuffGroup => group !== null)
+    const positive = groups.filter((group) => group !== "penalty")
+
+    const wanted =
+      (filters.buffs.has("any") && positive.length > 0) ||
+      groups.some((group) => filters.buffs.has(group))
+    if (!wanted) return false
+  }
+
   return true
 }
 
 /** Сумма уровней по выбранным работам — ею сортируется выдача. */
-export function workScore(pal: Pal, required: WorkRequirement): number {
+export function workScore(pal: Pal, works: PalFilters["works"]): number {
   let total = 0
-  for (const key of required.keys()) total += pal.work[key] ?? 0
+  for (const key of works.keys()) total += pal.work[key] ?? 0
   return total
 }
 
 /**
- * Отбор и порядок. При активном фильтре выше идут те, кто по выбранным
- * работам сильнее: искали лучшего, а не первого по алфавиту. Без фильтра —
- * порядок Палдекса, как в игре.
+ * Отбор и порядок. При выбранных работах выше идут те, кто по ним сильнее:
+ * искали лучшего, а не первого по алфавиту. Иначе — порядок Палдекса.
  */
 export function filterPals(
   pals: readonly Pal[],
-  required: WorkRequirement,
+  filters: PalFilters,
   query: string,
   locale: Locale,
 ): Pal[] {
-  const found = pals.filter((pal) => matchesWork(pal, required) && matchesLocalized(pal.name, query))
+  const found = pals.filter((pal) => matchesPal(pal, filters) && matchesLocalized(pal.name, query))
 
-  if (required.size === 0) return found
+  if (filters.works.size === 0) return found
 
   return found.sort(
     (a, b) =>
-      workScore(b, required) - workScore(a, required) ||
+      workScore(b, filters.works) - workScore(a, filters.works) ||
       a.name[locale].localeCompare(b.name[locale]),
   )
 }
@@ -50,8 +148,7 @@ export function filterPals(
 /**
  * Верхняя граница шкалы уровней. Берётся из данных, а не из константы: в игре
  * базовый максимум четыре, у стихийных вариантов доходит до восьми, и после
- * патча это число может измениться. Предположи мы его — интерфейс однажды
- * предложил бы уровень, которого не существует.
+ * патча это число может измениться.
  */
 export function maxWorkLevel(pals: readonly Pal[]): number {
   let max = 0
@@ -60,6 +157,13 @@ export function maxWorkLevel(pals: readonly Pal[]): number {
       if (level > max) max = level
     }
   }
+  return max
+}
+
+/** Верхняя граница шкалы еды — тоже из данных. */
+export function maxFood(pals: readonly Pal[]): number {
+  let max = 0
+  for (const pal of pals) if (pal.food > max) max = pal.food
   return max
 }
 
