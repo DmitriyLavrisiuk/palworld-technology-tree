@@ -32,7 +32,7 @@ export function FilterPopoverContent({ className, ...props }: FilterPopoverConte
           data-slot="popover-content"
           className={cn(
             "z-50 flex origin-(--transform-origin) flex-col rounded-b-lg rounded-t-none p-2.5 text-sm text-popover-foreground outline-hidden",
-            "border border-border/60 bg-popover/75 shadow-[0_24px_48px_-16px_rgb(0_0_0/0.55)] backdrop-blur-xl backdrop-saturate-150",
+            "border border-border/60 bg-popover/75 shadow-[0_24px_48px_-16px_rgb(0_0_0/0.35)] backdrop-blur-xl backdrop-saturate-150",
             "duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95",
             "data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
             "data-[side=bottom]:slide-in-from-top-2",

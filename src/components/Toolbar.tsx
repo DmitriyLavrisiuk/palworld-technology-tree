@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import {
   LayoutGridIcon,
   Rows3Icon,
@@ -9,6 +8,7 @@ import {
 } from "lucide-react"
 
 import { BackToSections } from "@/components/BackToSections"
+import { useScrolled } from "@/hooks/useScrolled"
 import { CategoryFilter } from "@/components/CategoryFilter"
 import { SettingsSheet } from "@/components/SettingsSheet"
 import { Badge } from "@/components/ui/badge"
@@ -105,24 +105,13 @@ export function Toolbar({
   onClearGroups,
   onOpenFavorites,
 }: ToolbarProps) {
-  /**
-   * Тень появляется только когда под шапкой что-то уехало наверх: у самого
-   * верха страницы отделять нечего, и постоянная тень читалась бы как рамка.
-   */
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 4)
-    update()
-    window.addEventListener("scroll", update, { passive: true })
-    return () => window.removeEventListener("scroll", update)
-  }, [])
+  const scrolled = useScrolled()
 
   return (
     <header
       className={cn(
         "sticky top-0 z-40 border-b bg-background/95 backdrop-blur transition-shadow duration-200",
-        scrolled && "shadow-[0_8px_24px_-12px_rgb(0_0_0/0.45)]",
+        scrolled && "shadow-[0_8px_24px_-12px_rgb(0_0_0/0.25)]",
       )}
     >
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2">
