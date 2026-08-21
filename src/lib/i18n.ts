@@ -116,9 +116,11 @@ export const UI = {
   filterAncientShort: { ru: "Древние", en: "Ancient" },
   filterHideDoneShort: { ru: "Без изученных", en: "Not researched" },
 
-  themeLight: { ru: "Светлая тема", en: "Light theme" },
-  themeDark: { ru: "Тёмная тема", en: "Dark theme" },
-  themeSystem: { ru: "Как в системе", en: "System theme" },
+  // Без слова «тема»: оно уже в заголовке секции, а с ним подписи
+  // переносились на две строки.
+  themeLight: { ru: "Светлая", en: "Light" },
+  themeDark: { ru: "Тёмная", en: "Dark" },
+  themeSystem: { ru: "Системная", en: "System" },
 
   levelShort: { ru: "ур.", en: "lv." },
   researched: { ru: "Изучено", en: "Researched" },
