@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react"
 
+import { PageLoader } from "@/components/PageLoader"
 import { Toolbar } from "@/components/Toolbar"
 import { DetailSheet } from "@/components/tree/DetailSheet"
 import { FavoritesSheet } from "@/components/tree/FavoritesSheet"
 import { PlannerBar } from "@/components/tree/PlannerBar"
 import { TechTree } from "@/components/tree/TechTree"
-import { Skeleton } from "@/components/ui/skeleton"
 import type { ProgressState } from "@/hooks/useProgress"
 import { loadTechData, peekTechData, type TechData } from "@/lib/data"
 import type { Technology } from "@/types/tech"
@@ -105,20 +105,7 @@ export function ResearchPage({ progress }: ResearchPageProps) {
     )
   }
 
-  if (!data) {
-    return (
-      <main className="flex flex-col gap-2 p-4" aria-busy>
-        <span className="sr-only">{t("loading", progress.locale)}</span>
-        <Skeleton className="h-11 w-full" />
-        <Skeleton className="h-11 w-2/3" />
-        <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))] gap-1.5">
-          {Array.from({ length: 12 }, (_, index) => (
-            <Skeleton key={index} className="h-14" />
-          ))}
-        </div>
-      </main>
-    )
-  }
+  if (!data) return <PageLoader locale={progress.locale} />
 
   return (
     // Колонка с растущим main: без неё при коротком контенте липкая панель
