@@ -189,7 +189,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
         />
       </header>
 
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-3 p-3">
+      <main className="mx-auto flex w-full max-w-[110rem] flex-1 flex-col gap-3 p-3">
         <h1 className="sr-only">{t("sectionPalSkills", locale)}</h1>
 
         {found.length === 0 ? (
@@ -207,7 +207,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
                 {found.length}
               </Badge>
             </h2>
-            <ul className="flex flex-col gap-1.5">
+            <ul className="grid grid-cols-1 items-stretch gap-2 lg:grid-cols-2 2xl:grid-cols-3">
               {found.map((pal) => (
                 <PalRow
                   key={pal.id}
@@ -217,6 +217,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
                   elements={data.elementNames}
                   passives={data.passives}
                   works={filters.works}
+                  workKeys={workKeys}
                   foodCap={foodCap}
                   onSelect={setSelectedId}
                 />

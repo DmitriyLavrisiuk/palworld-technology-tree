@@ -1,21 +1,14 @@
 import { CircleMinusIcon, MoonIcon, SparklesIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { WorkIcon } from "@/components/pals/WorkIcon"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { palIconUrl } from "@/lib/palData"
 import { t } from "@/lib/i18n"
 import { buffGroupOf, type PalFilters } from "@/lib/pals"
 import { cn } from "@/lib/utils"
 import type { Locale } from "@/types/tech"
-import {
-  WORK_ORDER,
-  type ElementNames,
-  type Pal,
-  type PassiveInfo,
-  type WorkKey,
-  type WorkNames,
-} from "@/types/pal"
+import type { ElementNames, Pal, PassiveInfo, WorkKey, WorkNames } from "@/types/pal"
 
 interface PalRowProps {
   pal: Pal
@@ -24,147 +17,174 @@ interface PalRowProps {
   elements: ElementNames
   passives: Record<string, PassiveInfo>
   works: PalFilters["works"]
+  /** Все работы раздела: у карточки фиксированные слоты, а не только свои. */
+  workKeys: WorkKey[]
   foodCap: number
   onSelect: (id: string) => void
 }
 
-export function PalRow({ pal, locale, names, elements, passives, works, foodCap, onSelect }: PalRowProps) {
-  /**
-   * Выбранные работы идут первыми: среди дюжины значков иначе не видно,
-   * за что пал попал в выдачу. Остальные сохраняют игровой порядок.
-   */
-  const owned = WORK_ORDER.filter((key: WorkKey) => pal.work[key])
-  const shown = [...owned].sort((a, b) => Number(works.has(b)) - Number(works.has(a)))
-
+/**
+ * Карточка пала в сетке. Внизу — слоты всех работ раздела в одном и том же
+ * порядке у каждой карточки: отсутствующие приглушены, а не спрятаны, поэтому
+ * одна и та же работа всегда стоит в одном месте и колонку можно сканировать
+ * взглядом сверху вниз.
+ */
+export function PalRow({
+  pal,
+  locale,
+  names,
+  elements,
+  passives,
+  works,
+  workKeys,
+  foodCap,
+  onSelect,
+}: PalRowProps) {
   return (
-    <li>
+    <li className="h-full">
       <button
         type="button"
         onClick={() => onSelect(pal.id)}
-        className="flex w-full items-center gap-3 rounded-lg border bg-card p-2 pr-3 text-left transition-colors hover:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+        className="flex h-full w-full flex-col gap-2 rounded-lg border bg-card p-3 text-left transition-colors hover:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
       >
-      <img
-        src={palIconUrl(pal.id)}
-        alt=""
-        width={48}
-        height={48}
-        loading="lazy"
-        decoding="async"
-        className="size-12 shrink-0 rounded-full border object-contain"
-        onError={(event) => {
-          event.currentTarget.style.visibility = "hidden"
-        }}
-      />
+        <span className="flex items-center gap-3">
+          <img
+            src={palIconUrl(pal.id)}
+            alt=""
+            width={48}
+            height={48}
+            loading="lazy"
+            decoding="async"
+            className="size-12 shrink-0 rounded-full border object-contain"
+            onError={(event) => {
+              event.currentTarget.style.visibility = "hidden"
+            }}
+          />
 
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="flex flex-wrap items-center gap-2">
-          <span className="truncate text-sm font-medium">{pal.name[locale]}</span>
-          <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
-            #{pal.dexNo}
-            {pal.dexSuffix}
-          </span>
-          <span className="flex shrink-0 gap-1">
-            {pal.elements.map((key) => (
-              <Tooltip key={key}>
-                <TooltipTrigger
-                  render={
-                    <span className="grid size-8 place-items-center rounded-full border bg-muted/50" />
-                  }
-                >
-                  <ElementIcon element={key} />
-                </TooltipTrigger>
-                <TooltipContent>{elements[key][locale]}</TooltipContent>
-              </Tooltip>
-            ))}
-          </span>
-          {pal.nocturnal && (
-            <span
-              title={t("palNocturnal", locale)}
-              aria-label={t("palNocturnal", locale)}
-              className="shrink-0 text-muted-foreground"
-            >
-              <MoonIcon className="size-3.5" />
-            </span>
-          )}
-        </span>
-
-        <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5" title={`${pal.food} / ${foodCap}`}>
-            <span className="flex gap-px" aria-hidden>
-              {Array.from({ length: foodCap }, (_, index) => (
-                <span
-                  key={index}
-                  className={cn(
-                    "h-2 w-1 rounded-[2px]",
-                    index < pal.food ? "bg-muted-foreground" : "bg-border",
-                  )}
-                />
-              ))}
-            </span>
-            <b className="font-medium text-foreground tabular-nums">{pal.food}</b>
-            {t("foodPerDay", locale)}
-          </span>
-
-          {pal.passives.map((id) => {
-            const info = passives[id]
-            if (!info) return null
-            const penalty = buffGroupOf(id) === "penalty"
-            return (
-              <span
-                key={id}
-                title={info.description[locale]}
-                className={cn(
-                  "flex items-center gap-1 rounded-full border px-2 py-0.5",
-                  penalty
-                    ? "border-destructive/40 bg-destructive/10 text-foreground"
-                    : "border-researched/50 bg-researched-surface text-foreground",
-                )}
-              >
-                {penalty ? (
-                  <CircleMinusIcon className="size-3 text-destructive" />
-                ) : (
-                  <SparklesIcon className="size-3 text-researched" />
-                )}
-                {info.name[locale]}
+          <span className="flex min-w-0 flex-1 flex-col gap-1">
+            <span className="flex flex-wrap items-center gap-2">
+              <span className="truncate text-sm font-medium">{pal.name[locale]}</span>
+              <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
+                #{pal.dexNo}
+                {pal.dexSuffix}
               </span>
-            )
-          })}
+              <span className="flex shrink-0 gap-1">
+                {pal.elements.map((key) => (
+                  <Tooltip key={key}>
+                    <TooltipTrigger
+                      render={
+                        <span className="grid size-7 place-items-center rounded-full border bg-muted/50" />
+                      }
+                    >
+                      <ElementIcon element={key} className="size-5" />
+                    </TooltipTrigger>
+                    <TooltipContent>{elements[key][locale]}</TooltipContent>
+                  </Tooltip>
+                ))}
+              </span>
+              {pal.nocturnal && (
+                <Tooltip>
+                  <TooltipTrigger render={<span className="shrink-0 text-muted-foreground" />}>
+                    <MoonIcon className="size-4" />
+                  </TooltipTrigger>
+                  <TooltipContent>{t("palNocturnal", locale)}</TooltipContent>
+                </Tooltip>
+              )}
+            </span>
+
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5" title={`${pal.food} / ${foodCap}`}>
+                <span className="flex gap-px" aria-hidden>
+                  {Array.from({ length: foodCap }, (_, index) => (
+                    <span
+                      key={index}
+                      className={cn(
+                        "h-2 w-1 rounded-[2px]",
+                        index < pal.food ? "bg-muted-foreground" : "bg-border",
+                      )}
+                    />
+                  ))}
+                </span>
+                <b className="font-medium text-foreground tabular-nums">{pal.food}</b>
+                {t("foodPerDay", locale)}
+              </span>
+
+              {pal.passives.map((id) => {
+                const info = passives[id]
+                if (!info) return null
+                const penalty = buffGroupOf(id) === "penalty"
+                return (
+                  <span
+                    key={id}
+                    title={info.description[locale]}
+                    className={cn(
+                      "flex items-center gap-1 rounded-full border px-2 py-0.5",
+                      penalty
+                        ? "border-destructive/40 bg-destructive/10 text-foreground"
+                        : "border-researched/50 bg-researched-surface text-foreground",
+                    )}
+                  >
+                    {penalty ? (
+                      <CircleMinusIcon className="size-3 text-destructive" />
+                    ) : (
+                      <SparklesIcon className="size-3 text-researched" />
+                    )}
+                    {info.name[locale]}
+                  </span>
+                )
+              })}
+            </span>
+          </span>
         </span>
 
         {pal.description[locale] && (
           <span
-            className="line-clamp-1 max-w-[64ch] text-xs text-muted-foreground/80"
+            className="line-clamp-1 text-xs text-muted-foreground/80"
             title={pal.description[locale]}
           >
             {pal.description[locale]}
           </span>
         )}
-      </div>
 
-      <span className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-1">
-        {shown.map((key) => (
-          <Tooltip key={key}>
-            <TooltipTrigger
-              render={
-                <span
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-md border px-1.5 py-1 font-mono text-xs tabular-nums",
-                    works.has(key)
-                      ? "border-ring bg-accent font-medium text-foreground"
-                      : "border-transparent text-muted-foreground",
-                  )}
-                />
-              }
-            >
-              <WorkIcon work={key} />
-              {pal.work[key]}
-            </TooltipTrigger>
-            <TooltipContent>
-              {names[key][locale]} · {pal.work[key]}
-            </TooltipContent>
-          </Tooltip>
-        ))}
-      </span>
+        <span
+          className="mt-auto grid gap-0.5"
+          style={{ gridTemplateColumns: `repeat(${workKeys.length}, minmax(0, 1fr))` }}
+        >
+          {workKeys.map((key) => {
+            const level = pal.work[key]
+            const picked = works.has(key) && Boolean(level)
+
+            return (
+              <Tooltip key={key}>
+                <TooltipTrigger
+                  render={
+                    <span
+                      className={cn(
+                        "flex flex-col items-center gap-0.5 rounded-md border py-1",
+                        picked ? "border-ring bg-accent" : "border-transparent",
+                        !level && "opacity-25",
+                      )}
+                    />
+                  }
+                >
+                  <WorkIcon work={key} className="size-5" />
+                  <span
+                    className={cn(
+                      "font-mono text-xs leading-none tabular-nums",
+                      picked ? "font-medium text-foreground" : "text-muted-foreground",
+                    )}
+                  >
+                    {level ?? "·"}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {names[key][locale]}
+                  {level ? ` · ${level}` : ""}
+                </TooltipContent>
+              </Tooltip>
+            )
+          })}
+        </span>
       </button>
     </li>
   )
