@@ -1,6 +1,7 @@
 import { CircleMinusIcon, MoonIcon, SparklesIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { WorkIcon } from "@/components/pals/WorkIcon"
 import { palIconUrl } from "@/lib/palData"
 import { t } from "@/lib/i18n"
@@ -58,13 +59,16 @@ export function PalRow({ pal, locale, names, elements, passives, works, foodCap 
           </span>
           <span className="flex shrink-0 gap-1">
             {pal.elements.map((key) => (
-              <span
-                key={key}
-                className="flex items-center gap-1 rounded-full border bg-muted/50 py-0.5 pr-2 pl-1 text-[11px] text-muted-foreground"
-              >
-                <ElementIcon element={key} title={elements[key][locale]} className="size-3.5" />
-                {elements[key][locale]}
-              </span>
+              <Tooltip key={key}>
+                <TooltipTrigger
+                  render={
+                    <span className="grid size-6 place-items-center rounded-full border bg-muted/50" />
+                  }
+                >
+                  <ElementIcon element={key} />
+                </TooltipTrigger>
+                <TooltipContent>{elements[key][locale]}</TooltipContent>
+              </Tooltip>
             ))}
           </span>
           {pal.nocturnal && (
@@ -133,19 +137,26 @@ export function PalRow({ pal, locale, names, elements, passives, works, foodCap 
 
       <ul className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-1">
         {shown.map((key) => (
-          <li
-            key={key}
-            title={`${names[key][locale]} ${pal.work[key]}`}
-            className={cn(
-              "flex items-center gap-1 rounded-md border px-1.5 py-0.5 font-mono text-xs tabular-nums",
-              works.has(key)
-                ? "border-ring bg-accent font-medium text-foreground"
-                : "border-transparent text-muted-foreground",
-            )}
-          >
-            <WorkIcon work={key} title={names[key][locale]} className="size-3.5" />
-            {pal.work[key]}
-          </li>
+          <Tooltip key={key}>
+            <TooltipTrigger
+              render={
+                <li
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-md border px-1.5 py-1 font-mono text-xs tabular-nums",
+                    works.has(key)
+                      ? "border-ring bg-accent font-medium text-foreground"
+                      : "border-transparent text-muted-foreground",
+                  )}
+                />
+              }
+            >
+              <WorkIcon work={key} />
+              {pal.work[key]}
+            </TooltipTrigger>
+            <TooltipContent>
+              {names[key][locale]} · {pal.work[key]}
+            </TooltipContent>
+          </Tooltip>
         ))}
       </ul>
     </li>

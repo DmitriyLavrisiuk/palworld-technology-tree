@@ -4,10 +4,11 @@ import { SearchIcon } from "lucide-react"
 import { BackToSections } from "@/components/BackToSections"
 import { PageLoader } from "@/components/PageLoader"
 import { SettingsSheet } from "@/components/SettingsSheet"
-import { PalFilterBar, type PanelKey } from "@/components/pals/PalFilterBar"
+import { PalFilterBar } from "@/components/pals/PalFilterBar"
 import { PalRow } from "@/components/pals/PalRow"
 import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import type { ProgressState } from "@/hooks/useProgress"
 import { t } from "@/lib/i18n"
@@ -40,7 +41,6 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
   const [query, setQuery] = useState("")
   /** Фильтры живут только в сессии: это разовый запрос, а не настройка. */
   const [filters, setFilters] = useState<PalFilters>(NO_PAL_FILTERS)
-  const [openPanel, setOpenPanel] = useState<PanelKey | null>(null)
 
   useEffect(() => {
     loadPals().then(setData, (cause: unknown) => {
@@ -132,7 +132,8 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
   if (!data) return <PageLoader locale={locale} />
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <TooltipProvider delay={250}>
+      <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2">
           <BackToSections locale={locale} className={CONTROL} />
@@ -177,17 +178,12 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
           maxLevel={maxLevel}
           maxFood={foodCap}
           buffCounts={buffCounts}
-          open={openPanel}
-          onOpen={setOpenPanel}
           onToggleWork={toggleWork}
           onWorkRange={setWorkRange}
           onToggleElement={toggleElement}
           onFood={(range) => setFilters((previous) => ({ ...previous, food: range }))}
           onToggleBuff={toggleBuff}
-          onReset={() => {
-            setFilters(NO_PAL_FILTERS)
-            setOpenPanel(null)
-          }}
+          onReset={() => setFilters(NO_PAL_FILTERS)}
         />
       </header>
 
@@ -225,7 +221,8 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
             </ul>
           </section>
         )}
-      </main>
-    </div>
+        </main>
+      </div>
+    </TooltipProvider>
   )
 }

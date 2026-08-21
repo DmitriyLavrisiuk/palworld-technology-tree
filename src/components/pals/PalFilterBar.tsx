@@ -1,6 +1,7 @@
 import { StarIcon, UtensilsIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { RangeCells } from "@/components/pals/RangeCells"
 import { WorkFilter } from "@/components/pals/WorkFilter"
 import { WorkIcon } from "@/components/pals/WorkIcon"
@@ -44,8 +45,6 @@ interface PalFilterBarProps {
   maxFood: number
   /** Сколько палов носит пассивку каждой группы — честные счётчики в панели. */
   buffCounts: ReadonlyMap<BuffFilterKey, number>
-  open: PanelKey | null
-  onOpen: (panel: PanelKey | null) => void
   onToggleWork: (key: WorkKey) => void
   onWorkRange: (key: WorkKey, range: Range | null) => void
   onToggleElement: (key: ElementKey) => void
@@ -64,6 +63,13 @@ function rangeLabel(range: Range | null, cap: number, locale: Locale): string {
   return `${range.min}–${range.max}`
 }
 
+/**
+ * «Жидкое стекло»: полупрозрачная подложка с блюром. Панель парит над
+ * списком, а не отодвигает его — прежний блок на всю ширину сдвигал выдачу.
+ */
+const GLASS =
+  "border-border/60 bg-popover/75 shadow-lg backdrop-blur-xl backdrop-saturate-150"
+
 const PILL =
   "flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs whitespace-nowrap transition-colors " +
   "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none pointer-coarse:h-11"
@@ -81,8 +87,6 @@ export function PalFilterBar({
   maxLevel,
   maxFood,
   buffCounts,
-  open,
-  onOpen,
   onToggleWork,
   onWorkRange,
   onToggleElement,
@@ -96,180 +100,169 @@ export function PalFilterBar({
     filters.food !== null ||
     filters.buffs.size > 0
 
-  const pill = (panel: PanelKey, active: boolean, content: React.ReactNode) => (
-    <button
-      type="button"
-      onClick={() => onOpen(open === panel ? null : panel)}
-      aria-expanded={open === panel}
-      className={cn(
-        PILL,
-        active
-          ? "border-transparent bg-primary text-primary-foreground"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground",
-        open === panel && !active && "border-ring text-foreground",
-      )}
-    >
-      {content}
-    </button>
+  const pill = (
+    active: boolean,
+    trigger: React.ReactNode,
+    panelClass: string,
+    panel: React.ReactNode,
+  ) => (
+    <Popover>
+      <PopoverTrigger
+        className={cn(
+          PILL,
+          active
+            ? "border-transparent bg-primary text-primary-foreground"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground",
+          "aria-expanded:border-ring",
+        )}
+      >
+        {trigger}
+      </PopoverTrigger>
+      <PopoverContent align="start" className={cn(GLASS, panelClass)}>
+        {panel}
+      </PopoverContent>
+    </Popover>
   )
 
   return (
-    <div className="flex flex-col border-b">
-      <div className="flex flex-wrap items-center gap-2 px-3 py-2">
-        {pill(
-          "works",
-          filters.works.size > 0,
-          <>
-            <WorkIcon work="Handcraft" title="" className="size-3.5" />
-            {t("palFilterWorks", locale)}
-            {filters.works.size > 0 && <span className="tabular-nums">{filters.works.size}</span>}
-          </>,
-        )}
-        {pill(
-          "elements",
-          filters.elements.size > 0,
-          <>
-            <ElementIcon element="Fire" className="size-3.5" />
-            {t("palFilterElements", locale)}
-            {filters.elements.size > 0 && (
-              <span className="tabular-nums">{filters.elements.size}</span>
-            )}
-          </>,
-        )}
-        {pill(
-          "food",
-          filters.food !== null,
-          <>
-            <UtensilsIcon className="size-3.5" />
-            {t("palFilterFood", locale)}
-            {filters.food !== null && (
-              <span className="tabular-nums">{rangeLabel(filters.food, maxFood, locale)}</span>
-            )}
-          </>,
-        )}
-        {pill(
-          "buff",
-          filters.buffs.size > 0,
-          <>
-            <StarIcon className="size-3.5" />
-            {t("palFilterBuff", locale)}
-            {filters.buffs.size > 0 && <span className="tabular-nums">{filters.buffs.size}</span>}
-          </>,
-        )}
-        {anyActive && (
-          <button
-            type="button"
-            onClick={onReset}
-            className={cn(PILL, "border-dashed text-muted-foreground hover:text-foreground")}
-          >
-            {t("workFilterClear", locale)}
-          </button>
-        )}
-      </div>
+    <div className="flex flex-wrap items-center gap-2 border-t border-b px-3 py-2">
+      {pill(
+        filters.works.size > 0,
+        <>
+          <WorkIcon work="Handcraft" title="" className="size-4" />
+          {t("palFilterWorks", locale)}
+          {filters.works.size > 0 && <span className="tabular-nums">{filters.works.size}</span>}
+        </>,
+        "w-[36rem] max-w-[calc(100vw-1rem)] p-3",
+        <div className="flex max-h-[65vh] flex-col gap-2 overflow-y-auto">
+          <WorkFilter
+            locale={locale}
+            names={workNames}
+            works={workKeys}
+            selected={filters.works}
+            maxLevel={maxLevel}
+            onToggle={onToggleWork}
+            onRange={onWorkRange}
+          />
+        </div>,
+      )}
 
-      {open !== null && (
-        <div className="border-t bg-muted/40 px-3 py-3">
-          <div className="mx-auto flex max-w-3xl flex-col gap-2">
-            {open === "works" && (
-              <WorkFilter
-                locale={locale}
-                names={workNames}
-                works={workKeys}
-                selected={filters.works}
-                maxLevel={maxLevel}
-                onToggle={onToggleWork}
-                onRange={onWorkRange}
-              />
-            )}
+      {pill(
+        filters.elements.size > 0,
+        <>
+          <ElementIcon element="Fire" className="size-4" />
+          {t("palFilterElements", locale)}
+          {filters.elements.size > 0 && (
+            <span className="tabular-nums">{filters.elements.size}</span>
+          )}
+        </>,
+        "w-72 p-2",
+        <div className="flex flex-col gap-2">
+          <p className="text-xs text-muted-foreground">{t("palFilterElementsHint", locale)}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {ELEMENT_ORDER.map((key) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => onToggleElement(key)}
+                aria-pressed={filters.elements.has(key)}
+                className={cn(
+                  "flex h-9 items-center gap-2 rounded-full border px-3 text-xs transition-colors pointer-coarse:h-11",
+                  "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
+                  filters.elements.has(key)
+                    ? "border-ring bg-accent font-medium"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                )}
+              >
+                <ElementIcon element={key} />
+                {elementNames[key][locale]}
+              </button>
+            ))}
+          </div>
+        </div>,
+      )}
 
-            {open === "elements" && (
-              <>
-                <p className="text-xs text-muted-foreground">
-                  {t("palFilterElementsHint", locale)}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {ELEMENT_ORDER.map((key) => (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() => onToggleElement(key)}
-                      aria-pressed={filters.elements.has(key)}
+      {pill(
+        filters.food !== null,
+        <>
+          <UtensilsIcon className="size-3.5" />
+          {t("palFilterFood", locale)}
+          {filters.food !== null && (
+            <span className="tabular-nums">{rangeLabel(filters.food, maxFood, locale)}</span>
+          )}
+        </>,
+        "w-auto p-3",
+        <div className="flex flex-col gap-2">
+          <p className="max-w-64 text-xs text-muted-foreground">{t("palFilterFoodHint", locale)}</p>
+          <RangeCells
+            cap={maxFood}
+            range={filters.food}
+            label={t("palFilterFood", locale)}
+            onChange={onFood}
+          />
+        </div>,
+      )}
+
+      {pill(
+        filters.buffs.size > 0,
+        <>
+          <StarIcon className="size-3.5" />
+          {t("palFilterBuff", locale)}
+          {filters.buffs.size > 0 && <span className="tabular-nums">{filters.buffs.size}</span>}
+        </>,
+        "w-72 p-2",
+        <div className="flex flex-col gap-1">
+          <p className="px-1 text-xs text-muted-foreground">{t("palFilterBuffHint", locale)}</p>
+          <ul className="flex flex-col">
+            {(["any", ...BUFF_GROUP_ORDER] as BuffFilterKey[]).map((key) => {
+              const checked = filters.buffs.has(key)
+              return (
+                <li key={key}>
+                  <button
+                    type="button"
+                    onClick={() => onToggleBuff(key)}
+                    aria-pressed={checked}
+                    className="flex min-h-9 w-full items-center gap-2 rounded-md px-2 text-left text-sm transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none pointer-coarse:min-h-11"
+                  >
+                    <span
+                      aria-hidden
                       className={cn(
-                        "flex h-9 items-center gap-2 rounded-full border px-3 text-xs transition-colors pointer-coarse:h-11",
-                        "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-                        filters.elements.has(key)
-                          ? "border-ring bg-accent font-medium"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        "grid size-4 shrink-0 place-items-center rounded-[4px] border",
+                        checked && "border-primary bg-primary text-primary-foreground",
                       )}
                     >
-                      <ElementIcon element={key} />
-                      {elementNames[key][locale]}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {open === "food" && (
-              <>
-                <p className="text-xs text-muted-foreground">{t("palFilterFoodHint", locale)}</p>
-                <RangeCells
-                  cap={maxFood}
-                  range={filters.food}
-                  label={t("palFilterFood", locale)}
-                  onChange={onFood}
-                />
-              </>
-            )}
-
-            {open === "buff" && (
-              <>
-                <p className="text-xs text-muted-foreground">{t("palFilterBuffHint", locale)}</p>
-                <ul className="flex flex-col">
-                  {(["any", ...BUFF_GROUP_ORDER] as BuffFilterKey[]).map((key) => {
-                    const checked = filters.buffs.has(key)
-                    return (
-                      <li key={key}>
-                        <button
-                          type="button"
-                          onClick={() => onToggleBuff(key)}
-                          aria-pressed={checked}
-                          className="flex min-h-9 w-full items-center gap-2 rounded-md px-2 text-left text-sm transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none pointer-coarse:min-h-11"
+                      {checked && (
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          className="size-3"
                         >
-                          <span
-                            aria-hidden
-                            className={cn(
-                              "grid size-4 shrink-0 place-items-center rounded-[4px] border",
-                              checked && "border-primary bg-primary text-primary-foreground",
-                            )}
-                          >
-                            {checked && (
-                              <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                                className="size-3"
-                              >
-                                <path d="m4 12 5 5L20 6" />
-                              </svg>
-                            )}
-                          </span>
-                          <span className="min-w-0 flex-1 truncate">
-                            {t(BUFF_LABEL[key], locale)}
-                          </span>
-                          <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
-                            {buffCounts.get(key) ?? 0}
-                          </span>
-                        </button>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </>
-            )}
-          </div>
-        </div>
+                          <path d="m4 12 5 5L20 6" />
+                        </svg>
+                      )}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate">{t(BUFF_LABEL[key], locale)}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
+                      {buffCounts.get(key) ?? 0}
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </div>,
+      )}
+
+      {anyActive && (
+        <button
+          type="button"
+          onClick={onReset}
+          className={cn(PILL, "border-dashed text-muted-foreground hover:text-foreground")}
+        >
+          {t("workFilterClear", locale)}
+        </button>
       )}
     </div>
   )

@@ -21,7 +21,7 @@ export function ElementIcon({ element, title, className }: ElementIconProps) {
       width={20}
       height={20}
       decoding="async"
-      className={cn("size-4 shrink-0 object-contain", className)}
+      className={cn("size-5 shrink-0 object-contain", className)}
       onError={(event) => {
         event.currentTarget.style.visibility = "hidden"
       }}

@@ -4,7 +4,8 @@ import type { WorkKey } from "@/types/pal"
 
 interface WorkIconProps {
   work: WorkKey
-  title: string
+  /** Подпись для нативной подсказки; не нужна, когда рядом стоит Tooltip. */
+  title?: string
   className?: string
 }
 
@@ -21,7 +22,7 @@ export function WorkIcon({ work, title, className }: WorkIconProps) {
       width={24}
       height={24}
       decoding="async"
-      className={cn("size-4 shrink-0 object-contain", className)}
+      className={cn("size-5 shrink-0 object-contain", className)}
       // Работы без иконки не бывает, но после патча файл может пропасть:
       // пустое место лучше значка сломанной картинки.
       onError={(event) => {

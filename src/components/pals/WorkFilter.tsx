@@ -31,7 +31,7 @@ export function WorkFilter({
   return (
     <div className="flex flex-col gap-2">
       <p className="text-xs text-muted-foreground">{t("workFilterHint", locale)}</p>
-      <ul className="grid gap-1 sm:grid-cols-2">
+      <ul className="grid gap-x-4 gap-y-0.5 sm:grid-cols-2">
         {works.map((key) => {
           const active = selected.has(key)
           const range = selected.get(key) ?? null
@@ -40,7 +40,7 @@ export function WorkFilter({
             <li
               key={key}
               className={cn(
-                "flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md px-2 py-1",
+                "flex flex-col gap-1 rounded-md px-2 py-1",
                 active && "bg-accent",
               )}
             >
@@ -58,12 +58,16 @@ export function WorkFilter({
                 <span className="min-w-0 flex-1 truncate">{names[key][locale]}</span>
               </button>
               {active && (
-                <RangeCells
-                  cap={maxLevel}
-                  range={range}
-                  label={names[key][locale]}
-                  onChange={(next) => onRange(key, next)}
-                />
+                // Ряд стоит под названием, а не рядом: в узкой колонке меню он
+                // вытеснял бы подпись работы в ноль.
+                <span className="pl-7">
+                  <RangeCells
+                    cap={maxLevel}
+                    range={range}
+                    label={names[key][locale]}
+                    onChange={(next) => onRange(key, next)}
+                  />
+                </span>
               )}
             </li>
           )
