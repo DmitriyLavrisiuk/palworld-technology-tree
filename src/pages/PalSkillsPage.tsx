@@ -7,7 +7,6 @@ import { SettingsSheet } from "@/components/SettingsSheet"
 import { PalFilterBar } from "@/components/pals/PalFilterBar"
 import { PalRow } from "@/components/pals/PalRow"
 import { PalSheet } from "@/components/pals/PalSheet"
-import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
@@ -209,12 +208,6 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
           </Empty>
         ) : (
           <section className="flex flex-col gap-2">
-            <h2 className="flex items-center gap-2 text-sm font-medium">
-              {t("palsFound", locale)}
-              <Badge variant="secondary" className="tabular-nums">
-                {found.length}
-              </Badge>
-            </h2>
             <ul className="grid grid-cols-1 items-stretch gap-2 lg:grid-cols-2 2xl:grid-cols-3">
               {deferredFound.map((pal) => (
                 <PalRow
