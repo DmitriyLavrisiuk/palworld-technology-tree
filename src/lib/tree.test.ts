@@ -145,6 +145,16 @@ describe("фильтры", () => {
     expect(passesFilters(relic, "available", filters)).toBe(true)
     expect(passesFilters(relic, "locked", filters)).toBe(false)
   })
+
+  it("«избранное» оставляет только отмеченные", () => {
+    const filters = { ...NO_FILTERS, favoritesOnly: true }
+    expect(passesFilters(sphere, "available", filters, new Set([sphere.id]))).toBe(true)
+    expect(passesFilters(sphere, "available", filters, new Set(["Другая"]))).toBe(false)
+  })
+
+  it("выключенный фильтр избранного пропускает всех", () => {
+    expect(passesFilters(sphere, "available", NO_FILTERS, new Set())).toBe(true)
+  })
 })
 
 describe("отбор целиком", () => {
@@ -158,6 +168,14 @@ describe("отбор целиком", () => {
 
     expect(result.map((item) => item.tech.id)).toEqual(["Special_PalSphere_Grade_01", "Relic"])
     expect(result.map((item) => item.status)).toEqual(["available", "locked"])
+  })
+
+  it("прокидывает избранное в отбор", () => {
+    const list = [sphere, tech("Axe", { name: { en: "Stone Axe", ru: "Каменный топор" } })]
+    const filters = { ...NO_FILTERS, favoritesOnly: true }
+    const result = visibleTechs(list, new Set(), 10, "", filters, new Set(["Axe"]))
+
+    expect(result.map((item) => item.tech.id)).toEqual(["Axe"])
   })
 })
 

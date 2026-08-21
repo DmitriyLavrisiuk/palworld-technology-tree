@@ -42,6 +42,8 @@ export interface Progress {
    * при отрисовке: хранилище про каталог технологий не знает.
    */
   favorites: string[]
+  /** Избранные палы. Живут отдельно от технологий: пространства id разные. */
+  palFavorites: string[]
 }
 
 const VIEWS: ViewMode[] = ["levels", "lanes", "compact"]
@@ -64,6 +66,7 @@ const DEFAULTS: Progress = {
   groups: [],
   collapsed: [],
   favorites: [],
+  palFavorites: [],
 }
 
 /**
@@ -99,6 +102,9 @@ function coerce(raw: unknown): Progress {
     favorites: Array.isArray(value.favorites)
       ? value.favorites.filter((id): id is string => typeof id === "string")
       : DEFAULTS.favorites,
+    palFavorites: Array.isArray(value.palFavorites)
+      ? value.palFavorites.filter((id): id is string => typeof id === "string")
+      : DEFAULTS.palFavorites,
     groups: Array.isArray(value.groups)
       ? value.groups.filter((group): group is GroupKey =>
           (GROUP_ORDER as string[]).includes(group as string),
@@ -143,6 +149,7 @@ export function useProgress() {
   const researched = useMemo(() => new Set(state.researched), [state.researched])
   const collapsed = useMemo(() => new Set(state.collapsed), [state.collapsed])
   const favorites = useMemo(() => new Set(state.favorites), [state.favorites])
+  const palFavorites = useMemo(() => new Set(state.palFavorites), [state.palFavorites])
 
   const toggleResearched = useCallback((id: string) => {
     setState((previous) => {
@@ -199,6 +206,15 @@ export function useProgress() {
     })
   }, [])
 
+  const togglePalFavorite = useCallback((id: string) => {
+    setState((previous) => {
+      const next = new Set(previous.palFavorites)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return { ...previous, palFavorites: [...next] }
+    })
+  }, [])
+
   const toggleFavorite = useCallback((id: string) => {
     setState((previous) => {
       const next = new Set(previous.favorites)
@@ -213,6 +229,7 @@ export function useProgress() {
     researched,
     collapsed,
     favorites,
+    palFavorites,
     toggleResearched,
     setLevel,
     setLocale,
@@ -223,5 +240,6 @@ export function useProgress() {
     clearGroups,
     toggleCollapsed,
     toggleFavorite,
+    togglePalFavorite,
   }
 }

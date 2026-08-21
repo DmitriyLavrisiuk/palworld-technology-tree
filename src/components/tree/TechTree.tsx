@@ -19,6 +19,17 @@ import type { Chain, GroupKey, Locale, Technology } from "@/types/tech"
 
 const LABEL_WIDTH = 144
 
+/**
+ * Секции всплывают по очереди — тем же движением, что карточки на экране
+ * выбора раздела. Задержка задаётся инлайн-стилем, а не классом: значений
+ * одиннадцать, и литералами их пришлось бы перечислять все.
+ */
+const SECTION_APPEAR =
+  "animate-in fade-in-0 slide-in-from-bottom-3 animation-duration-300 fill-mode-both motion-reduce:animate-none"
+
+/** Кап каскада: всё ниже первого экрана появляется вместе с пятой секцией. */
+const appearDelay = (index: number) => ({ animationDelay: `${Math.min(index, 4) * 75}ms` })
+
 interface TechTreeProps {
   data: TechData
   locale: Locale
@@ -159,11 +170,11 @@ export function TechTree({
   if (view === "compact") {
     return (
       <div className="flex flex-col gap-2 p-2 sm:p-3">
-        {sections.map((section) => {
+        {sections.map((section, index) => {
           const isCollapsed = collapsed.has(section.key)
 
           return (
-            <section key={section.key}>
+            <section key={section.key} className={SECTION_APPEAR} style={appearDelay(index)}>
               <SectionHeading
                 section={section}
                 collapsed={isCollapsed}
@@ -235,8 +246,8 @@ export function TechTree({
   if (view === "lanes") {
     return (
       <div className="flex flex-col gap-2 p-1 sm:p-3" style={nodeVars(metrics.step)}>
-        {sections.map((section) => (
-          <section key={section.key}>
+        {sections.map((section, index) => (
+          <section key={section.key} className={SECTION_APPEAR} style={appearDelay(index)}>
             <SectionHeading
               section={section}
               collapsed={collapsed.has(section.key)}
@@ -295,8 +306,8 @@ export function TechTree({
   // view === "levels"
   return (
     <div className="flex flex-col gap-2 p-1 sm:p-3">
-      {sections.map((section) => (
-        <section key={section.key}>
+      {sections.map((section, index) => (
+        <section key={section.key} className={SECTION_APPEAR} style={appearDelay(index)}>
           <SectionHeading
             section={section}
             collapsed={collapsed.has(section.key)}

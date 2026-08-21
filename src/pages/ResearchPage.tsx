@@ -3,12 +3,10 @@ import { useEffect, useMemo, useState } from "react"
 import { PageLoader } from "@/components/PageLoader"
 import { Toolbar } from "@/components/Toolbar"
 import { DetailSheet } from "@/components/tree/DetailSheet"
-import { FavoritesSheet } from "@/components/tree/FavoritesSheet"
 import { PlannerBar } from "@/components/tree/PlannerBar"
 import { TechTree } from "@/components/tree/TechTree"
 import type { ProgressState } from "@/hooks/useProgress"
 import { loadTechData, peekTechData, type TechData } from "@/lib/data"
-import type { Technology } from "@/types/tech"
 import { buildRoute } from "@/lib/planner"
 import { t } from "@/lib/i18n"
 import {
@@ -39,7 +37,6 @@ export function ResearchPage({ progress }: ResearchPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   /** Цель маршрута живёт только в сессии: в localStorage её не кладём. */
   const [routeTargetId, setRouteTargetId] = useState<string | null>(null)
-  const [favoritesOpen, setFavoritesOpen] = useState(false)
 
   useEffect(() => {
     loadTechData().then(setData, (cause: unknown) => {
@@ -57,9 +54,16 @@ export function ResearchPage({ progress }: ResearchPageProps) {
   const visible = useMemo(
     () =>
       data
-        ? visibleTechs(data.technologies, progress.researched, progress.level, query, filters)
+        ? visibleTechs(
+            data.technologies,
+            progress.researched,
+            progress.level,
+            query,
+            filters,
+            progress.favorites,
+          )
         : [],
-    [data, progress.researched, progress.level, query, filters],
+    [data, progress.researched, progress.level, query, filters, progress.favorites],
   )
 
   const route = useMemo(
@@ -78,23 +82,14 @@ export function ResearchPage({ progress }: ResearchPageProps) {
   )
 
   /**
-   * Отметки разрешаются в технологии здесь, а не в панели: технология,
-   * исчезнувшая после патча игры, остаётся в хранилище навсегда, и счётчик
-   * по размеру множества разошёлся бы со списком. Порядок — по уровню, то
-   * есть в том, в котором до них можно дойти.
+   * Счётчик считается по живым технологиям, а не по размеру множества:
+   * технология, исчезнувшая после патча игры, остаётся в хранилище навсегда
+   * и иначе завышала бы цифру на пилюле.
    */
-  const favoriteTechs = useMemo(() => {
-    if (!data) return []
-    return [...progress.favorites]
-      .map((id) => data.byId.get(id))
-      .filter((tech): tech is Technology => Boolean(tech))
-      .sort(
-        (a, b) =>
-          a.level - b.level ||
-          a.cost - b.cost ||
-          a.name[progress.locale].localeCompare(b.name[progress.locale]),
-      )
-  }, [data, progress.favorites, progress.locale])
+  const favoritesCount = useMemo(() => {
+    if (!data) return 0
+    return [...progress.favorites].filter((id) => data.byId.has(id)).length
+  }, [data, progress.favorites])
 
   if (error) {
     return (
@@ -131,8 +126,7 @@ export function ResearchPage({ progress }: ResearchPageProps) {
         groupCounts={groupCounts}
         onToggleGroup={progress.toggleGroup}
         onClearGroups={progress.clearGroups}
-        favoritesCount={favoriteTechs.length}
-        onOpenFavorites={() => setFavoritesOpen(true)}
+        favoritesCount={favoritesCount}
         onNodeSize={progress.setNodeSize}
       />
 
@@ -163,22 +157,6 @@ export function ResearchPage({ progress }: ResearchPageProps) {
           onClear={() => setRouteTargetId(null)}
         />
       )}
-
-      <FavoritesSheet
-        open={favoritesOpen}
-        techs={favoriteTechs}
-        data={data}
-        locale={progress.locale}
-        researched={progress.researched}
-        onOpenChange={setFavoritesOpen}
-        onToggleFavorite={progress.toggleFavorite}
-        onSelect={(id) => {
-          // Оба листа выезжают справа и перекрыли бы друг друга: смена
-          // содержимого без движения читалась бы как «ничего не произошло».
-          setSelectedId(id)
-          setFavoritesOpen(false)
-        }}
-      />
 
       <DetailSheet
         tech={selectedId ? (data.byId.get(selectedId) ?? null) : null}

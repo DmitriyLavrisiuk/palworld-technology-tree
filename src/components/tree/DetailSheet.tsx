@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { CheckIcon, RouteIcon, SparklesIcon, StarIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 
 import { MaterialList } from "@/components/tree/MaterialList"
@@ -28,7 +29,7 @@ interface DetailSheetProps {
 
 /** Панель деталей: что это, чем гейтится, из чего делается и насколько мы уверены в цепочке. */
 export function DetailSheet({
-  tech,
+  tech: activeTech,
   data,
   locale,
   researched,
@@ -39,6 +40,13 @@ export function DetailSheet({
   onToggleFavorite,
   onPlanRoute,
 }: DetailSheetProps) {
+  // Лист живёт смонтированным и хранит последнюю показанную технологию: если
+  // рендерить его только при выборе, base-ui не успевает проиграть ни
+  // входную, ни выездную анимацию — лист просто мигает.
+  const [lastTech, setLastTech] = useState(activeTech)
+  if (activeTech && activeTech !== lastTech) setLastTech(activeTech)
+  const tech = activeTech ?? lastTech
+
   if (!tech) return null
 
   const status = nodeStatus(tech, researched, playerLevel)
@@ -49,7 +57,7 @@ export function DetailSheet({
   const requires = tech.reqTech ? data.byId.get(tech.reqTech) : null
 
   return (
-    <Sheet open onOpenChange={(open) => !open && onClose()}>
+    <Sheet open={activeTech !== null} onOpenChange={(open) => !open && onClose()}>
       <SheetContent side="right" className="gap-0 overflow-y-auto" showCloseButton={false}>
         {/* Своя кнопка вместо штатной: та 28 px и подписана по-английски. */}
         <Button

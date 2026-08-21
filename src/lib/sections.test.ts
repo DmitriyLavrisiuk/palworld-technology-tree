@@ -20,6 +20,17 @@ describe("разбор адреса раздела", () => {
     expect(sectionFromHash("#/research?level=30")).toBe("research")
   })
 
+  it("навыки палов открываются своим адресом", () => {
+    expect(sectionFromHash("#/pal-skills")).toBe("pal-skills")
+    expect(sectionFromHash("#/pal-skills/")).toBe("pal-skills")
+    expect(sectionFromHash("#/pal-skills?work=Mining")).toBe("pal-skills")
+  })
+
+  it("дроп с палов открывается своим адресом", () => {
+    expect(sectionFromHash("#/pal-drops")).toBe("pal-drops")
+    expect(sectionFromHash("#/pal-drops/")).toBe("pal-drops")
+  })
+
   it("неизвестный адрес ведёт на экран выбора, а не в пустоту", () => {
     expect(sectionFromHash("#/nope")).toBe("home")
     expect(sectionFromHash("#/breeding")).toBe("home")

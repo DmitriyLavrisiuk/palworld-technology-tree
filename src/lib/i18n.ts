@@ -23,8 +23,13 @@ export const UI = {
   },
   sectionPalSkills: { ru: "Навыки палов", en: "Pal skills" },
   sectionPalSkillsHint: {
-    ru: "Активные и пассивные навыки: что делают и у кого встречаются",
-    en: "Active and passive skills: what they do and which pals have them",
+    ru: "Кто на какие работы годится: подбор пала под задачи базы",
+    en: "Who is good at what: pick a pal for the jobs your base needs",
+  },
+  sectionPalDrops: { ru: "Дроп с палов", en: "Pal drops" },
+  sectionPalDropsHint: {
+    ru: "Что выпадает из палов при смерти: нужна шерсть — видно, кого фармить",
+    en: "What pals drop when killed: need wool — see who to farm",
   },
   sectionBreeding: { ru: "Разведение палов", en: "Pal breeding" },
   sectionBreedingHint: {
@@ -32,6 +37,78 @@ export const UI = {
     en: "Parent pairs and what they hatch into",
   },
   soon: { ru: "Скоро", en: "Soon" },
+
+  titlePalSkills: {
+    ru: "Навыки палов — Шпаргалки Palworld",
+    en: "Pal Skills — Palworld Cheatsheets",
+  },
+  titlePalDrops: {
+    ru: "Дроп с палов — Шпаргалки Palworld",
+    en: "Pal Drops — Palworld Cheatsheets",
+  },
+  dropSearch: { ru: "Поиск ресурса…", en: "Search resources…" },
+  dropsFound: { ru: "Найдено", en: "Found" },
+  dropsEmpty: { ru: "Ничего не нашлось", en: "Nothing found" },
+  dropsEmptyHint: {
+    ru: "Такого ресурса нет — проверьте написание или поищите на другом языке",
+    en: "No such resource — check the spelling or try the other language",
+  },
+  dropSheetHint: { ru: "кто выпадает при смерти", en: "dropped on death by" },
+  dropChanceTitle: { ru: "Шанс выпадения", en: "Drop chance" },
+  workFilterTitle: { ru: "Какие работы нужны", en: "Jobs you need covered" },
+  workFilterHint: {
+    ru: "Первый клик по цифре — «от», второй — «до». Клик при растянутом диапазоне начинает новый, по единственной выбранной цифре — снимает выбор.",
+    en: "First click on a number sets the low end, second sets the high end. A click on a stretched range starts a new one; clicking the only selected number clears it.",
+  },
+  workFilterClear: { ru: "Сбросить", en: "Clear" },
+  palFilterWorks: { ru: "Работы", en: "Jobs" },
+  palFilterElements: { ru: "Стихии", en: "Elements" },
+  palFilterElementsHint: {
+    ru: "Пал подходит, если у него есть хотя бы одна из выбранных стихий",
+    en: "A pal matches if it has at least one of the selected elements",
+  },
+  palFilterFood: { ru: "Еда", en: "Food" },
+  palFilterFoodHint: {
+    ru: "Сколько ест. Чаще всего нужно «не больше N»: клик по 1, затем по N.",
+    en: "How much it eats. Usually you want “at most N”: click 1, then N.",
+  },
+  palFilterBuff: { ru: "Усилитель", en: "Booster" },
+  palFilterBuffHint: {
+    ru: "Врождённая пассивка. Штрафные помечены знаком минуса; «любой» их не считает.",
+    en: "An innate passive. Penalties carry a minus mark; “any” does not count them.",
+  },
+  buffAny: { ru: "Любой усилитель", en: "Any booster" },
+  buffElement: { ru: "Усиление стихии", en: "Element damage" },
+  buffAttack: { ru: "Атака", en: "Attack" },
+  buffDefense: { ru: "Защита", en: "Defense" },
+  buffLegend: { ru: "«Легенда»", en: "“Legend”" },
+  buffPenalty: { ru: "Со штрафом", en: "With a penalty" },
+  rangeAny: { ru: "любой", en: "any" },
+  palSize: { ru: "Размер", en: "Size" },
+  palSizeXS: { ru: "Очень мелкий", en: "Extra small" },
+  palSizeS: { ru: "Мелкий", en: "Small" },
+  palSizeM: { ru: "Средний", en: "Medium" },
+  palSizeL: { ru: "Крупный", en: "Large" },
+  palSizeXL: { ru: "Очень крупный", en: "Extra large" },
+  palTransport: { ru: "Переноска", en: "Carry" },
+  palSpeedUnit: { ru: "скорость", en: "speed" },
+  palNightShort: { ru: "ночной", en: "nocturnal" },
+  palNoWorkLong: { ru: "Не работает на базе", en: "Does no base work" },
+  foodPerDay: { ru: "еды", en: "food" },
+  palSearch: { ru: "Поиск пала…", en: "Search pal…" },
+  palsFound: { ru: "Найдено", en: "Found" },
+  palNocturnal: { ru: "Работает ночью", en: "Nocturnal" },
+  palNoWork: { ru: "не работает", en: "no jobs" },
+  palsEmpty: { ru: "Никто не подходит", en: "Nobody matches" },
+  palsIdle: { ru: "Выберите фильтр", en: "Pick a filter" },
+  palsIdleHint: {
+    ru: "Отметьте работы, стихии или другой фильтр — подходящие палы появятся здесь. Или начните вводить имя в поиске.",
+    en: "Choose works, elements or another filter — matching pals will show up here. Or start typing a name in the search box.",
+  },
+  palsEmptyHint: {
+    ru: "Ни один пал не закрывает все выбранные работы на таком уровне — снизьте требование или уберите работу",
+    en: "No pal covers every selected job at that level — lower a requirement or drop a job",
+  },
   backToSections: { ru: "К разделам", en: "All sections" },
   statResearched: { ru: "Изучено", en: "Researched" },
   statPoints: { ru: "Очки", en: "Points" },
@@ -57,9 +134,11 @@ export const UI = {
   filterAncientShort: { ru: "Древние", en: "Ancient" },
   filterHideDoneShort: { ru: "Без изученных", en: "Not researched" },
 
-  themeLight: { ru: "Светлая тема", en: "Light theme" },
-  themeDark: { ru: "Тёмная тема", en: "Dark theme" },
-  themeSystem: { ru: "Как в системе", en: "System theme" },
+  // Без слова «тема»: оно уже в заголовке секции, а с ним подписи
+  // переносились на две строки.
+  themeLight: { ru: "Светлая", en: "Light" },
+  themeDark: { ru: "Тёмная", en: "Dark" },
+  themeSystem: { ru: "Системная", en: "System" },
 
   levelShort: { ru: "ур.", en: "lv." },
   researched: { ru: "Изучено", en: "Researched" },
@@ -93,15 +172,6 @@ export const UI = {
   favoriteAdd: { ru: "В избранное", en: "Add to favorites" },
   favoriteRemove: { ru: "Убрать из избранного", en: "Remove from favorites" },
   inFavorites: { ru: "в избранном", en: "in favorites" },
-  favoritesEmpty: { ru: "В избранном пусто", en: "No favorites yet" },
-  favoritesEmptyHint: {
-    ru: "Откройте технологию и нажмите «В избранное» — она появится здесь",
-    en: "Open a technology and press “Add to favorites” — it will show up here",
-  },
-  favoritesMaterials: {
-    ru: "Материалы на крафт избранного",
-    en: "Materials to craft the favorites",
-  },
   expand: { ru: "Развернуть", en: "Expand" },
   collapse: { ru: "Свернуть", en: "Collapse" },
   switchLanguage: { ru: "Переключить на английский", en: "Switch to Russian" },
@@ -165,6 +235,11 @@ const STEP_FORMS = {
   en: ["step", "steps", "steps"],
 } as const
 
+const PAL_FORMS = {
+  ru: ["пал", "пала", "палов"],
+  en: ["pal", "pals", "pals"],
+} as const
+
 /**
  * «1 очков» и «1 шагов» — так писать нельзя. Русский требует трёх форм,
  * английскому хватает двух, поэтому склонение живёт здесь, а не в компонентах.
@@ -186,4 +261,8 @@ export function pointsLabel(count: number, locale: Locale, ancient: boolean): st
 
 export function stepsLabel(count: number, locale: Locale): string {
   return pluralForm(count, locale, STEP_FORMS[locale])
+}
+
+export function palsLabel(count: number, locale: Locale): string {
+  return pluralForm(count, locale, PAL_FORMS[locale])
 }

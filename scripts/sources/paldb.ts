@@ -1,4 +1,5 @@
 import { load } from "cheerio"
+import { WORK_ORDER, type ElementKey, type WorkKey } from "../../src/types/pal.ts"
 import { fetchText } from "../lib/http.ts"
 import type { GroupKey, Locale } from "../../src/types/tech.ts"
 
@@ -195,4 +196,165 @@ export async function fetchRecipe(slug: string, fresh: boolean): Promise<PaldbRe
 
   if (!materials.length) return null
   return { stations, materials }
+}
+
+export interface PaldbPal {
+  id: string
+  icon: string
+}
+
+/**
+ * Портреты палов приезжают одной страницей — тем же приёмом, что и иконки
+ * технологий. `data-pal-id` несёт точный ключ строки DataTable, поэтому джойн
+ * с игровой таблицей идёт по id, а не по отображаемому имени.
+ *
+ * На странице у каждого пала несколько ссылок с этим атрибутом (портрет, имя),
+ * но `img` есть только у портрета — по нему и отбираем.
+ */
+export async function fetchPalList(fresh: boolean): Promise<PaldbPal[]> {
+  const html = await fetchText(`${BASE}/en/Pals`, { fresh })
+  if (!html) throw new Error("Pals page returned nothing")
+
+  const $ = load(html)
+  const icons = new Map<string, string>()
+
+  $("a[data-pal-id]").each((_, element) => {
+    const node = $(element)
+    const id = node.attr("data-pal-id")
+    if (!id || icons.has(id)) return
+
+    const icon = node.find("img").first().attr("src")
+    if (icon) icons.set(id, icon)
+  })
+
+  return [...icons].map(([id, icon]) => ({ id, icon }))
+}
+
+export interface WorkIcon {
+  id: WorkKey
+  icon: string
+}
+
+/**
+ * Иконки работ. Соответствие «номер файла → игровой ключ» не выдумывается: в
+ * выпадающем меню страницы палов у каждой работы стоит `data-i18n` вида
+ * `common_work_suitability_emitflame`, то есть тот же ключ, что и в игровой
+ * таблице, только в нижнем регистре. Это такой же честный джойн, как
+ * `data-pal-id` у палов.
+ *
+ * Нефтедобычи в меню нет — ею не владеет ни один пал Палдекса, поэтому и
+ * иконки для неё не существует.
+ */
+export async function fetchWorkIcons(fresh: boolean): Promise<WorkIcon[]> {
+  const html = await fetchText(`${BASE}/en/Pals`, { fresh })
+  if (!html) throw new Error("Pals page returned nothing")
+
+  const $ = load(html)
+  const byLowerKey = new Map(WORK_ORDER.map((key) => [key.toLowerCase(), key]))
+  const found = new Map<WorkKey, string>()
+
+  $("[data-i18n^='common_work_suitability_']").each((_, element) => {
+    const node = $(element)
+    const raw = (node.attr("data-i18n") ?? "").replace("common_work_suitability_", "")
+    const key = byLowerKey.get(raw)
+    if (!key || found.has(key)) return
+
+    const icon = node.closest("a").find("img").first().attr("src")
+    if (icon) found.set(key, icon)
+  })
+
+  return [...found].map(([id, icon]) => ({ id, icon }))
+}
+
+export interface ElementIcon {
+  id: ElementKey
+  icon: string
+}
+
+/**
+ * Иконки стихий. Соответствие «номер файла → стихия» нигде не записано, но
+ * выводится без гадания: в строке каждого пала стоят его иконки стихий, а сами
+ * стихии известны из игровой таблицы. Сопоставив порядок иконок с порядком
+ * стихий у всех палов, получаем карту — и любое противоречие роняет сборку,
+ * а не тихо подменяет огонь льдом.
+ */
+export async function fetchElementIcons(
+  elementsById: ReadonlyMap<string, readonly ElementKey[]>,
+  fresh: boolean,
+): Promise<ElementIcon[]> {
+  const html = await fetchText(`${BASE}/en/Pals`, { fresh })
+  if (!html) throw new Error("Pals page returned nothing")
+
+  const $ = load(html)
+  const found = new Map<ElementKey, string>()
+  const seen = new Set<string>()
+
+  $("a[data-pal-id]").each((_, anchor) => {
+    const id = $(anchor).attr("data-pal-id")
+    if (!id || seen.has(id)) return
+    seen.add(id)
+
+    const elements = elementsById.get(id)
+    if (!elements?.length) return
+
+    const icons: string[] = []
+    $(anchor)
+      .closest("div.d-flex")
+      .find("img[src*='T_Icon_element_s_']")
+      .each((_, img) => {
+        const src = $(img).attr("src")
+        if (src) icons.push(src)
+      })
+    if (icons.length !== elements.length) return
+
+    elements.forEach((element, index) => {
+      const known = found.get(element)
+      if (known && known !== icons[index]) {
+        throw new Error(`Element icon conflict for ${element}: ${known} vs ${icons[index]} (${id})`)
+      }
+      found.set(element, icons[index])
+    })
+  })
+
+  return [...found].map(([id, icon]) => ({ id, icon }))
+}
+
+export interface ItemIconIndex {
+  /** Прямое соответствие: data-hover несёт игровой id предмета. */
+  byId: Map<string, string>
+  /** Резерв: слаг английского имени — из него paldb строит href предмета. */
+  bySlug: Map<string, string>
+}
+
+/**
+ * Иконки предметов со страницы Items — двумя честными путями сразу. У части
+ * блоков ссылка с иконкой несёт `data-hover="?s=Items%2F<GameId>"` — это
+ * прямой игровой id. У остальных hover закэширован хэшем, и соответствие
+ * строится через слаг английского имени из локализации игры: href страницы
+ * предмета paldb получает из имени заменой пробелов на подчёркивания. Пути
+ * сверяются друг с другом на этапе сборки; расхождение — ошибка.
+ */
+export async function fetchItemIconIndex(fresh: boolean): Promise<ItemIconIndex> {
+  const html = await fetchText(`${BASE}/en/Items`, { fresh })
+  if (!html) throw new Error("Items page returned nothing")
+
+  const $ = load(html)
+  const byId = new Map<string, string>()
+  const bySlug = new Map<string, string>()
+
+  $("a").each((_, element) => {
+    const anchor = $(element)
+    const icon = anchor.children("img").first().attr("src")
+    if (!icon) return
+
+    const href = anchor.attr("href")
+    if (href && !bySlug.has(decodeURIComponent(href))) {
+      bySlug.set(decodeURIComponent(href), icon)
+    }
+
+    const hover = /^\?s=Items%2F([A-Za-z0-9_]+)$/.exec(anchor.attr("data-hover") ?? "")?.[1]
+    if (hover && !byId.has(hover)) byId.set(hover, icon)
+  })
+
+  return { byId, bySlug }
 }

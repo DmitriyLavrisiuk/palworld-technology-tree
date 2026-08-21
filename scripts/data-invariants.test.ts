@@ -13,6 +13,8 @@ import {
 } from "../src/lib/constants.ts"
 import { GROUP_NAMES, GROUP_ORDER } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
+import { ELEMENT_ORDER, WORK_ORDER, type PalsFile } from "../src/types/pal.ts"
+import type { DropsFile } from "../src/types/drop.ts"
 
 /**
  * Сторожит сгенерированные данные. Парсер сверяет то же самое во время
@@ -26,6 +28,9 @@ const read = <T>(rel: string): T => JSON.parse(readFileSync(join(ROOT, rel), "ut
 const technologies = read<Technology[]>("src/data/technologies.json")
 const recipes = read<Recipe[]>("src/data/recipes.json")
 const chains = read<ChainsFile>("src/data/chains.json")
+const palsFile = read<PalsFile>("src/data/pals.json")
+const pals = palsFile.pals
+const dropsFile = read<DropsFile>("src/data/drops.json")
 
 const ids = new Set(technologies.map((tech) => tech.id))
 
@@ -328,5 +333,223 @@ describe("цепочки", () => {
       0,
     )
     expect(nodes).toBe(16)
+  })
+})
+
+describe("палы: контрольные суммы", () => {
+  /**
+   * 288, а не 303 из таблицы и не 299 со страницы paldb. Разница объяснима и
+   * проверена: 15 строк — служебные близнецы (квестовые копии, версии для
+   * нефтевышки) с чужим номером Палдекса, а 11 палов Якусимы есть на paldb,
+   * но в зеркале игровой таблицы их ещё нет. Число обязано падать при смене
+   * любой из трёх величин — тогда мы про это узнаем.
+   */
+  it("288 палов из Палдекса", () => {
+    expect(pals).toHaveLength(288)
+  })
+
+  it("номер Палдекса вместе с суффиксом уникален", () => {
+    const keys = pals.map((pal) => `${pal.dexNo}${pal.dexSuffix}`)
+    expect(new Set(keys).size).toBe(keys.length)
+  })
+
+  it("имя есть на обоих языках и это не заглушка локали", () => {
+    for (const pal of pals) {
+      expect(pal.name.en.length, pal.id).toBeGreaterThan(0)
+      expect(pal.name.ru.length, pal.id).toBeGreaterThan(0)
+      expect(/^[a-z]{2}_Text$/i.test(pal.name.ru), pal.id).toBe(false)
+    }
+  })
+
+  /**
+   * Русские имена приезжают джойном по ключу в нижнем регистре: в таблице
+   * SheepBall, в дампе Sheepball. Если джойн однажды сделают буквальным,
+   * русские имена подменятся английскими — вот это и ловится.
+   */
+  it("у палов есть отдельные русские имена, а не копии английских", () => {
+    const translated = pals.filter((pal) => pal.name.ru !== pal.name.en)
+    expect(translated.length).toBe(pals.length)
+  })
+
+  it("у каждого пала есть портрет на диске", () => {
+    for (const pal of pals) {
+      expect(existsSync(join(ROOT, "public/icons/pals", `${pal.id}.webp`)), pal.id).toBe(true)
+    }
+  })
+
+  it("все тринадцать работ переведены", () => {
+    expect(Object.keys(palsFile.workNames)).toHaveLength(WORK_ORDER.length)
+    for (const key of WORK_ORDER) {
+      expect(palsFile.workNames[key].ru.length, key).toBeGreaterThan(0)
+      expect(palsFile.workNames[key].en.length, key).toBeGreaterThan(0)
+      expect(palsFile.workNames[key].ru, key).not.toBe(key)
+    }
+  })
+
+  /**
+   * Верхняя граница шкалы в фильтре берётся из данных, а не из головы: в игре
+   * базовый максимум четыре, но стихийные варианты доходят до восьми. Число
+   * здесь — контрольное: вырастет после патча, тест это покажет.
+   */
+  it("уровни работ лежат в диапазоне 1..8", () => {
+    const levels = pals.flatMap((pal) => Object.values(pal.work))
+    expect(Math.min(...levels)).toBe(1)
+    expect(Math.max(...levels)).toBe(8)
+  })
+
+  it("нулевые уровни в файл не попадают", () => {
+    for (const pal of pals) {
+      for (const [key, level] of Object.entries(pal.work)) {
+        expect(level, `${pal.id}/${key}`).toBeGreaterThan(0)
+        expect(WORK_ORDER, `${pal.id}/${key}`).toContain(key)
+      }
+    }
+  })
+
+  /**
+   * Стихий у пала одна или две — кроме Astralym: в игровой таблице у него
+   * ElementType1 равен None, и работ он тоже не умеет. Это единственное
+   * исключение, и оно названо поимённо: появится второе — тест упадёт, а не
+   * тихо расширит правило.
+   */
+  it("стихий одна или две, и ровно один пал без них", () => {
+    const without = pals.filter((pal) => pal.elements.length === 0)
+    expect(without.map((pal) => pal.id)).toEqual(["WorldTreeDragon"])
+
+    for (const pal of pals) {
+      expect(pal.elements.length, pal.id).toBeLessThanOrEqual(2)
+    }
+  })
+
+  /**
+   * Нефтедобыча есть полем в таблице, но ею не владеет ни один пал Палдекса —
+   * поэтому её нет в фильтре и для неё нет иконки. Если после патча она у
+   * кого-то появится, тест упадёт, и раздел надо будет дополнить.
+   */
+  it("нефтедобычей не владеет ни один пал", () => {
+    expect(pals.filter((pal) => pal.work.OilExtraction)).toEqual([])
+  })
+
+  it("у каждой встречающейся работы есть иконка на диске", () => {
+    const used = new Set(pals.flatMap((pal) => Object.keys(pal.work)))
+    for (const key of used) {
+      expect(existsSync(join(ROOT, "public/icons/work", `${key}.webp`)), key).toBe(true)
+    }
+  })
+
+  it("все стихии переведены", () => {
+    for (const key of ELEMENT_ORDER) {
+      expect(palsFile.elementNames[key].ru.length, key).toBeGreaterThan(0)
+      expect(palsFile.elementNames[key].en.length, key).toBeGreaterThan(0)
+      expect(palsFile.elementNames[key].ru, key).not.toBe(key)
+    }
+  })
+
+  it("стихии палов берутся из известного набора", () => {
+    for (const pal of pals) {
+      for (const element of pal.elements) {
+        expect(ELEMENT_ORDER, pal.id).toContain(element)
+      }
+    }
+  })
+
+  it("расход еды в диапазоне 1–9", () => {
+    for (const pal of pals) {
+      expect(pal.food, pal.id).toBeGreaterThanOrEqual(1)
+      expect(pal.food, pal.id).toBeLessThanOrEqual(9)
+    }
+  })
+
+  it("описание есть у каждого пала на обоих языках", () => {
+    for (const pal of pals) {
+      expect(pal.description.ru.length, pal.id).toBeGreaterThan(0)
+      expect(pal.description.en.length, pal.id).toBeGreaterThan(0)
+    }
+  })
+
+  /**
+   * Каждая пассивка, встречающаяся у палов, обязана иметь тексты в
+   * справочнике файла. Обратное тоже верно: в справочнике нет ничего
+   * лишнего — тексты кладутся только для реально встречающихся.
+   */
+  it("пассивки палов и их справочник совпадают", () => {
+    const used = new Set(pals.flatMap((pal) => pal.passives))
+    expect([...used].sort()).toEqual(Object.keys(palsFile.passives).sort())
+    for (const id of used) {
+      const info = palsFile.passives[id]
+      expect(info.name.ru.length, id).toBeGreaterThan(0)
+      expect(info.description.ru.length, id).toBeGreaterThan(0)
+    }
+  })
+
+  it("у каждой стихии есть иконка на диске", () => {
+    for (const key of ELEMENT_ORDER) {
+      expect(existsSync(join(ROOT, "public/icons/elements", `${key}.webp`)), key).toBe(true)
+    }
+  })
+
+  it("версия игры совпадает с константой", () => {
+    expect(palsFile.gameVersion).toBe(GAME_VERSION)
+  })
+})
+
+describe("дроп с палов", () => {
+  const resources = dropsFile.resources
+  const palIds = new Set(pals.map((pal) => pal.id))
+
+  it("ресурсы есть и id уникальны без оглядки на регистр", () => {
+    expect(resources.length).toBeGreaterThanOrEqual(90)
+    const lower = resources.map((resource) => resource.id.toLowerCase())
+    expect(new Set(lower).size).toBe(resources.length)
+  })
+
+  it("у каждого ресурса имя на обоих языках", () => {
+    for (const resource of resources) {
+      expect(resource.name.en, resource.id).toBeTruthy()
+      expect(resource.name.ru, resource.id).toBeTruthy()
+    }
+  })
+
+  it("каждый источник — пал из Палдекса, без дублей внутри ресурса", () => {
+    for (const resource of resources) {
+      expect(resource.sources.length, resource.id).toBeGreaterThan(0)
+      const seen = new Set<string>()
+      for (const source of resource.sources) {
+        expect(palIds.has(source.palId), `${resource.id}: ${source.palId}`).toBe(true)
+        expect(seen.has(source.palId), `${resource.id}: ${source.palId} дважды`).toBe(false)
+        seen.add(source.palId)
+      }
+    }
+  })
+
+  it("количества и шансы в осмысленных пределах", () => {
+    for (const resource of resources) {
+      for (const source of resource.sources) {
+        expect(source.min, `${resource.id}: ${source.palId}`).toBeGreaterThanOrEqual(1)
+        expect(source.max).toBeGreaterThanOrEqual(source.min)
+        expect(source.rate).toBeGreaterThan(0)
+        expect(source.rate).toBeLessThanOrEqual(100)
+      }
+    }
+  })
+
+  it("почти у каждого пала есть дроп: пустые перечислены поимённо", () => {
+    const covered = new Set(
+      resources.flatMap((resource) => resource.sources.map((source) => source.palId)),
+    )
+    const without = pals.filter((pal) => !covered.has(pal.id)).map((pal) => pal.id)
+    // Единственное известное исключение — DrillGame: у него нет строки в таблице дропа.
+    expect(without).toEqual(["DrillGame"])
+  })
+
+  it("у каждого ресурса есть файл иконки на диске", () => {
+    for (const resource of resources) {
+      const file = join(ROOT, "public/icons/drops", `${resource.id}.webp`)
+      expect(existsSync(file), resource.id).toBe(true)
+    }
+  })
+
+  it("версия игры совпадает с остальными данными", () => {
+    expect(dropsFile.gameVersion).toBe(GAME_VERSION)
   })
 })

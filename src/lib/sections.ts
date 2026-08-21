@@ -9,10 +9,12 @@
  * технологии), поэтому страницы называются разделами.
  */
 
-export type SectionId = "home" | "research"
+export type SectionId = "home" | "research" | "pal-skills" | "pal-drops"
 
 export const HOME_HASH = "#/"
 export const RESEARCH_HASH = "#/research"
+export const PAL_SKILLS_HASH = "#/pal-skills"
+export const PAL_DROPS_HASH = "#/pal-drops"
 
 /**
  * Смотрим только на первый сегмент. Второй зарезервирован под отложенный
@@ -24,5 +26,8 @@ export const RESEARCH_HASH = "#/research"
  */
 export function sectionFromHash(hash: string): SectionId {
   const segment = hash.replace(/^#\/?/, "").split(/[/?]/)[0]
-  return segment === "research" ? "research" : "home"
+  if (segment === "research") return "research"
+  if (segment === "pal-skills") return "pal-skills"
+  if (segment === "pal-drops") return "pal-drops"
+  return "home"
 }
