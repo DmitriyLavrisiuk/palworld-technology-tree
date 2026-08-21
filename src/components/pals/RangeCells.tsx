@@ -25,7 +25,7 @@ export function RangeCells({ cap, range, label, onChange }: RangeCellsProps) {
             onClick={() => onChange(hitRange(range, value))}
             aria-pressed={inside}
             className={cn(
-              "grid size-6 place-items-center rounded-md border text-xs tabular-nums transition-colors",
+              "grid size-6 place-items-center rounded-md border text-xs tabular-nums transition-colors pointer-coarse:size-11",
               "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
               inside
                 ? "border-transparent bg-primary font-medium text-primary-foreground"

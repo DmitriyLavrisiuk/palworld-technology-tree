@@ -65,7 +65,7 @@ function rangeLabel(range: Range | null, cap: number, locale: Locale): string {
 }
 
 const PILL =
-  "flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs whitespace-nowrap transition-colors " +
+  "flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs whitespace-nowrap transition-colors " +
   "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none pointer-coarse:h-11"
 
 /**
@@ -195,7 +195,7 @@ export function PalFilterBar({
                       onClick={() => onToggleElement(key)}
                       aria-pressed={filters.elements.has(key)}
                       className={cn(
-                        "flex h-8 items-center gap-2 rounded-full border px-3 text-xs transition-colors pointer-coarse:h-11",
+                        "flex h-9 items-center gap-2 rounded-full border px-3 text-xs transition-colors pointer-coarse:h-11",
                         "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
                         filters.elements.has(key)
                           ? "border-ring bg-accent font-medium"

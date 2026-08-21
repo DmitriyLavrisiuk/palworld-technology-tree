@@ -1,4 +1,4 @@
-import { MoonIcon, SparklesIcon } from "lucide-react"
+import { CircleMinusIcon, MoonIcon, SparklesIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
 import { WorkIcon } from "@/components/pals/WorkIcon"
@@ -23,9 +23,10 @@ interface PalRowProps {
   elements: ElementNames
   passives: Record<string, PassiveInfo>
   works: PalFilters["works"]
+  foodCap: number
 }
 
-export function PalRow({ pal, locale, names, elements, passives, works }: PalRowProps) {
+export function PalRow({ pal, locale, names, elements, passives, works, foodCap }: PalRowProps) {
   /**
    * Выбранные работы идут первыми: среди дюжины значков иначе не видно,
    * за что пал попал в выдачу. Остальные сохраняют игровой порядок.
@@ -78,9 +79,9 @@ export function PalRow({ pal, locale, names, elements, passives, works }: PalRow
         </span>
 
         <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5" title={`${pal.food} / 9`}>
+          <span className="flex items-center gap-1.5" title={`${pal.food} / ${foodCap}`}>
             <span className="flex gap-px" aria-hidden>
-              {Array.from({ length: 9 }, (_, index) => (
+              {Array.from({ length: foodCap }, (_, index) => (
                 <span
                   key={index}
                   className={cn(
@@ -109,9 +110,11 @@ export function PalRow({ pal, locale, names, elements, passives, works }: PalRow
                     : "border-researched/50 bg-researched-surface text-foreground",
                 )}
               >
-                <SparklesIcon
-                  className={cn("size-3", penalty ? "text-destructive" : "text-researched")}
-                />
+                {penalty ? (
+                  <CircleMinusIcon className="size-3 text-destructive" />
+                ) : (
+                  <SparklesIcon className="size-3 text-researched" />
+                )}
                 {info.name[locale]}
               </span>
             )

@@ -219,6 +219,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
                   elements={data.elementNames}
                   passives={data.passives}
                   works={filters.works}
+                  foodCap={foodCap}
                 />
               ))}
             </ul>

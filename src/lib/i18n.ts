@@ -39,8 +39,8 @@ export const UI = {
   },
   workFilterTitle: { ru: "Какие работы нужны", en: "Jobs you need covered" },
   workFilterHint: {
-    ru: "Первый клик по цифре — «от», второй — «до». Клик по единственной выбранной цифре снимает диапазон.",
-    en: "First click on a number sets the low end, second sets the high end. Clicking the only selected number clears the range.",
+    ru: "Первый клик по цифре — «от», второй — «до». Клик при растянутом диапазоне начинает новый, по единственной выбранной цифре — снимает выбор.",
+    en: "First click on a number sets the low end, second sets the high end. A click on a stretched range starts a new one; clicking the only selected number clears it.",
   },
   workFilterClear: { ru: "Сбросить", en: "Clear" },
   palFilterWorks: { ru: "Работы", en: "Jobs" },
@@ -56,8 +56,8 @@ export const UI = {
   },
   palFilterBuff: { ru: "Усилитель", en: "Booster" },
   palFilterBuffHint: {
-    ru: "Врождённая пассивка. Штрафные видны в списке красным; «любой» их не считает.",
-    en: "An innate passive. Penalties show in red in the list; “any” does not count them.",
+    ru: "Врождённая пассивка. Штрафные помечены знаком минуса; «любой» их не считает.",
+    en: "An innate passive. Penalties carry a minus mark; “any” does not count them.",
   },
   buffAny: { ru: "Любой усилитель", en: "Any booster" },
   buffElement: { ru: "Усиление стихии", en: "Element damage" },

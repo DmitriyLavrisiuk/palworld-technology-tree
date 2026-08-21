@@ -40,7 +40,7 @@ export function WorkFilter({
             <li
               key={key}
               className={cn(
-                "flex min-h-9 flex-wrap items-center gap-x-3 gap-y-1 rounded-md px-2 py-1",
+                "flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md px-2 py-1",
                 active && "bg-accent",
               )}
             >
@@ -49,7 +49,7 @@ export function WorkFilter({
                 onClick={() => onToggle(key)}
                 aria-pressed={active}
                 className={cn(
-                  "flex min-w-0 flex-1 items-center gap-2 text-left text-sm transition-colors",
+                  "flex min-h-9 min-w-0 flex-1 items-center gap-2 text-left text-sm transition-colors pointer-coarse:min-h-11",
                   "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
                   active ? "font-medium" : "text-muted-foreground hover:text-foreground",
                 )}
