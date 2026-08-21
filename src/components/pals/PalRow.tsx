@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { CircleMinusIcon, MoonIcon, SparklesIcon } from "lucide-react"
+import { CircleMinusIcon, MoonIcon, SparklesIcon, StarIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
 import { WorkIcon } from "@/components/pals/WorkIcon"
@@ -21,6 +21,7 @@ interface PalRowProps {
   /** Все работы раздела: у карточки фиксированные слоты, а не только свои. */
   workKeys: WorkKey[]
   foodCap: number
+  favorite: boolean
   onSelect: (id: string) => void
 }
 
@@ -39,6 +40,7 @@ export const PalRow = memo(function PalRow({
   works,
   workKeys,
   foodCap,
+  favorite,
   onSelect,
 }: PalRowProps) {
   return (
@@ -85,6 +87,12 @@ export const PalRow = memo(function PalRow({
                   </Tooltip>
                 ))}
               </span>
+              {favorite && (
+                <StarIcon
+                  className="ml-auto size-4 shrink-0 fill-current text-favorite"
+                  aria-hidden
+                />
+              )}
               {pal.nocturnal && (
                 <Tooltip>
                   <TooltipTrigger render={<span className="shrink-0 text-muted-foreground" />}>

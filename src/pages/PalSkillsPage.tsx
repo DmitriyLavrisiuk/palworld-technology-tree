@@ -77,8 +77,8 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
   }, [pals])
 
   const found = useMemo(
-    () => filterPals(pals, filters, query, locale),
-    [pals, filters, query, locale],
+    () => filterPals(pals, filters, query, locale, progress.palFavorites),
+    [pals, filters, query, locale, progress.palFavorites],
   )
 
   /**
@@ -171,8 +171,8 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
           <span className="ml-auto flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
             <span>
               {t("palsFound", locale)}{" "}
-              <b className="text-foreground tabular-nums">{found.length}</b> {t("ofTotal", locale)}{" "}
-              <span className="tabular-nums">{pals.length}</span>
+              <span className="font-medium text-foreground tabular-nums">{found.length}</span>{" "}
+              {t("ofTotal", locale)} <span className="tabular-nums">{pals.length}</span>
             </span>
             <SettingsSheet
               locale={locale}
@@ -195,6 +195,10 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
           maxLevel={maxLevel}
           maxFood={foodCap}
           buffCounts={buffCounts}
+          favoritesCount={progress.palFavorites.size}
+          onToggleFavoritesOnly={() =>
+            setFilters((previous) => ({ ...previous, favoritesOnly: !previous.favoritesOnly }))
+          }
           onToggleWork={toggleWork}
           onWorkRange={setWorkRange}
           onToggleElement={toggleElement}
@@ -228,6 +232,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
                   works={deferredWorks}
                   workKeys={workKeys}
                   foodCap={foodCap}
+                  favorite={progress.palFavorites.has(pal.id)}
                   onSelect={setSelectedId}
                 />
               ))}
@@ -243,6 +248,8 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
           elements={data.elementNames}
           passives={data.passives}
           maxLevel={maxLevel}
+          favorite={selectedId !== null && progress.palFavorites.has(selectedId)}
+          onToggleFavorite={progress.togglePalFavorite}
           onClose={() => setSelectedId(null)}
         />
       </div>

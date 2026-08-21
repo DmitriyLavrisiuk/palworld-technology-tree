@@ -159,8 +159,8 @@ export function Toolbar({
         <span className="ml-auto flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
           <span className="hidden sm:inline">
             {t("statResearched", locale)}{" "}
-            <span className="font-medium text-foreground tabular-nums">{totals.count}</span> /{" "}
-            <span className="tabular-nums">{total}</span>
+            <span className="font-medium text-foreground tabular-nums">{totals.count}</span>{" "}
+            {t("ofTotal", locale)} <span className="tabular-nums">{total}</span>
           </span>
           <span className="hidden items-center gap-1 md:inline-flex">
             {t("statPoints", locale)}{" "}

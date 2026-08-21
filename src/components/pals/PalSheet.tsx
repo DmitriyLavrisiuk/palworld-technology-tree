@@ -1,4 +1,4 @@
-import { CircleMinusIcon, MoonIcon, SparklesIcon, XIcon } from "lucide-react"
+import { CircleMinusIcon, MoonIcon, SparklesIcon, StarIcon, XIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
 import { WorkIcon } from "@/components/pals/WorkIcon"
@@ -38,6 +38,8 @@ interface PalSheetProps {
   passives: Record<string, PassiveInfo>
   /** Верх шкалы работ — из данных, как и в фильтре. */
   maxLevel: number
+  favorite: boolean
+  onToggleFavorite: (id: string) => void
   onClose: () => void
 }
 
@@ -53,6 +55,8 @@ export function PalSheet({
   elements,
   passives,
   maxLevel,
+  favorite,
+  onToggleFavorite,
   onClose,
 }: PalSheetProps) {
   if (!pal) return null
@@ -155,6 +159,15 @@ export function PalSheet({
               <span className="text-xs text-muted-foreground">{t("palSpeedUnit", locale)}</span>
             </span>
           </div>
+
+          <Button
+            variant="outline"
+            className={cn("h-11", favorite && "border-favorite/60 text-favorite-foreground")}
+            onClick={() => onToggleFavorite(pal.id)}
+          >
+            <StarIcon fill={favorite ? "currentColor" : "none"} />
+            {t(favorite ? "favoriteRemove" : "favoriteAdd", locale)}
+          </Button>
 
           {pal.description[locale] && (
             <p className="text-sm text-muted-foreground">{pal.description[locale]}</p>

@@ -131,6 +131,31 @@ describe("подбор по стихиям, еде и усилителям", () 
   })
 })
 
+describe("избранное", () => {
+  it("выключенный фильтр пропускает всех независимо от избранного", () => {
+    expect(matchesPal(pal("A", {}), NO_PAL_FILTERS, new Set(["A"]))).toBe(true)
+    expect(matchesPal(pal("B", {}), NO_PAL_FILTERS, new Set(["A"]))).toBe(true)
+  })
+
+  it("включённый фильтр оставляет только избранных", () => {
+    const f = filters({ favoritesOnly: true })
+    expect(matchesPal(pal("A", {}), f, new Set(["A"]))).toBe(true)
+    expect(matchesPal(pal("B", {}), f, new Set(["A"]))).toBe(false)
+  })
+
+  it("складывается с остальными фильтрами по «и»", () => {
+    const f = filters({ favoritesOnly: true, works: works([["Mining", null]]) })
+    expect(matchesPal(pal("A", { Mining: 2 }), f, new Set(["A"]))).toBe(true)
+    expect(matchesPal(pal("B", {}), f, new Set(["B"]))).toBe(false)
+  })
+
+  it("filterPals прокидывает избранное в отбор", () => {
+    const pals = [pal("A", {}), pal("B", {})]
+    const f = filters({ favoritesOnly: true })
+    expect(filterPals(pals, f, "", "ru", new Set(["B"])).map((p) => p.id)).toEqual(["B"])
+  })
+})
+
 describe("порядок выдачи", () => {
   it("при выбранных работах сильнейший идёт первым", () => {
     const weak = pal("Weak", { Mining: 3 })

@@ -81,6 +81,8 @@ export interface PalFilters {
   elements: ReadonlySet<ElementKey>
   food: Range | null
   buffs: ReadonlySet<BuffFilterKey>
+  /** Только избранные. Пункт появляется в фильтрах, когда избранное непусто. */
+  favoritesOnly: boolean
 }
 
 export const NO_PAL_FILTERS: PalFilters = {
@@ -88,9 +90,16 @@ export const NO_PAL_FILTERS: PalFilters = {
   elements: new Set(),
   food: null,
   buffs: new Set(),
+  favoritesOnly: false,
 }
 
-export function matchesPal(pal: Pal, filters: PalFilters): boolean {
+export function matchesPal(
+  pal: Pal,
+  filters: PalFilters,
+  favorites: ReadonlySet<string> = new Set(),
+): boolean {
+  if (filters.favoritesOnly && !favorites.has(pal.id)) return false
+
   for (const [key, range] of filters.works) {
     const level = pal.work[key] ?? 0
     if (level === 0 || !inRange(level, range)) return false
@@ -133,8 +142,11 @@ export function filterPals(
   filters: PalFilters,
   query: string,
   locale: Locale,
+  favorites: ReadonlySet<string> = new Set(),
 ): Pal[] {
-  const found = pals.filter((pal) => matchesPal(pal, filters) && matchesLocalized(pal.name, query))
+  const found = pals.filter(
+    (pal) => matchesPal(pal, filters, favorites) && matchesLocalized(pal.name, query),
+  )
 
   if (filters.works.size === 0) return found
 

@@ -46,6 +46,9 @@ interface PalFilterBarProps {
   maxFood: number
   /** Сколько палов носит пассивку каждой группы — честные счётчики в панели. */
   buffCounts: ReadonlyMap<BuffFilterKey, number>
+  /** Сколько палов в избранном; при нуле пилюля не показывается. */
+  favoritesCount: number
+  onToggleFavoritesOnly: () => void
   onToggleWork: (key: WorkKey) => void
   onWorkRange: (key: WorkKey, range: Range | null) => void
   onToggleElement: (key: ElementKey) => void
@@ -81,6 +84,8 @@ export function PalFilterBar({
   maxLevel,
   maxFood,
   buffCounts,
+  favoritesCount,
+  onToggleFavoritesOnly,
   onToggleWork,
   onWorkRange,
   onToggleElement,
@@ -92,7 +97,8 @@ export function PalFilterBar({
     filters.works.size > 0 ||
     filters.elements.size > 0 ||
     filters.food !== null ||
-    filters.buffs.size > 0
+    filters.buffs.size > 0 ||
+    filters.favoritesOnly
 
   const pill = (
     active: boolean,
@@ -245,6 +251,25 @@ export function PalFilterBar({
             })}
           </ul>
         </div>,
+      )}
+
+      {/* Появляющийся пункт: пока избранного нет, фильтровать нечем. */}
+      {favoritesCount > 0 && (
+        <button
+          type="button"
+          onClick={onToggleFavoritesOnly}
+          aria-pressed={filters.favoritesOnly}
+          className={cn(
+            PILL,
+            filters.favoritesOnly
+              ? "border-transparent bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
+          )}
+        >
+          <StarIcon className="size-3.5" fill="currentColor" />
+          {t("favorites", locale)}
+          <span className="tabular-nums">{favoritesCount}</span>
+        </button>
       )}
 
       {anyActive && (
