@@ -2,6 +2,7 @@ import { useDeferredValue, useEffect, useMemo, useState } from "react"
 import { SearchIcon } from "lucide-react"
 
 import { BackToSections } from "@/components/BackToSections"
+import { FLOATING_HEADER } from "@/components/Toolbar"
 import { PageLoader } from "@/components/PageLoader"
 import { SettingsSheet } from "@/components/SettingsSheet"
 import { PalFilterBar } from "@/components/pals/PalFilterBar"
@@ -11,9 +12,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/u
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import type { ProgressState } from "@/hooks/useProgress"
-import { useScrolled } from "@/hooks/useScrolled"
 import { t } from "@/lib/i18n"
-import { cn } from "@/lib/utils"
 import { loadPals, peekPals } from "@/lib/palData"
 import {
   NO_PAL_FILTERS,
@@ -44,7 +43,6 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
   /** Фильтры живут только в сессии: это разовый запрос, а не настройка. */
   const [filters, setFilters] = useState<PalFilters>(NO_PAL_FILTERS)
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const scrolled = useScrolled()
 
   useEffect(() => {
     loadPals().then(setData, (cause: unknown) => {
@@ -146,12 +144,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
   return (
     <TooltipProvider delay={250}>
       <div className="flex min-h-dvh flex-col">
-      <header
-        className={cn(
-          "sticky top-0 z-40 border-b bg-background/95 backdrop-blur transition-shadow duration-200",
-          scrolled && "shadow-[0_8px_24px_-12px_rgb(0_0_0/0.25)]",
-        )}
-      >
+      <header className={FLOATING_HEADER}>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2">
           <BackToSections locale={locale} className={CONTROL} />
 

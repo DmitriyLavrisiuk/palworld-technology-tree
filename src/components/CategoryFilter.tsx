@@ -1,6 +1,7 @@
 import { CheckIcon, LayersIcon } from "lucide-react"
 
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { FilterPopoverContent } from "@/components/FilterPopoverContent"
+import { Popover, PopoverTrigger } from "@/components/ui/popover"
 import { GROUP_NAMES, GROUP_ORDER } from "@/lib/constants"
 import { t } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
@@ -50,7 +51,7 @@ export function CategoryFilter({
         {active && <span className="tabular-nums">{selected.size}</span>}
       </PopoverTrigger>
 
-      <PopoverContent align="start" className="w-64 p-1">
+      <FilterPopoverContent className="w-64 p-1">
         <ul className="flex flex-col">
           {GROUP_ORDER.map((group) => {
             const checked = selected.has(group)
@@ -90,7 +91,7 @@ export function CategoryFilter({
             {t("categoriesAll", locale)}
           </button>
         )}
-      </PopoverContent>
+      </FilterPopoverContent>
     </Popover>
   )
 }

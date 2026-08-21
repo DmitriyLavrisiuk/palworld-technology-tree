@@ -1,7 +1,7 @@
 import { StarIcon, UtensilsIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
-import { FilterPopoverContent } from "@/components/pals/FilterPopoverContent"
+import { FilterPopoverContent } from "@/components/FilterPopoverContent"
 import { Popover, PopoverTrigger } from "@/components/ui/popover"
 import { RangeCells } from "@/components/pals/RangeCells"
 import { WorkFilter } from "@/components/pals/WorkFilter"
@@ -253,8 +253,10 @@ export function PalFilterBar({
         </div>,
       )}
 
-      {/* Появляющийся пункт: пока избранного нет, фильтровать нечем. */}
-      {favoritesCount > 0 && (
+      {/* Появляющийся пункт: пока избранного нет, фильтровать нечем. При
+          включённом фильтре виден и с нулём — иначе, сняв последнюю звезду,
+          фильтр было бы нечем выключить. */}
+      {(favoritesCount > 0 || filters.favoritesOnly) && (
         <button
           type="button"
           onClick={onToggleFavoritesOnly}
@@ -268,7 +270,7 @@ export function PalFilterBar({
         >
           <StarIcon className="size-3.5" fill="currentColor" />
           {t("favorites", locale)}
-          <span className="tabular-nums">{favoritesCount}</span>
+          {favoritesCount > 0 && <span className="tabular-nums">{favoritesCount}</span>}
         </button>
       )}
 

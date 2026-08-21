@@ -8,7 +8,6 @@ import {
 } from "lucide-react"
 
 import { BackToSections } from "@/components/BackToSections"
-import { useScrolled } from "@/hooks/useScrolled"
 import { CategoryFilter } from "@/components/CategoryFilter"
 import { SettingsSheet } from "@/components/SettingsSheet"
 import { Badge } from "@/components/ui/badge"
@@ -31,6 +30,14 @@ type UiKey = Parameters<typeof t>[0]
  * же толстый, как у телефона.
  */
 export const CONTROL = "h-9 pointer-coarse:h-11"
+
+/**
+ * Парящая шапка, общая для разделов: постоянная тень, скругление и отступы
+ * от краёв экрана со всех сторон. Из-за зазора сверху контент при прокрутке
+ * виден в щели над шапкой — это и есть «парение», а не дефект.
+ */
+export const FLOATING_HEADER =
+  "sticky top-3 z-40 mx-3 rounded-xl border bg-background/95 shadow-[0_8px_24px_-12px_rgb(0_0_0/0.25)] backdrop-blur"
 
 const VIEWS: { value: ViewMode; label: UiKey; icon: typeof Rows3Icon }[] = [
   { value: "lanes", label: "viewLanes", icon: Rows3Icon },
@@ -78,7 +85,6 @@ interface ToolbarProps {
   groupCounts: ReadonlyMap<GroupKey, number>
   onToggleGroup: (group: GroupKey) => void
   onClearGroups: () => void
-  onOpenFavorites: () => void
 }
 
 export function Toolbar({
@@ -103,17 +109,9 @@ export function Toolbar({
   groupCounts,
   onToggleGroup,
   onClearGroups,
-  onOpenFavorites,
 }: ToolbarProps) {
-  const scrolled = useScrolled()
-
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 border-b bg-background/95 backdrop-blur transition-shadow duration-200",
-        scrolled && "shadow-[0_8px_24px_-12px_rgb(0_0_0/0.25)]",
-      )}
-    >
+    <header className={FLOATING_HEADER}>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2">
         <span className="flex shrink-0 items-center gap-2">
           <BackToSections locale={locale} className={CONTROL} />
@@ -173,33 +171,6 @@ export function Toolbar({
             )}
           </span>
         </span>
-
-        {/* Вход в раздел, а не фильтр: поэтому кнопка стоит рядом с настройками,
-            а не среди пилюль второго ряда. Видна и при нуле — иначе после
-            первой же отметки будет неясно, куда смотреть. */}
-        <button
-          type="button"
-          onClick={onOpenFavorites}
-          aria-label={
-            favoritesCount > 0
-              ? `${t("favorites", locale)}: ${favoritesCount}`
-              : t("favorites", locale)
-          }
-          title={t("favorites", locale)}
-          className={cn(
-            CONTROL,
-            // Ширина задаётся так же, как высота в CONTROL: у кнопки нет
-            // подписи, и по содержимому она выходит уже цели касания.
-            "flex min-w-9 shrink-0 items-center justify-center gap-1 rounded-lg px-2 text-xs transition-colors pointer-coarse:min-w-11",
-            "hover:bg-muted focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-            favoritesCount > 0
-              ? "text-favorite-foreground"
-              : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          <StarIcon className="size-4" fill={favoritesCount > 0 ? "currentColor" : "none"} />
-          {favoritesCount > 0 && <span className="tabular-nums">{favoritesCount}</span>}
-        </button>
 
         <SettingsSheet
           locale={locale}
@@ -271,6 +242,29 @@ export function Toolbar({
               </button>
             )
           })}
+
+          {/* Появляющийся пункт, как у палов: пока избранного нет, фильтровать
+              нечем. При включённом фильтре видна и с нулём — иначе, сняв
+              последнюю звезду, фильтр было бы нечем выключить. */}
+          {(favoritesCount > 0 || filters.favoritesOnly) && (
+            <button
+              type="button"
+              onClick={() => onFilters({ ...filters, favoritesOnly: !filters.favoritesOnly })}
+              aria-pressed={filters.favoritesOnly}
+              className={cn(
+                CONTROL,
+                "flex items-center gap-1.5 rounded-full border px-3.5 text-xs whitespace-nowrap transition-colors",
+                "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
+                filters.favoritesOnly
+                  ? "border-transparent bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              <StarIcon className="size-3.5" fill="currentColor" />
+              {t("favorites", locale)}
+              {favoritesCount > 0 && <span className="tabular-nums">{favoritesCount}</span>}
+            </button>
+          )}
         </span>
 
         <ul className="ml-auto hidden shrink-0 items-center gap-3 text-xs text-muted-foreground lg:flex">

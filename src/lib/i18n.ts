@@ -147,15 +147,6 @@ export const UI = {
   favoriteAdd: { ru: "В избранное", en: "Add to favorites" },
   favoriteRemove: { ru: "Убрать из избранного", en: "Remove from favorites" },
   inFavorites: { ru: "в избранном", en: "in favorites" },
-  favoritesEmpty: { ru: "В избранном пусто", en: "No favorites yet" },
-  favoritesEmptyHint: {
-    ru: "Откройте технологию и нажмите «В избранное» — она появится здесь",
-    en: "Open a technology and press “Add to favorites” — it will show up here",
-  },
-  favoritesMaterials: {
-    ru: "Материалы на крафт избранного",
-    en: "Materials to craft the favorites",
-  },
   expand: { ru: "Развернуть", en: "Expand" },
   collapse: { ru: "Свернуть", en: "Collapse" },
   switchLanguage: { ru: "Переключить на английский", en: "Switch to Russian" },

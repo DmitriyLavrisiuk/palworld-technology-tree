@@ -12,6 +12,8 @@ export interface Filters {
   availableOnly: boolean
   ancientOnly: boolean
   hideResearched: boolean
+  /** Только избранные. Пилюля появляется в фильтрах, когда избранное непусто. */
+  favoritesOnly: boolean
   /** Показываемые категории. Пустой набор означает «все». */
   groups: ReadonlySet<GroupKey>
 }
@@ -20,6 +22,7 @@ export const NO_FILTERS: Filters = {
   availableOnly: false,
   ancientOnly: false,
   hideResearched: false,
+  favoritesOnly: false,
   groups: new Set(),
 }
 
@@ -94,7 +97,9 @@ export function passesFilters(
   tech: Technology,
   status: NodeStatus,
   filters: Filters,
+  favorites: ReadonlySet<string> = new Set(),
 ): boolean {
+  if (filters.favoritesOnly && !favorites.has(tech.id)) return false
   if (filters.groups.size > 0 && !filters.groups.has(tech.group)) return false
   if (filters.ancientOnly && !tech.ancient) return false
   if (filters.hideResearched && status === "researched") return false
@@ -128,12 +133,13 @@ export function visibleTechs(
   playerLevel: number,
   query: string,
   filters: Filters,
+  favorites: ReadonlySet<string> = new Set(),
 ): VisibleTech[] {
   const result: VisibleTech[] = []
   for (const tech of technologies) {
     if (!matches(tech, query)) continue
     const status = nodeStatus(tech, researched, playerLevel)
-    if (!passesFilters(tech, status, filters)) continue
+    if (!passesFilters(tech, status, filters, favorites)) continue
     result.push({ tech, status })
   }
   return result
