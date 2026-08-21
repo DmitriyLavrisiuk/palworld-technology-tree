@@ -214,8 +214,10 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
       <main className="mx-auto flex w-full max-w-[110rem] flex-1 flex-col gap-3 p-3">
         <h1 className="sr-only">{t("sectionPalSkills", locale)}</h1>
 
-        {deferredFound.length === 0 ? (
-          <Empty className="py-12">
+        {/* Пустые состояния ждут, пока отложенный список догонит живой:
+            иначе на кадр перехода вспыхивало бы «Никто не подходит». */}
+        {deferredFound.length === 0 && deferredFound === found ? (
+          <Empty className="py-12 animate-in fade-in-0 slide-in-from-bottom-3 animation-duration-300 fill-mode-both motion-reduce:animate-none">
             <EmptyHeader>
               <EmptyTitle>{t(idle ? "palsIdle" : "palsEmpty", locale)}</EmptyTitle>
               <EmptyDescription>
@@ -226,7 +228,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
         ) : (
           <section className="flex flex-col gap-2">
             <ul className="grid grid-cols-1 items-stretch gap-2 lg:grid-cols-2 2xl:grid-cols-3">
-              {deferredFound.map((pal) => (
+              {deferredFound.map((pal, index) => (
                 <PalRow
                   key={pal.id}
                   pal={pal}
@@ -238,6 +240,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
                   workKeys={workKeys}
                   foodCap={foodCap}
                   favorite={progress.palFavorites.has(pal.id)}
+                  index={index}
                   onSelect={setSelectedId}
                 />
               ))}

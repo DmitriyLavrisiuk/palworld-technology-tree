@@ -22,6 +22,8 @@ interface PalRowProps {
   workKeys: WorkKey[]
   foodCap: number
   favorite: boolean
+  /** Позиция в выдаче — задаёт задержку каскада появления. */
+  index: number
   onSelect: (id: string) => void
 }
 
@@ -41,12 +43,19 @@ export const PalRow = memo(function PalRow({
   workKeys,
   foodCap,
   favorite,
+  index,
   onSelect,
 }: PalRowProps) {
   return (
     // content-visibility: карточки за экраном не раскладываются и не
     // рисуются — на 288 карточках это большая часть кадра.
-    <li className="h-full [content-visibility:auto] [contain-intrinsic-size:auto_190px]">
+    // Каскад появления быстрее, чем у секций: карточек на экране около
+    // дюжины, и с шагом 75 мс хвост ждал бы секунду. Кап тот же — всё
+    // ниже первого экрана появляется вместе с последней из каскада.
+    <li
+      className="h-full [content-visibility:auto] [contain-intrinsic-size:auto_190px] animate-in fade-in-0 slide-in-from-bottom-3 animation-duration-300 fill-mode-both motion-reduce:animate-none"
+      style={{ animationDelay: `${Math.min(index, 12) * 40}ms` }}
+    >
       <button
         type="button"
         onClick={() => onSelect(pal.id)}
