@@ -23,8 +23,8 @@ export const UI = {
   },
   sectionPalSkills: { ru: "Навыки палов", en: "Pal skills" },
   sectionPalSkillsHint: {
-    ru: "Активные и пассивные навыки: что делают и у кого встречаются",
-    en: "Active and passive skills: what they do and which pals have them",
+    ru: "Кто на какие работы годится: подбор пала под задачи базы",
+    en: "Who is good at what: pick a pal for the jobs your base needs",
   },
   sectionBreeding: { ru: "Разведение палов", en: "Pal breeding" },
   sectionBreedingHint: {
@@ -32,6 +32,23 @@ export const UI = {
     en: "Parent pairs and what they hatch into",
   },
   soon: { ru: "Скоро", en: "Soon" },
+
+  titlePalSkills: {
+    ru: "Навыки палов — Шпаргалки Palworld",
+    en: "Pal Skills — Palworld Cheatsheets",
+  },
+  workFilterTitle: { ru: "Какие работы нужны", en: "Jobs you need covered" },
+  workFilterClear: { ru: "Сбросить", en: "Clear" },
+  workAtLeast: { ru: "не ниже", en: "at least" },
+  palSearch: { ru: "Поиск пала…", en: "Search pal…" },
+  palsFound: { ru: "Найдено", en: "Found" },
+  palNocturnal: { ru: "Работает ночью", en: "Nocturnal" },
+  palNoWork: { ru: "не работает", en: "no jobs" },
+  palsEmpty: { ru: "Никто не подходит", en: "Nobody matches" },
+  palsEmptyHint: {
+    ru: "Ни один пал не закрывает все выбранные работы на таком уровне — снизьте требование или уберите работу",
+    en: "No pal covers every selected job at that level — lower a requirement or drop a job",
+  },
   backToSections: { ru: "К разделам", en: "All sections" },
   statResearched: { ru: "Изучено", en: "Researched" },
   statPoints: { ru: "Очки", en: "Points" },

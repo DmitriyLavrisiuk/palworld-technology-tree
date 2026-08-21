@@ -13,7 +13,7 @@ import {
 } from "../src/lib/constants.ts"
 import { GROUP_NAMES, GROUP_ORDER } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
-import { WORK_ORDER, type PalsFile } from "../src/types/pal.ts"
+import { ELEMENT_ORDER, WORK_ORDER, type PalsFile } from "../src/types/pal.ts"
 
 /**
  * Сторожит сгенерированные данные. Парсер сверяет то же самое во время
@@ -416,6 +416,22 @@ describe("палы: контрольные суммы", () => {
 
     for (const pal of pals) {
       expect(pal.elements.length, pal.id).toBeLessThanOrEqual(2)
+    }
+  })
+
+  it("все стихии переведены", () => {
+    for (const key of ELEMENT_ORDER) {
+      expect(palsFile.elementNames[key].ru.length, key).toBeGreaterThan(0)
+      expect(palsFile.elementNames[key].en.length, key).toBeGreaterThan(0)
+      expect(palsFile.elementNames[key].ru, key).not.toBe(key)
+    }
+  })
+
+  it("стихии палов берутся из известного набора", () => {
+    for (const pal of pals) {
+      for (const element of pal.elements) {
+        expect(ELEMENT_ORDER, pal.id).toContain(element)
+      }
     }
   })
 

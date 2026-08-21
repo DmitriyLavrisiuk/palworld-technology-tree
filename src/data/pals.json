@@ -55,6 +55,44 @@
       "ru": "Фермерство"
     }
   },
+  "elementNames": {
+    "Normal": {
+      "en": "Neutral",
+      "ru": "Обычный"
+    },
+    "Fire": {
+      "en": "Fire",
+      "ru": "Огонь"
+    },
+    "Water": {
+      "en": "Water",
+      "ru": "Вода"
+    },
+    "Leaf": {
+      "en": "Grass",
+      "ru": "Природа"
+    },
+    "Electricity": {
+      "en": "Electric",
+      "ru": "Молния"
+    },
+    "Ice": {
+      "en": "Ice",
+      "ru": "Лед"
+    },
+    "Earth": {
+      "en": "Ground",
+      "ru": "Земля"
+    },
+    "Dark": {
+      "en": "Dark",
+      "ru": "Тьма"
+    },
+    "Dragon": {
+      "en": "Dragon",
+      "ru": "Дракон"
+    }
+  },
   "pals": [
     {
       "id": "SheepBall",

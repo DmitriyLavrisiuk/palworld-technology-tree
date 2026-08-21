@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises"
 import { writeJson } from "./lib/http.ts"
 import { log } from "./lib/log.ts"
 import { fetchDataTable, fetchPalTable } from "./sources/datatable.ts"
-import { fetchDescriptions, fetchPalNames, fetchWorkNames } from "./sources/l10n.ts"
+import { fetchDescriptions, fetchElementNames, fetchPalNames, fetchWorkNames } from "./sources/l10n.ts"
 import { fetchItemNames, fetchPalList, fetchRecipe, fetchTechList, toSlug } from "./sources/paldb.ts"
 import { downloadIcons } from "./sources/icons.ts"
 import { buildChains, type OverrideFile } from "./build-chains.ts"
@@ -16,7 +16,14 @@ import {
   TOTAL_TECH_POINTS,
 } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
-import { WORK_ORDER, type Pal, type PalsFile, type WorkNames } from "../src/types/pal.ts"
+import {
+  ELEMENT_ORDER,
+  WORK_ORDER,
+  type ElementNames,
+  type Pal,
+  type PalsFile,
+  type WorkNames,
+} from "../src/types/pal.ts"
 
 const OUT = {
   technologies: "src/data/technologies.json",
@@ -335,13 +342,15 @@ async function buildChainsFile(technologies: Technology[]) {
 async function buildPals(): Promise<PalsFile> {
   log.step("Pals")
 
-  const [table, listed, namesEn, namesRu, workEn, workRu] = await Promise.all([
+  const [table, listed, namesEn, namesRu, workEn, workRu, elemEn, elemRu] = await Promise.all([
     fetchPalTable(fresh),
     fetchPalList(fresh),
     fetchPalNames("en", fresh),
     fetchPalNames("ru", fresh),
     fetchWorkNames("en", fresh),
     fetchWorkNames("ru", fresh),
+    fetchElementNames("en", fresh),
+    fetchElementNames("ru", fresh),
   ])
 
   /**
@@ -405,10 +414,19 @@ async function buildPals(): Promise<PalsFile> {
     }
   }
 
+  const elementNames = {} as ElementNames
+  for (const key of ELEMENT_ORDER) {
+    elementNames[key] = {
+      en: usable(elemEn[key]) ?? key,
+      ru: usable(elemRu[key]) ?? usable(elemEn[key]) ?? key,
+    }
+  }
+
   const file: PalsFile = {
     gameVersion: GAME_VERSION,
     generatedAt: new Date().toISOString().slice(0, 10),
     workNames,
+    elementNames,
     pals,
   }
 

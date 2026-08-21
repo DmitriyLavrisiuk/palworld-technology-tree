@@ -1,11 +1,11 @@
-import { EggIcon, NetworkIcon, ZapIcon } from "lucide-react"
+import { EggIcon, NetworkIcon, PawPrintIcon } from "lucide-react"
 
 import { SettingsSheet } from "@/components/SettingsSheet"
 import { CONTROL } from "@/components/Toolbar"
 import { Badge } from "@/components/ui/badge"
 import type { ProgressState } from "@/hooks/useProgress"
 import { t } from "@/lib/i18n"
-import { RESEARCH_HASH } from "@/lib/sections"
+import { PAL_SKILLS_HASH, RESEARCH_HASH } from "@/lib/sections"
 import { cn } from "@/lib/utils"
 
 type UiKey = Parameters<typeof t>[0]
@@ -25,7 +25,13 @@ const SECTIONS: {
     hint: "sectionResearchHint",
     href: RESEARCH_HASH,
   },
-  { key: "palSkills", icon: ZapIcon, title: "sectionPalSkills", hint: "sectionPalSkillsHint", href: null },
+  {
+    key: "palSkills",
+    icon: PawPrintIcon,
+    title: "sectionPalSkills",
+    hint: "sectionPalSkillsHint",
+    href: PAL_SKILLS_HASH,
+  },
   { key: "breeding", icon: EggIcon, title: "sectionBreeding", hint: "sectionBreedingHint", href: null },
 ]
 

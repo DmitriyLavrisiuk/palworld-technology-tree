@@ -49,9 +49,8 @@ export async function fetchPalNames(locale: Locale, fresh: boolean): Promise<L10
   return out
 }
 
-/** Названия рабочих навыков. Ключи совпадают с суффиксами `WorkSuitability_*`. */
-export async function fetchWorkNames(locale: Locale, fresh: boolean): Promise<Record<string, string>> {
-  const raw = await fetchJson<Record<string, Entry>>(URL(locale, "work_suitability"), { fresh })
+async function fetchNameMap(locale: Locale, file: string, fresh: boolean): Promise<Record<string, string>> {
+  const raw = await fetchJson<Record<string, Entry>>(URL(locale, file), { fresh })
   const out: Record<string, string> = {}
 
   for (const [key, entry] of Object.entries(raw)) {
@@ -59,4 +58,14 @@ export async function fetchWorkNames(locale: Locale, fresh: boolean): Promise<Re
   }
 
   return out
+}
+
+/** Названия рабочих навыков. Ключи совпадают с суффиксами `WorkSuitability_*`. */
+export async function fetchWorkNames(locale: Locale, fresh: boolean): Promise<Record<string, string>> {
+  return await fetchNameMap(locale, "work_suitability", fresh)
+}
+
+/** Названия стихий. Формат тот же, что у работ. */
+export async function fetchElementNames(locale: Locale, fresh: boolean): Promise<Record<string, string>> {
+  return await fetchNameMap(locale, "elements", fresh)
 }

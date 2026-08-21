@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import {
-  ArrowLeftIcon,
   LayoutGridIcon,
   Rows3Icon,
   RulerIcon,
@@ -9,6 +8,7 @@ import {
   StarIcon,
 } from "lucide-react"
 
+import { BackToSections } from "@/components/BackToSections"
 import { CategoryFilter } from "@/components/CategoryFilter"
 import { SettingsSheet } from "@/components/SettingsSheet"
 import { Badge } from "@/components/ui/badge"
@@ -19,7 +19,6 @@ import { t } from "@/lib/i18n"
 import type { NodeSizeKey } from "@/lib/nodeSize"
 import type { Filters, ResearchedTotals } from "@/lib/tree"
 import type { GroupKey } from "@/types/tech"
-import { HOME_HASH } from "@/lib/sections"
 import { cn } from "@/lib/utils"
 import type { Locale } from "@/types/tech"
 
@@ -127,24 +126,8 @@ export function Toolbar({
       )}
     >
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2">
-        {/* Выход из раздела виден на любой ширине: прячется только подпись.
-            У пришедшего по прямой ссылке в истории вкладки может не быть
-            предыдущей записи, и без этой ссылки раздел стал бы ловушкой. */}
         <span className="flex shrink-0 items-center gap-2">
-          <a
-            href={HOME_HASH}
-            aria-label={t("backToSections", locale)}
-            title={t("backToSections", locale)}
-            className={cn(
-              CONTROL,
-              "flex min-w-9 items-center justify-center gap-2 rounded-lg px-2 text-sm font-medium transition-colors pointer-coarse:min-w-11",
-              "text-muted-foreground hover:bg-muted hover:text-foreground",
-              "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-            )}
-          >
-            <ArrowLeftIcon className="size-4" />
-            <span className="hidden sm:inline">{t("backToSections", locale)}</span>
-          </a>
+          <BackToSections locale={locale} className={CONTROL} />
           {/* Счётчик вне ссылки: он про дерево, а внутри попал бы в её имя. */}
           <Badge variant="secondary" className="hidden tabular-nums sm:inline-flex">
             {shown}

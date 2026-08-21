@@ -49,6 +49,18 @@ export type ElementKey =
   | "Dark"
   | "Dragon"
 
+export const ELEMENT_ORDER: ElementKey[] = [
+  "Normal",
+  "Fire",
+  "Water",
+  "Leaf",
+  "Electricity",
+  "Ice",
+  "Earth",
+  "Dark",
+  "Dragon",
+]
+
 export type PalSize = "XS" | "S" | "M" | "L" | "XL"
 
 export interface Pal {
@@ -75,9 +87,12 @@ export interface Pal {
 /** Локализованные названия навыков — тоже из дампа, а не из нашего словаря. */
 export type WorkNames = Record<WorkKey, Localized>
 
+export type ElementNames = Record<ElementKey, Localized>
+
 export interface PalsFile {
   gameVersion: string
   generatedAt: string
   workNames: WorkNames
+  elementNames: ElementNames
   pals: Pal[]
 }
