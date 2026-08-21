@@ -6,6 +6,7 @@ import { PageLoader } from "@/components/PageLoader"
 import { SettingsSheet } from "@/components/SettingsSheet"
 import { PalFilterBar } from "@/components/pals/PalFilterBar"
 import { PalRow } from "@/components/pals/PalRow"
+import { PalSheet } from "@/components/pals/PalSheet"
 import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -41,6 +42,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
   const [query, setQuery] = useState("")
   /** Фильтры живут только в сессии: это разовый запрос, а не настройка. */
   const [filters, setFilters] = useState<PalFilters>(NO_PAL_FILTERS)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
   useEffect(() => {
     loadPals().then(setData, (cause: unknown) => {
@@ -216,12 +218,23 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
                   passives={data.passives}
                   works={filters.works}
                   foodCap={foodCap}
+                  onSelect={setSelectedId}
                 />
               ))}
             </ul>
           </section>
         )}
         </main>
+
+        <PalSheet
+          pal={selectedId ? (pals.find((pal) => pal.id === selectedId) ?? null) : null}
+          locale={locale}
+          names={data.workNames}
+          elements={data.elementNames}
+          passives={data.passives}
+          maxLevel={maxLevel}
+          onClose={() => setSelectedId(null)}
+        />
       </div>
     </TooltipProvider>
   )

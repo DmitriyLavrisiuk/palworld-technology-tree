@@ -25,9 +25,10 @@ interface PalRowProps {
   passives: Record<string, PassiveInfo>
   works: PalFilters["works"]
   foodCap: number
+  onSelect: (id: string) => void
 }
 
-export function PalRow({ pal, locale, names, elements, passives, works, foodCap }: PalRowProps) {
+export function PalRow({ pal, locale, names, elements, passives, works, foodCap, onSelect }: PalRowProps) {
   /**
    * Выбранные работы идут первыми: среди дюжины значков иначе не видно,
    * за что пал попал в выдачу. Остальные сохраняют игровой порядок.
@@ -36,7 +37,12 @@ export function PalRow({ pal, locale, names, elements, passives, works, foodCap 
   const shown = [...owned].sort((a, b) => Number(works.has(b)) - Number(works.has(a)))
 
   return (
-    <li className="flex items-center gap-3 rounded-lg border bg-card p-2 pr-3">
+    <li>
+      <button
+        type="button"
+        onClick={() => onSelect(pal.id)}
+        className="flex w-full items-center gap-3 rounded-lg border bg-card p-2 pr-3 text-left transition-colors hover:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+      >
       <img
         src={palIconUrl(pal.id)}
         alt=""
@@ -135,12 +141,12 @@ export function PalRow({ pal, locale, names, elements, passives, works, foodCap 
         )}
       </div>
 
-      <ul className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-1">
+      <span className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-1">
         {shown.map((key) => (
           <Tooltip key={key}>
             <TooltipTrigger
               render={
-                <li
+                <span
                   className={cn(
                     "flex items-center gap-1.5 rounded-md border px-1.5 py-1 font-mono text-xs tabular-nums",
                     works.has(key)
@@ -158,7 +164,8 @@ export function PalRow({ pal, locale, names, elements, passives, works, foodCap 
             </TooltipContent>
           </Tooltip>
         ))}
-      </ul>
+      </span>
+      </button>
     </li>
   )
 }
