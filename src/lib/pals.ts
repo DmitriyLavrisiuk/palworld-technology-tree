@@ -1,6 +1,6 @@
 import { matchesLocalized } from "@/lib/tree"
 import type { Locale } from "@/types/tech"
-import type { Pal, WorkKey } from "@/types/pal"
+import { WORK_ORDER, type Pal, type WorkKey } from "@/types/pal"
 
 /**
  * Подбор пала под работы базы.
@@ -61,4 +61,19 @@ export function maxWorkLevel(pals: readonly Pal[]): number {
     }
   }
   return max
+}
+
+/**
+ * Работы, которыми хоть кто-то владеет.
+ *
+ * Нефтедобыча есть полем в игровой таблице, но ни у одного пала Палдекса её
+ * нет — у paldb её нет и в фильтрах, и иконки для неё не существует. Показывать
+ * такую кнопку значит предлагать фильтр, который всегда даёт пустоту.
+ */
+export function usedWorkKeys(pals: readonly Pal[]): WorkKey[] {
+  const used = new Set<WorkKey>()
+  for (const pal of pals) {
+    for (const key of Object.keys(pal.work) as WorkKey[]) used.add(key)
+  }
+  return WORK_ORDER.filter((key) => used.has(key))
 }

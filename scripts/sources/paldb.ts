@@ -1,4 +1,5 @@
 import { load } from "cheerio"
+import { WORK_ORDER, type WorkKey } from "../../src/types/pal.ts"
 import { fetchText } from "../lib/http.ts"
 import type { GroupKey, Locale } from "../../src/types/tech.ts"
 
@@ -227,4 +228,40 @@ export async function fetchPalList(fresh: boolean): Promise<PaldbPal[]> {
   })
 
   return [...icons].map(([id, icon]) => ({ id, icon }))
+}
+
+export interface WorkIcon {
+  id: WorkKey
+  icon: string
+}
+
+/**
+ * Иконки работ. Соответствие «номер файла → игровой ключ» не выдумывается: в
+ * выпадающем меню страницы палов у каждой работы стоит `data-i18n` вида
+ * `common_work_suitability_emitflame`, то есть тот же ключ, что и в игровой
+ * таблице, только в нижнем регистре. Это такой же честный джойн, как
+ * `data-pal-id` у палов.
+ *
+ * Нефтедобычи в меню нет — ею не владеет ни один пал Палдекса, поэтому и
+ * иконки для неё не существует.
+ */
+export async function fetchWorkIcons(fresh: boolean): Promise<WorkIcon[]> {
+  const html = await fetchText(`${BASE}/en/Pals`, { fresh })
+  if (!html) throw new Error("Pals page returned nothing")
+
+  const $ = load(html)
+  const byLowerKey = new Map(WORK_ORDER.map((key) => [key.toLowerCase(), key]))
+  const found = new Map<WorkKey, string>()
+
+  $("[data-i18n^='common_work_suitability_']").each((_, element) => {
+    const node = $(element)
+    const raw = (node.attr("data-i18n") ?? "").replace("common_work_suitability_", "")
+    const key = byLowerKey.get(raw)
+    if (!key || found.has(key)) return
+
+    const icon = node.closest("a").find("img").first().attr("src")
+    if (icon) found.set(key, icon)
+  })
+
+  return [...found].map(([id, icon]) => ({ id, icon }))
 }

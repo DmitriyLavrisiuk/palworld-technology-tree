@@ -26,3 +26,7 @@ export function peekPals(): PalsFile | null {
 export function palIconUrl(id: string): string {
   return `${import.meta.env.BASE_URL}icons/pals/${id}.webp`
 }
+
+export function workIconUrl(key: string): string {
+  return `${import.meta.env.BASE_URL}icons/work/${key}.webp`
+}

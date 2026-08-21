@@ -5,7 +5,14 @@ import { writeJson } from "./lib/http.ts"
 import { log } from "./lib/log.ts"
 import { fetchDataTable, fetchPalTable } from "./sources/datatable.ts"
 import { fetchDescriptions, fetchElementNames, fetchPalNames, fetchWorkNames } from "./sources/l10n.ts"
-import { fetchItemNames, fetchPalList, fetchRecipe, fetchTechList, toSlug } from "./sources/paldb.ts"
+import {
+  fetchItemNames,
+  fetchPalList,
+  fetchRecipe,
+  fetchTechList,
+  fetchWorkIcons,
+  toSlug,
+} from "./sources/paldb.ts"
 import { downloadIcons } from "./sources/icons.ts"
 import { buildChains, type OverrideFile } from "./build-chains.ts"
 import {
@@ -32,7 +39,7 @@ const OUT = {
   pals: "src/data/pals.json",
 }
 
-const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons"] as const
+const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons", "work-icons"] as const
 type Stage = (typeof STAGES)[number]
 
 const args = process.argv.slice(2)
@@ -466,6 +473,14 @@ async function main() {
     if (result.failed.length) {
       log.warn(`${result.failed.length} pal icons failed: ${result.failed.slice(0, 5).join(", ")}`)
     }
+  }
+
+  if (runs("work-icons")) {
+    log.step("Work icons")
+    const icons = await fetchWorkIcons(false)
+    const result = await downloadIcons(icons, fresh, "public/icons/work")
+    log.done(`${result.saved} work icons → public/icons/work`)
+    if (result.failed.length) log.warn(`${result.failed.length} work icons failed`)
   }
 
   if (runs("recipes")) await buildRecipes(technologies)

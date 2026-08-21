@@ -419,6 +419,22 @@ describe("палы: контрольные суммы", () => {
     }
   })
 
+  /**
+   * Нефтедобыча есть полем в таблице, но ею не владеет ни один пал Палдекса —
+   * поэтому её нет в фильтре и для неё нет иконки. Если после патча она у
+   * кого-то появится, тест упадёт, и раздел надо будет дополнить.
+   */
+  it("нефтедобычей не владеет ни один пал", () => {
+    expect(pals.filter((pal) => pal.work.OilExtraction)).toEqual([])
+  })
+
+  it("у каждой встречающейся работы есть иконка на диске", () => {
+    const used = new Set(pals.flatMap((pal) => Object.keys(pal.work)))
+    for (const key of used) {
+      expect(existsSync(join(ROOT, "public/icons/work", `${key}.webp`)), key).toBe(true)
+    }
+  })
+
   it("все стихии переведены", () => {
     for (const key of ELEMENT_ORDER) {
       expect(palsFile.elementNames[key].ru.length, key).toBeGreaterThan(0)

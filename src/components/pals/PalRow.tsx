@@ -1,6 +1,6 @@
 import { MoonIcon } from "lucide-react"
 
-import { WORK_ICON } from "@/components/pals/WorkFilter"
+import { WorkIcon } from "@/components/pals/WorkIcon"
 import { Badge } from "@/components/ui/badge"
 import { palIconUrl } from "@/lib/palData"
 import { t } from "@/lib/i18n"
@@ -70,7 +70,6 @@ export function PalRow({ pal, locale, names, elements, required }: PalRowProps) 
 
       <ul className="ml-auto flex flex-wrap items-center justify-end gap-1">
         {shown.map((key) => {
-          const Icon = WORK_ICON[key]
           const picked = required.has(key)
 
           return (
@@ -84,7 +83,7 @@ export function PalRow({ pal, locale, names, elements, required }: PalRowProps) 
                   : "border-transparent text-muted-foreground",
               )}
             >
-              <Icon className="size-3.5 shrink-0" aria-hidden />
+              <WorkIcon work={key} title={names[key][locale]} className="size-3.5" />
               {pal.work[key]}
             </li>
           )

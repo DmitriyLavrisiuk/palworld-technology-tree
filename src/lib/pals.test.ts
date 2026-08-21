@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { filterPals, matchesWork, maxWorkLevel, workScore } from "./pals.ts"
+import { filterPals, matchesWork, maxWorkLevel, usedWorkKeys, workScore } from "./pals.ts"
 import type { Pal, WorkKey } from "@/types/pal"
 
 function pal(id: string, work: Partial<Record<WorkKey, number>>, ru = id, en = id): Pal {
@@ -113,5 +113,21 @@ describe("верхняя граница уровня", () => {
   it("на пустых данных не падает", () => {
     expect(maxWorkLevel([])).toBe(0)
     expect(maxWorkLevel([pal("A", {})])).toBe(0)
+  })
+})
+
+describe("используемые работы", () => {
+  it("возвращает только те работы, которыми кто-то владеет", () => {
+    const pals = [pal("A", { Mining: 3 }), pal("B", { Cool: 1, Mining: 5 })]
+    expect(usedWorkKeys(pals)).toEqual(["Mining", "Cool"])
+  })
+
+  it("порядок игровой, а не порядок встречи", () => {
+    const pals = [pal("A", { MonsterFarm: 1 }), pal("B", { EmitFlame: 1 })]
+    expect(usedWorkKeys(pals)).toEqual(["EmitFlame", "MonsterFarm"])
+  })
+
+  it("на пустых данных пусто", () => {
+    expect(usedWorkKeys([])).toEqual([])
   })
 })

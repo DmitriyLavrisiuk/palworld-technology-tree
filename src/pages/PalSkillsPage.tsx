@@ -12,7 +12,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import type { ProgressState } from "@/hooks/useProgress"
 import { t } from "@/lib/i18n"
 import { loadPals, peekPals } from "@/lib/palData"
-import { filterPals, maxWorkLevel } from "@/lib/pals"
+import { filterPals, maxWorkLevel, usedWorkKeys } from "@/lib/pals"
 import type { PalsFile, WorkKey } from "@/types/pal"
 
 const CONTROL = "h-9 pointer-coarse:h-11"
@@ -40,6 +40,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
   // и мемоизация отбора ниже перестаёт работать.
   const pals = useMemo(() => data?.pals ?? [], [data])
   const maxLevel = useMemo(() => maxWorkLevel(pals), [pals])
+  const works = useMemo(() => usedWorkKeys(pals), [pals])
   const found = useMemo(
     () => filterPals(pals, required, query, locale),
     [pals, required, query, locale],
@@ -108,6 +109,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
           locale={locale}
           names={data.workNames}
           required={required}
+          works={works}
           maxLevel={maxLevel}
           onChange={change}
           onClear={() => setRequired(new Map())}

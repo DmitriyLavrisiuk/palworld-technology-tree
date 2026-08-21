@@ -1,51 +1,16 @@
-import {
-  DropletIcon,
-  FlameIcon,
-  FuelIcon,
-  HammerIcon,
-  HandIcon,
-  PickaxeIcon,
-  PillIcon,
-  SnowflakeIcon,
-  SproutIcon,
-  TreePineIcon,
-  TruckIcon,
-  WheatIcon,
-  ZapIcon,
-} from "lucide-react"
-
+import { WorkIcon } from "@/components/pals/WorkIcon"
 import { t } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 import type { Locale } from "@/types/tech"
-import { WORK_ORDER, type WorkKey, type WorkNames } from "@/types/pal"
-
-/**
- * Значки — из lucide, а не из игры. У paldb иконки работ пронумерованы
- * (`T_icon_palwork_04`), но чем какой номер является, нигде не записано:
- * сопоставлять пришлось бы на глаз, а это ровно та догадка, которую проект
- * старается не выдавать за данные. Подпись рядом снимает вопрос узнавания.
- */
-const WORK_ICON: Record<WorkKey, typeof FlameIcon> = {
-  EmitFlame: FlameIcon,
-  Watering: DropletIcon,
-  Seeding: SproutIcon,
-  GenerateElectricity: ZapIcon,
-  Handcraft: HammerIcon,
-  Collection: HandIcon,
-  Deforest: TreePineIcon,
-  Mining: PickaxeIcon,
-  OilExtraction: FuelIcon,
-  ProductMedicine: PillIcon,
-  Cool: SnowflakeIcon,
-  Transport: TruckIcon,
-  MonsterFarm: WheatIcon,
-}
+import type { WorkKey, WorkNames } from "@/types/pal"
 
 interface WorkFilterProps {
   locale: Locale
   names: WorkNames
   /** Требуемые уровни. Отсутствие ключа означает «работа не выбрана». */
   required: ReadonlyMap<WorkKey, number>
+  /** Только те работы, которыми кто-то владеет: остальные дали бы пустоту. */
+  works: WorkKey[]
   maxLevel: number
   onChange: (key: WorkKey, level: number | null) => void
   onClear: () => void
@@ -63,6 +28,7 @@ export function WorkFilter({
   locale,
   names,
   required,
+  works,
   maxLevel,
   onChange,
   onClear,
@@ -85,8 +51,7 @@ export function WorkFilter({
       </div>
 
       <ul className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {WORK_ORDER.map((key) => {
-          const Icon = WORK_ICON[key]
+        {works.map((key) => {
           const level = required.get(key) ?? null
           const active = level !== null
 
@@ -108,7 +73,7 @@ export function WorkFilter({
                   active ? "font-medium" : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                <Icon className="size-4 shrink-0" aria-hidden />
+                <WorkIcon work={key} title={names[key][locale]} />
                 <span className="min-w-0 flex-1 truncate">{names[key][locale]}</span>
               </button>
 
@@ -143,5 +108,3 @@ export function WorkFilter({
     </section>
   )
 }
-
-export { WORK_ICON }
