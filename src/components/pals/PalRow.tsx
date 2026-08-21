@@ -1,3 +1,4 @@
+import { memo } from "react"
 import { CircleMinusIcon, MoonIcon, SparklesIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
@@ -29,7 +30,7 @@ interface PalRowProps {
  * одна и та же работа всегда стоит в одном месте и колонку можно сканировать
  * взглядом сверху вниз.
  */
-export function PalRow({
+export const PalRow = memo(function PalRow({
   pal,
   locale,
   names,
@@ -41,7 +42,9 @@ export function PalRow({
   onSelect,
 }: PalRowProps) {
   return (
-    <li className="h-full">
+    // content-visibility: карточки за экраном не раскладываются и не
+    // рисуются — на 288 карточках это большая часть кадра.
+    <li className="h-full [content-visibility:auto] [contain-intrinsic-size:auto_190px]">
       <button
         type="button"
         onClick={() => onSelect(pal.id)}
@@ -188,4 +191,4 @@ export function PalRow({
       </button>
     </li>
   )
-}
+})

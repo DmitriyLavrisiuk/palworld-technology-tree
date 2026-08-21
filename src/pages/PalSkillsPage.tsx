@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useDeferredValue, useEffect, useMemo, useState } from "react"
 import { SearchIcon } from "lucide-react"
 
 import { BackToSections } from "@/components/BackToSections"
@@ -78,6 +78,14 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
     () => filterPals(pals, filters, query, locale),
     [pals, filters, query, locale],
   )
+
+  /**
+   * Счётчик и пилюли живут на живых значениях, а тяжёлый список — на
+   * отложенных: клик по фильтру отзывается мгновенно, 288 карточек
+   * догоняют прерываемым рендером, а не одной длинной задачей.
+   */
+  const deferredFound = useDeferredValue(found)
+  const deferredWorks = useDeferredValue(filters.works)
 
   function toggleWork(key: WorkKey) {
     setFilters((previous) => {
@@ -192,7 +200,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
       <main className="mx-auto flex w-full max-w-[110rem] flex-1 flex-col gap-3 p-3">
         <h1 className="sr-only">{t("sectionPalSkills", locale)}</h1>
 
-        {found.length === 0 ? (
+        {deferredFound.length === 0 ? (
           <Empty className="py-12">
             <EmptyHeader>
               <EmptyTitle>{t("palsEmpty", locale)}</EmptyTitle>
@@ -208,7 +216,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
               </Badge>
             </h2>
             <ul className="grid grid-cols-1 items-stretch gap-2 lg:grid-cols-2 2xl:grid-cols-3">
-              {found.map((pal) => (
+              {deferredFound.map((pal) => (
                 <PalRow
                   key={pal.id}
                   pal={pal}
@@ -216,7 +224,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
                   names={data.workNames}
                   elements={data.elementNames}
                   passives={data.passives}
-                  works={filters.works}
+                  works={deferredWorks}
                   workKeys={workKeys}
                   foodCap={foodCap}
                   onSelect={setSelectedId}

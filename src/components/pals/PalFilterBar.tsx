@@ -1,7 +1,8 @@
 import { StarIcon, UtensilsIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { FilterPopoverContent } from "@/components/pals/FilterPopoverContent"
+import { Popover, PopoverTrigger } from "@/components/ui/popover"
 import { RangeCells } from "@/components/pals/RangeCells"
 import { WorkFilter } from "@/components/pals/WorkFilter"
 import { WorkIcon } from "@/components/pals/WorkIcon"
@@ -63,13 +64,6 @@ function rangeLabel(range: Range | null, cap: number, locale: Locale): string {
   return `${range.min}–${range.max}`
 }
 
-/**
- * «Жидкое стекло»: полупрозрачная подложка с блюром. Панель парит над
- * списком, а не отодвигает его — прежний блок на всю ширину сдвигал выдачу.
- */
-const GLASS =
-  "border-border/60 bg-popover/75 shadow-lg backdrop-blur-xl backdrop-saturate-150"
-
 const PILL =
   "flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs whitespace-nowrap transition-colors " +
   "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none pointer-coarse:h-11"
@@ -118,9 +112,7 @@ export function PalFilterBar({
       >
         {trigger}
       </PopoverTrigger>
-      <PopoverContent align="start" className={cn(GLASS, panelClass)}>
-        {panel}
-      </PopoverContent>
+      <FilterPopoverContent className={panelClass}>{panel}</FilterPopoverContent>
     </Popover>
   )
 
