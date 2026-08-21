@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { CircleMinusIcon, MoonIcon, SparklesIcon, StarIcon, XIcon } from "lucide-react"
 
 import { ElementIcon } from "@/components/pals/ElementIcon"
@@ -49,7 +50,7 @@ interface PalSheetProps {
  * панель деталей технологии.
  */
 export function PalSheet({
-  pal,
+  pal: activePal,
   locale,
   names,
   elements,
@@ -59,12 +60,19 @@ export function PalSheet({
   onToggleFavorite,
   onClose,
 }: PalSheetProps) {
+  // Лист живёт смонтированным и хранит последнего показанного пала: если
+  // рендерить его только при выборе, base-ui не успевает проиграть ни
+  // входную, ни выездную анимацию — лист просто мигает.
+  const [lastPal, setLastPal] = useState(activePal)
+  if (activePal && activePal !== lastPal) setLastPal(activePal)
+  const pal = activePal ?? lastPal
+
   if (!pal) return null
 
   const owned = WORK_ORDER.filter((key: WorkKey) => pal.work[key])
 
   return (
-    <Sheet open onOpenChange={(open) => !open && onClose()}>
+    <Sheet open={activePal !== null} onOpenChange={(open) => !open && onClose()}>
       <SheetContent side="right" className="gap-0 overflow-y-auto" showCloseButton={false}>
         {/* Своя кнопка вместо штатной: та 28 px и подписана по-английски. */}
         <Button

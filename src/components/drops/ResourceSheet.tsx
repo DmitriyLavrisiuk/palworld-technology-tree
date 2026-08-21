@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { XIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -21,13 +22,25 @@ interface ResourceSheetProps {
  * Лист ресурса: полный список палов-источников, лучшие сверху. Выезжает
  * справа тем же жестом, что карточка пала и панель деталей технологии.
  */
-export function ResourceSheet({ resource, locale, palsById, onClose }: ResourceSheetProps) {
+export function ResourceSheet({
+  resource: activeResource,
+  locale,
+  palsById,
+  onClose,
+}: ResourceSheetProps) {
+  // Лист живёт смонтированным и хранит последний показанный ресурс: если
+  // рендерить его только при выборе, base-ui не успевает проиграть ни
+  // входную, ни выездную анимацию — лист просто мигает.
+  const [lastResource, setLastResource] = useState(activeResource)
+  if (activeResource && activeResource !== lastResource) setLastResource(activeResource)
+  const resource = activeResource ?? lastResource
+
   if (!resource) return null
 
   const sources = sortedSources(resource.sources)
 
   return (
-    <Sheet open onOpenChange={(open) => !open && onClose()}>
+    <Sheet open={activeResource !== null} onOpenChange={(open) => !open && onClose()}>
       <SheetContent side="right" className="gap-0 overflow-y-auto" showCloseButton={false}>
         {/* Своя кнопка вместо штатной: та 28 px и подписана по-английски. */}
         <Button
