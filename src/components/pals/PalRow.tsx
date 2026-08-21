@@ -62,7 +62,7 @@ export function PalRow({ pal, locale, names, elements, passives, works, foodCap 
               <Tooltip key={key}>
                 <TooltipTrigger
                   render={
-                    <span className="grid size-6 place-items-center rounded-full border bg-muted/50" />
+                    <span className="grid size-8 place-items-center rounded-full border bg-muted/50" />
                   }
                 >
                   <ElementIcon element={key} />

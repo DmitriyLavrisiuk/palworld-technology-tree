@@ -22,7 +22,7 @@ export function WorkIcon({ work, title, className }: WorkIconProps) {
       width={24}
       height={24}
       decoding="async"
-      className={cn("size-5 shrink-0 object-contain", className)}
+      className={cn("size-6 shrink-0 object-contain", className)}
       // Работы без иконки не бывает, но после патча файл может пропасть:
       // пустое место лучше значка сломанной картинки.
       onError={(event) => {

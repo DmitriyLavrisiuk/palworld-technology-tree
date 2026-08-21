@@ -125,7 +125,7 @@ export function PalFilterBar({
   )
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border-t border-b px-3 py-2">
+    <div className="flex flex-wrap items-center gap-2 border-t px-3 py-2">
       {pill(
         filters.works.size > 0,
         <>
@@ -133,8 +133,8 @@ export function PalFilterBar({
           {t("palFilterWorks", locale)}
           {filters.works.size > 0 && <span className="tabular-nums">{filters.works.size}</span>}
         </>,
-        "w-[36rem] max-w-[calc(100vw-1rem)] p-3",
-        <div className="flex max-h-[65vh] flex-col gap-2 overflow-y-auto">
+        "w-[28rem] max-w-[calc(100vw-1rem)] p-3",
+        <div className="flex max-h-[calc(100dvh-9rem)] flex-col gap-2 overflow-y-auto">
           <WorkFilter
             locale={locale}
             names={workNames}
