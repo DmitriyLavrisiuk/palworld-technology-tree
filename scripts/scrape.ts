@@ -3,9 +3,9 @@ import { readFile } from "node:fs/promises"
 
 import { writeJson } from "./lib/http.ts"
 import { log } from "./lib/log.ts"
-import { fetchDataTable } from "./sources/datatable.ts"
-import { fetchDescriptions } from "./sources/l10n.ts"
-import { fetchItemNames, fetchRecipe, fetchTechList, toSlug } from "./sources/paldb.ts"
+import { fetchDataTable, fetchPalTable } from "./sources/datatable.ts"
+import { fetchDescriptions, fetchPalNames, fetchWorkNames } from "./sources/l10n.ts"
+import { fetchItemNames, fetchPalList, fetchRecipe, fetchTechList, toSlug } from "./sources/paldb.ts"
 import { downloadIcons } from "./sources/icons.ts"
 import { buildChains, type OverrideFile } from "./build-chains.ts"
 import {
@@ -16,14 +16,16 @@ import {
   TOTAL_TECH_POINTS,
 } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
+import { WORK_ORDER, type Pal, type PalsFile, type WorkNames } from "../src/types/pal.ts"
 
 const OUT = {
   technologies: "src/data/technologies.json",
   recipes: "src/data/recipes.json",
   chains: "src/data/chains.json",
+  pals: "src/data/pals.json",
 }
 
-const STAGES = ["techs", "icons", "recipes", "materials", "chains"] as const
+const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons"] as const
 type Stage = (typeof STAGES)[number]
 
 const args = process.argv.slice(2)
@@ -326,6 +328,95 @@ async function buildChainsFile(technologies: Technology[]) {
   log.info(`Correct mistakes in ${OVERRIDES}, not in the generated ${OUT.chains}`)
 }
 
+/**
+ * Палы: числа из игровой таблицы, имена из дампа локализации — то же
+ * распределение авторитета, что у технологий.
+ */
+async function buildPals(): Promise<PalsFile> {
+  log.step("Pals")
+
+  const [table, listed, namesEn, namesRu, workEn, workRu] = await Promise.all([
+    fetchPalTable(fresh),
+    fetchPalList(fresh),
+    fetchPalNames("en", fresh),
+    fetchPalNames("ru", fresh),
+    fetchWorkNames("en", fresh),
+    fetchWorkNames("ru", fresh),
+  ])
+
+  /**
+   * Номер Палдекса сам по себе не уникален: у Ламболла есть служебный близнец
+   * Quest_Farmer03_SheepBall, у Лизпанка — версия для нефтевышки. Отсечь их по
+   * маскам id значило бы гадать, поэтому сверяемся со списком paldb: там ровно
+   * те палы, которых игрок может поймать.
+   */
+  const catalogued = new Set(listed.map((entry) => entry.id))
+  const rows = table.filter((row) => catalogued.has(row.id))
+
+  log.info(`${rows.length} pals in the Paldeck (${table.length - rows.length} service rows dropped)`)
+
+  // Список paldb и таблица игры расходятся, когда один из источников отстал
+  // на патч. Это не ошибка сборки, но знать о ней надо: молча потерянный пал
+  // выглядит как «его просто нет в игре».
+  const inTable = new Set(table.map((row) => row.id))
+  const unmatched = listed.filter((entry) => !inTable.has(entry.id))
+  if (unmatched.length) {
+    log.warn(
+      `${unmatched.length} pals listed on paldb are missing from the table: ` +
+        unmatched.slice(0, 8).map((entry) => entry.id).join(", "),
+    )
+  }
+
+  const missing: string[] = []
+
+  const pals: Pal[] = rows
+    .map((row) => {
+      // Регистр ключей в дампе расходится с таблицей: SheepBall против
+      // Sheepball. Карты имён построены по нижнему регистру именно поэтому.
+      const key = row.id.toLowerCase()
+      const en = usable(namesEn[key]?.name) ?? row.id
+      const ru = usable(namesRu[key]?.name) ?? en
+
+      if (!namesEn[key]) missing.push(row.id)
+
+      return {
+        id: row.id,
+        dexNo: row.dexNo,
+        dexSuffix: row.dexSuffix,
+        name: { en, ru },
+        elements: row.elements,
+        work: row.work,
+        nocturnal: row.nocturnal,
+        size: row.size,
+        transportSpeed: row.transportSpeed,
+      }
+    })
+    .sort((a, b) => a.dexNo - b.dexNo || a.dexSuffix.localeCompare(b.dexSuffix))
+
+  if (missing.length) {
+    log.warn(`${missing.length} pals without a localised name: ${missing.slice(0, 5).join(", ")}`)
+  }
+
+  const workNames = {} as WorkNames
+  for (const key of WORK_ORDER) {
+    workNames[key] = {
+      en: usable(workEn[key]) ?? key,
+      ru: usable(workRu[key]) ?? usable(workEn[key]) ?? key,
+    }
+  }
+
+  const file: PalsFile = {
+    gameVersion: GAME_VERSION,
+    generatedAt: new Date().toISOString().slice(0, 10),
+    workNames,
+    pals,
+  }
+
+  await writeJson(OUT.pals, file)
+  log.done(`${pals.length} pals → ${OUT.pals}`)
+  return file
+}
+
 async function main() {
   log.info(`Palworld tech tree scraper · stages: ${stages.join(", ")}${fresh ? " · fresh" : ""}`)
 
@@ -345,6 +436,18 @@ async function main() {
     const result = await downloadIcons(listEn, fresh)
     log.done(`${result.saved} icons → public/icons`)
     if (result.failed.length) log.warn(`${result.failed.length} icons failed: ${result.failed.slice(0, 5).join(", ")}`)
+  }
+
+  if (runs("pals")) await buildPals()
+
+  if (runs("pal-icons")) {
+    log.step("Pal icons")
+    const list = await fetchPalList(false)
+    const result = await downloadIcons(list, fresh, "public/icons/pals")
+    log.done(`${result.saved} pal icons → public/icons/pals`)
+    if (result.failed.length) {
+      log.warn(`${result.failed.length} pal icons failed: ${result.failed.slice(0, 5).join(", ")}`)
+    }
   }
 
   if (runs("recipes")) await buildRecipes(technologies)

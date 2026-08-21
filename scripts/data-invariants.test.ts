@@ -13,6 +13,7 @@ import {
 } from "../src/lib/constants.ts"
 import { GROUP_NAMES, GROUP_ORDER } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
+import { WORK_ORDER, type PalsFile } from "../src/types/pal.ts"
 
 /**
  * Сторожит сгенерированные данные. Парсер сверяет то же самое во время
@@ -26,6 +27,8 @@ const read = <T>(rel: string): T => JSON.parse(readFileSync(join(ROOT, rel), "ut
 const technologies = read<Technology[]>("src/data/technologies.json")
 const recipes = read<Recipe[]>("src/data/recipes.json")
 const chains = read<ChainsFile>("src/data/chains.json")
+const palsFile = read<PalsFile>("src/data/pals.json")
+const pals = palsFile.pals
 
 const ids = new Set(technologies.map((tech) => tech.id))
 
@@ -328,5 +331,95 @@ describe("цепочки", () => {
       0,
     )
     expect(nodes).toBe(16)
+  })
+})
+
+describe("палы: контрольные суммы", () => {
+  /**
+   * 288, а не 303 из таблицы и не 299 со страницы paldb. Разница объяснима и
+   * проверена: 15 строк — служебные близнецы (квестовые копии, версии для
+   * нефтевышки) с чужим номером Палдекса, а 11 палов Якусимы есть на paldb,
+   * но в зеркале игровой таблицы их ещё нет. Число обязано падать при смене
+   * любой из трёх величин — тогда мы про это узнаем.
+   */
+  it("288 палов из Палдекса", () => {
+    expect(pals).toHaveLength(288)
+  })
+
+  it("номер Палдекса вместе с суффиксом уникален", () => {
+    const keys = pals.map((pal) => `${pal.dexNo}${pal.dexSuffix}`)
+    expect(new Set(keys).size).toBe(keys.length)
+  })
+
+  it("имя есть на обоих языках и это не заглушка локали", () => {
+    for (const pal of pals) {
+      expect(pal.name.en.length, pal.id).toBeGreaterThan(0)
+      expect(pal.name.ru.length, pal.id).toBeGreaterThan(0)
+      expect(/^[a-z]{2}_Text$/i.test(pal.name.ru), pal.id).toBe(false)
+    }
+  })
+
+  /**
+   * Русские имена приезжают джойном по ключу в нижнем регистре: в таблице
+   * SheepBall, в дампе Sheepball. Если джойн однажды сделают буквальным,
+   * русские имена подменятся английскими — вот это и ловится.
+   */
+  it("у палов есть отдельные русские имена, а не копии английских", () => {
+    const translated = pals.filter((pal) => pal.name.ru !== pal.name.en)
+    expect(translated.length).toBe(pals.length)
+  })
+
+  it("у каждого пала есть портрет на диске", () => {
+    for (const pal of pals) {
+      expect(existsSync(join(ROOT, "public/icons/pals", `${pal.id}.webp`)), pal.id).toBe(true)
+    }
+  })
+
+  it("все тринадцать работ переведены", () => {
+    expect(Object.keys(palsFile.workNames)).toHaveLength(WORK_ORDER.length)
+    for (const key of WORK_ORDER) {
+      expect(palsFile.workNames[key].ru.length, key).toBeGreaterThan(0)
+      expect(palsFile.workNames[key].en.length, key).toBeGreaterThan(0)
+      expect(palsFile.workNames[key].ru, key).not.toBe(key)
+    }
+  })
+
+  /**
+   * Верхняя граница шкалы в фильтре берётся из данных, а не из головы: в игре
+   * базовый максимум четыре, но стихийные варианты доходят до восьми. Число
+   * здесь — контрольное: вырастет после патча, тест это покажет.
+   */
+  it("уровни работ лежат в диапазоне 1..8", () => {
+    const levels = pals.flatMap((pal) => Object.values(pal.work))
+    expect(Math.min(...levels)).toBe(1)
+    expect(Math.max(...levels)).toBe(8)
+  })
+
+  it("нулевые уровни в файл не попадают", () => {
+    for (const pal of pals) {
+      for (const [key, level] of Object.entries(pal.work)) {
+        expect(level, `${pal.id}/${key}`).toBeGreaterThan(0)
+        expect(WORK_ORDER, `${pal.id}/${key}`).toContain(key)
+      }
+    }
+  })
+
+  /**
+   * Стихий у пала одна или две — кроме Astralym: в игровой таблице у него
+   * ElementType1 равен None, и работ он тоже не умеет. Это единственное
+   * исключение, и оно названо поимённо: появится второе — тест упадёт, а не
+   * тихо расширит правило.
+   */
+  it("стихий одна или две, и ровно один пал без них", () => {
+    const without = pals.filter((pal) => pal.elements.length === 0)
+    expect(without.map((pal) => pal.id)).toEqual(["WorldTreeDragon"])
+
+    for (const pal of pals) {
+      expect(pal.elements.length, pal.id).toBeLessThanOrEqual(2)
+    }
+  })
+
+  it("версия игры совпадает с константой", () => {
+    expect(palsFile.gameVersion).toBe(GAME_VERSION)
   })
 })

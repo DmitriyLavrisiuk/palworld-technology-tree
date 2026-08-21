@@ -1,12 +1,15 @@
 import { fetchJson } from "../lib/http.ts"
+import { WORK_ORDER, type ElementKey, type PalSize, type WorkKey } from "../../src/types/pal.ts"
 
 /**
  * FModel export of the game's own table. Mirrored on GitHub, so this is one
  * request rather than a .pak extraction.
  */
-const URL =
-  "https://raw.githubusercontent.com/CreativeTechGuy/PalworldDBIndex/main/src/raw_data/" +
-  "Pal/Content/Pal/DataTable/Technology/DT_TechnologyRecipeUnlock.json"
+const MIRROR =
+  "https://raw.githubusercontent.com/CreativeTechGuy/PalworldDBIndex/main/src/raw_data/Pal/Content/Pal/DataTable/"
+
+const URL = `${MIRROR}Technology/DT_TechnologyRecipeUnlock.json`
+const PAL_URL = `${MIRROR}Character/DT_PalMonsterParameter.json`
 
 export interface RawRow {
   UnlockBuildObjects: string[]
@@ -67,4 +70,94 @@ export async function fetchDataTable(fresh: boolean): Promise<DataTableRow[]> {
     unlockBuild: row.UnlockBuildObjects ?? [],
     unlockItems: row.UnlockItemRecipes ?? [],
   }))
+}
+
+/**
+ * Строка таблицы палов. Из девяноста полей берём те, что нужны разделу
+ * рабочих навыков; остальное — боевые статы и внутренняя механика.
+ */
+interface RawPal {
+  IsPal: boolean
+  ZukanIndex: number
+  ZukanIndexSuffix: string
+  Size: string
+  ElementType1: string
+  ElementType2: string
+  Nocturnal: boolean
+  TransportSpeed: number
+  WorkSuitability_EmitFlame: number
+  WorkSuitability_Watering: number
+  WorkSuitability_Seeding: number
+  WorkSuitability_GenerateElectricity: number
+  WorkSuitability_Handcraft: number
+  WorkSuitability_Collection: number
+  WorkSuitability_Deforest: number
+  WorkSuitability_Mining: number
+  WorkSuitability_OilExtraction: number
+  WorkSuitability_ProductMedicine: number
+  WorkSuitability_Cool: number
+  WorkSuitability_Transport: number
+  WorkSuitability_MonsterFarm: number
+}
+
+interface PalExport {
+  Rows?: Record<string, RawPal>
+}
+
+export interface PalTableRow {
+  id: string
+  dexNo: number
+  dexSuffix: string
+  size: PalSize
+  elements: ElementKey[]
+  nocturnal: boolean
+  transportSpeed: number
+  work: Partial<Record<WorkKey, number>>
+}
+
+function stripEnum(value: string | undefined, prefix: string): string | null {
+  if (!value) return null
+  const bare = value.replace(prefix, "")
+  return bare === "None" ? null : bare
+}
+
+/**
+ * Отдаёт только палов из Палдекса: `ZukanIndex > 0` само по себе отсекает
+ * босс-версии, рейдовых, башенных и квестовых — из 753 строк остаётся 303.
+ * Стихийные варианты при этом остаются, у них свой номер с суффиксом.
+ */
+export async function fetchPalTable(fresh: boolean): Promise<PalTableRow[]> {
+  const exports = await fetchJson<PalExport[]>(PAL_URL, { fresh })
+  const table = exports.find((entry) => entry.Rows)
+  if (!table?.Rows) throw new Error("Pal DataTable export contains no Rows")
+
+  const rows: PalTableRow[] = []
+
+  for (const [id, row] of Object.entries(table.Rows)) {
+    if (!row.IsPal || row.ZukanIndex <= 0) continue
+
+    const work: Partial<Record<WorkKey, number>> = {}
+    for (const key of WORK_ORDER) {
+      const level = row[`WorkSuitability_${key}` as keyof RawPal] as number
+      if (level > 0) work[key] = level
+    }
+
+    const elements = [
+      stripEnum(row.ElementType1, "EPalElementType::"),
+      stripEnum(row.ElementType2, "EPalElementType::"),
+    ].filter((value): value is ElementKey => Boolean(value))
+
+    rows.push({
+      id,
+      dexNo: row.ZukanIndex,
+      dexSuffix: row.ZukanIndexSuffix ?? "",
+      size: (stripEnum(row.Size, "EPalSizeType::") ?? "M") as PalSize,
+      elements,
+      nocturnal: row.Nocturnal,
+      transportSpeed: row.TransportSpeed,
+      work,
+    })
+  }
+
+  return rows
 }

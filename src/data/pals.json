@@ -1,0 +1,5787 @@
+{
+  "gameVersion": "1.0.3",
+  "generatedAt": "2026-08-21",
+  "workNames": {
+    "EmitFlame": {
+      "en": "Kindling",
+      "ru": "Разжигание огня"
+    },
+    "Watering": {
+      "en": "Watering",
+      "ru": "Полив"
+    },
+    "Seeding": {
+      "en": "Planting",
+      "ru": "Посев семян"
+    },
+    "GenerateElectricity": {
+      "en": "Generating Electricity",
+      "ru": "Генерация энергии"
+    },
+    "Handcraft": {
+      "en": "Handiwork",
+      "ru": "Ручная работа"
+    },
+    "Collection": {
+      "en": "Gathering",
+      "ru": "Сбор"
+    },
+    "Deforest": {
+      "en": "Lumbering",
+      "ru": "Рубка деревьев"
+    },
+    "Mining": {
+      "en": "Mining",
+      "ru": "Добыча"
+    },
+    "OilExtraction": {
+      "en": "Crude Oil Extraction",
+      "ru": "Вытягивание сырой нефти"
+    },
+    "ProductMedicine": {
+      "en": "Medicine Production",
+      "ru": "Фармацевтика"
+    },
+    "Cool": {
+      "en": "Cooling",
+      "ru": "Охлаждение"
+    },
+    "Transport": {
+      "en": "Transporting",
+      "ru": "Транспортировка"
+    },
+    "MonsterFarm": {
+      "en": "Farming",
+      "ru": "Фермерство"
+    }
+  },
+  "pals": [
+    {
+      "id": "SheepBall",
+      "dexNo": 1,
+      "dexSuffix": "",
+      "name": {
+        "en": "Lamball",
+        "ru": "Ламболл"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 1,
+        "Transport": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 160
+    },
+    {
+      "id": "PinkCat",
+      "dexNo": 2,
+      "dexSuffix": "",
+      "name": {
+        "en": "Cattiva",
+        "ru": "Каттива"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 1,
+        "Collection": 1,
+        "Mining": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 160
+    },
+    {
+      "id": "ChickenPal",
+      "dexNo": 3,
+      "dexSuffix": "",
+      "name": {
+        "en": "Chikipi",
+        "ru": "Чикипи"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 212
+    },
+    {
+      "id": "Carbunclo",
+      "dexNo": 4,
+      "dexSuffix": "",
+      "name": {
+        "en": "Lifmunk",
+        "ru": "Лифманк"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 1,
+        "Handcraft": 1,
+        "Collection": 1,
+        "Deforest": 1,
+        "ProductMedicine": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 250
+    },
+    {
+      "id": "BluePlatypus",
+      "dexNo": 5,
+      "dexSuffix": "",
+      "name": {
+        "en": "Fuack",
+        "ru": "Камоноске"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 1,
+        "Handcraft": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 202
+    },
+    {
+      "id": "BluePlatypus_Fire",
+      "dexNo": 5,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Fuack Ignis",
+        "ru": "Камоноске Игнис"
+      },
+      "elements": [
+        "Water",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 2,
+        "Watering": 2,
+        "Handcraft": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 202
+    },
+    {
+      "id": "CuteFox",
+      "dexNo": 6,
+      "dexSuffix": "",
+      "name": {
+        "en": "Vixy",
+        "ru": "Викси"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 190
+    },
+    {
+      "id": "FlyingManta",
+      "dexNo": 7,
+      "dexSuffix": "",
+      "name": {
+        "en": "Celaray",
+        "ru": "Селарай"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "FlyingManta_Thunder",
+      "dexNo": 7,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Celaray Lux",
+        "ru": "Селарай Лакс"
+      },
+      "elements": [
+        "Water",
+        "Electricity"
+      ],
+      "work": {
+        "Watering": 1,
+        "GenerateElectricity": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "WoolFox",
+      "dexNo": 8,
+      "dexSuffix": "",
+      "name": {
+        "en": "Cremis",
+        "ru": "Кремис"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 1,
+        "MonsterFarm": 2
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 170
+    },
+    {
+      "id": "KendoFrog",
+      "dexNo": 9,
+      "dexSuffix": "",
+      "name": {
+        "en": "Croajiro",
+        "ru": "Кроадзиро"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 1,
+        "Handcraft": 1,
+        "Collection": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 300
+    },
+    {
+      "id": "KendoFrog_Dark",
+      "dexNo": 9,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Croajiro Noct",
+        "ru": "Кроадзиро Нокт"
+      },
+      "elements": [
+        "Water",
+        "Dark"
+      ],
+      "work": {
+        "Watering": 1,
+        "Handcraft": 2,
+        "Collection": 1,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 300
+    },
+    {
+      "id": "LeafMomonga",
+      "dexNo": 10,
+      "dexSuffix": "",
+      "name": {
+        "en": "Herbil",
+        "ru": "Хербил"
+      },
+      "elements": [
+        "Leaf",
+        "Normal"
+      ],
+      "work": {
+        "Seeding": 1,
+        "Collection": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 350
+    },
+    {
+      "id": "Ganesha",
+      "dexNo": 11,
+      "dexSuffix": "",
+      "name": {
+        "en": "Teafant",
+        "ru": "Тифант"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 1
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 180
+    },
+    {
+      "id": "PlantSlime",
+      "dexNo": 12,
+      "dexSuffix": "",
+      "name": {
+        "en": "Gumoss",
+        "ru": "Гумосс"
+      },
+      "elements": [
+        "Leaf",
+        "Earth"
+      ],
+      "work": {
+        "Seeding": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 175
+    },
+    {
+      "id": "SamuraiDog",
+      "dexNo": 13,
+      "dexSuffix": "",
+      "name": {
+        "en": "Pupperai",
+        "ru": "Паппирай"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Collection": 1,
+        "Deforest": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 200
+    },
+    {
+      "id": "CloverFairy",
+      "dexNo": 14,
+      "dexSuffix": "",
+      "name": {
+        "en": "Clovee",
+        "ru": "Клови"
+      },
+      "elements": [
+        "Leaf",
+        "Normal"
+      ],
+      "work": {
+        "Seeding": 1,
+        "Collection": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 200
+    },
+    {
+      "id": "Hedgehog",
+      "dexNo": 15,
+      "dexSuffix": "",
+      "name": {
+        "en": "Jolthog",
+        "ru": "Джолтхог"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 215
+    },
+    {
+      "id": "Hedgehog_Ice",
+      "dexNo": 15,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Jolthog Cryst",
+        "ru": "Джолтхог Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Cool": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 215
+    },
+    {
+      "id": "NegativeKoala",
+      "dexNo": 16,
+      "dexSuffix": "",
+      "name": {
+        "en": "Depresso",
+        "ru": "Депрессо"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 1,
+        "Mining": 1,
+        "Transport": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 100
+    },
+    {
+      "id": "Penguin",
+      "dexNo": 17,
+      "dexSuffix": "",
+      "name": {
+        "en": "Pengullet",
+        "ru": "Пенгуллет"
+      },
+      "elements": [
+        "Water",
+        "Ice"
+      ],
+      "work": {
+        "Watering": 1,
+        "Handcraft": 1,
+        "Cool": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 265
+    },
+    {
+      "id": "Penguin_Electric",
+      "dexNo": 17,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Pengullet Lux",
+        "ru": "Пенгуллет Лакс"
+      },
+      "elements": [
+        "Water",
+        "Electricity"
+      ],
+      "work": {
+        "Watering": 1,
+        "GenerateElectricity": 2,
+        "Handcraft": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 265
+    },
+    {
+      "id": "CaptainPenguin",
+      "dexNo": 18,
+      "dexSuffix": "",
+      "name": {
+        "en": "Penking",
+        "ru": "Пенкинг"
+      },
+      "elements": [
+        "Water",
+        "Ice"
+      ],
+      "work": {
+        "Watering": 2,
+        "Handcraft": 2,
+        "Mining": 3,
+        "Cool": 2,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 280
+    },
+    {
+      "id": "CaptainPenguin_Black",
+      "dexNo": 18,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Penking Lux",
+        "ru": "Пенкинг Лакс"
+      },
+      "elements": [
+        "Water",
+        "Electricity"
+      ],
+      "work": {
+        "Watering": 2,
+        "GenerateElectricity": 3,
+        "Handcraft": 2,
+        "Mining": 3,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 280
+    },
+    {
+      "id": "WizardOwl",
+      "dexNo": 19,
+      "dexSuffix": "",
+      "name": {
+        "en": "Hoocrates",
+        "ru": "Хукрат"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 1
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 225
+    },
+    {
+      "id": "Alpaca",
+      "dexNo": 20,
+      "dexSuffix": "",
+      "name": {
+        "en": "Melpaca",
+        "ru": "Мелпака"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "MonsterFarm": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 261
+    },
+    {
+      "id": "KingAlpaca",
+      "dexNo": 21,
+      "dexSuffix": "",
+      "name": {
+        "en": "Kingpaca",
+        "ru": "Кингпака"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 290
+    },
+    {
+      "id": "KingAlpaca_Ice",
+      "dexNo": 21,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Kingpaca Cryst",
+        "ru": "Кингпака Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Collection": 2,
+        "Cool": 4
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 290
+    },
+    {
+      "id": "DreamDemon",
+      "dexNo": 22,
+      "dexSuffix": "",
+      "name": {
+        "en": "Daedream",
+        "ru": "Даэдрим"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 1,
+        "Collection": 1,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 220
+    },
+    {
+      "id": "Monkey",
+      "dexNo": 23,
+      "dexSuffix": "",
+      "name": {
+        "en": "Tanzee",
+        "ru": "Танзи"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 1,
+        "Handcraft": 1,
+        "Collection": 1,
+        "Deforest": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 174
+    },
+    {
+      "id": "Monkey_Fire",
+      "dexNo": 23,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Tanzee Ignis",
+        "ru": "Танзи Игнис"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 1,
+        "Handcraft": 1,
+        "Deforest": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 174
+    },
+    {
+      "id": "NightFox",
+      "dexNo": 24,
+      "dexSuffix": "",
+      "name": {
+        "en": "Nox",
+        "ru": "Нокс"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 1
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 164
+    },
+    {
+      "id": "LavaGirl",
+      "dexNo": 25,
+      "dexSuffix": "",
+      "name": {
+        "en": "Flambelle",
+        "ru": "Фламбелль"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 1,
+        "Handcraft": 1,
+        "Transport": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 140
+    },
+    {
+      "id": "FlameBambi",
+      "dexNo": 26,
+      "dexSuffix": "",
+      "name": {
+        "en": "Rooby",
+        "ru": "Руби"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": -1
+    },
+    {
+      "id": "Bastet",
+      "dexNo": 27,
+      "dexSuffix": "",
+      "name": {
+        "en": "Mau",
+        "ru": "Мау"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 317
+    },
+    {
+      "id": "Bastet_Ice",
+      "dexNo": 27,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Mau Cryst",
+        "ru": "Мау Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Cool": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 317
+    },
+    {
+      "id": "Boar",
+      "dexNo": 28,
+      "dexSuffix": "",
+      "name": {
+        "en": "Rushoar",
+        "ru": "Рашоа"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Mining": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 300
+    },
+    {
+      "id": "Kitsunebi",
+      "dexNo": 29,
+      "dexSuffix": "",
+      "name": {
+        "en": "Foxparks",
+        "ru": "Фокспаркс"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 240
+    },
+    {
+      "id": "Kitsunebi_Ice",
+      "dexNo": 29,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Foxparks Cryst",
+        "ru": "Фокспаркс Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Cool": 2
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 240
+    },
+    {
+      "id": "NegativeOctopus",
+      "dexNo": 30,
+      "dexSuffix": "",
+      "name": {
+        "en": "Killamari",
+        "ru": "Килламари"
+      },
+      "elements": [
+        "Dark",
+        "Water"
+      ],
+      "work": {
+        "Watering": 1,
+        "Collection": 1,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 260
+    },
+    {
+      "id": "NegativeOctopus_Neutral",
+      "dexNo": 30,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Killamari Primo",
+        "ru": "Килламари Примо"
+      },
+      "elements": [
+        "Normal",
+        "Water"
+      ],
+      "work": {
+        "Watering": 1,
+        "Collection": 1,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 260
+    },
+    {
+      "id": "CuteMole",
+      "dexNo": 31,
+      "dexSuffix": "",
+      "name": {
+        "en": "Fuddler",
+        "ru": "Фуддлер"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 1,
+        "Mining": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 240
+    },
+    {
+      "id": "Deer",
+      "dexNo": 32,
+      "dexSuffix": "",
+      "name": {
+        "en": "Eikthyrdeer",
+        "ru": "Иктирдир"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Deforest": 2
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 390
+    },
+    {
+      "id": "Deer_Ground",
+      "dexNo": 32,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Eikthyrdeer Terra",
+        "ru": "Иктирдир Тэрра"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Deforest": 2
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 390
+    },
+    {
+      "id": "Garm",
+      "dexNo": 33,
+      "dexSuffix": "",
+      "name": {
+        "en": "Direhowl",
+        "ru": "Дайэхаул"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 460
+    },
+    {
+      "id": "BerryGoat",
+      "dexNo": 34,
+      "dexSuffix": "",
+      "name": {
+        "en": "Caprity",
+        "ru": "Каприти"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 2,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 235
+    },
+    {
+      "id": "BerryGoat_Dark",
+      "dexNo": 34,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Caprity Noct",
+        "ru": "Каприти Нокт"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Seeding": 2,
+        "MonsterFarm": 1
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 235
+    },
+    {
+      "id": "MopBaby",
+      "dexNo": 35,
+      "dexSuffix": "",
+      "name": {
+        "en": "Swee",
+        "ru": "Сви"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Collection": 1,
+        "Cool": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 175
+    },
+    {
+      "id": "MopKing",
+      "dexNo": 36,
+      "dexSuffix": "",
+      "name": {
+        "en": "Sweepa",
+        "ru": "Свипа"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Collection": 2,
+        "Cool": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 210
+    },
+    {
+      "id": "TentacleTurtle",
+      "dexNo": 37,
+      "dexSuffix": "",
+      "name": {
+        "en": "Turtacle",
+        "ru": "Туртакл"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 2,
+        "Mining": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 190
+    },
+    {
+      "id": "TentacleTurtle_Ground",
+      "dexNo": 37,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Turtacle Terra",
+        "ru": "Туртакл Терра"
+      },
+      "elements": [
+        "Water",
+        "Earth"
+      ],
+      "work": {
+        "Watering": 2,
+        "Mining": 3,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 190
+    },
+    {
+      "id": "WindChimes",
+      "dexNo": 38,
+      "dexSuffix": "",
+      "name": {
+        "en": "Hangyu",
+        "ru": "Хангю"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 1,
+        "Collection": 1,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 250
+    },
+    {
+      "id": "WindChimes_Ice",
+      "dexNo": 38,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Hangyu Cryst",
+        "ru": "Хангю Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Collection": 2,
+        "Cool": 2,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 250
+    },
+    {
+      "id": "SweetsSheep",
+      "dexNo": 39,
+      "dexSuffix": "",
+      "name": {
+        "en": "Woolipop",
+        "ru": "Вулипоп"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 200
+    },
+    {
+      "id": "SweetsSheep_Ground",
+      "dexNo": 39,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Woolipop Terra",
+        "ru": "Вулипоп Терра"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 200
+    },
+    {
+      "id": "CowPal",
+      "dexNo": 40,
+      "dexSuffix": "",
+      "name": {
+        "en": "Mozzarina",
+        "ru": "Моззарина"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "MonsterFarm": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 317
+    },
+    {
+      "id": "BlueDragon",
+      "dexNo": 41,
+      "dexSuffix": "",
+      "name": {
+        "en": "Azurobe",
+        "ru": "Азуроб"
+      },
+      "elements": [
+        "Water",
+        "Dragon"
+      ],
+      "work": {
+        "Watering": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 350
+    },
+    {
+      "id": "BlueDragon_Ice",
+      "dexNo": 41,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Azurobe Cryst",
+        "ru": "Азуроб Крист"
+      },
+      "elements": [
+        "Ice",
+        "Dragon"
+      ],
+      "work": {
+        "Cool": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 350
+    },
+    {
+      "id": "ElecCat",
+      "dexNo": 42,
+      "dexSuffix": "",
+      "name": {
+        "en": "Sparkit",
+        "ru": "Спаркит"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 1,
+        "Handcraft": 1,
+        "Transport": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 270
+    },
+    {
+      "id": "Kelpie",
+      "dexNo": 43,
+      "dexSuffix": "",
+      "name": {
+        "en": "Kelpsea",
+        "ru": "Келпси"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 400
+    },
+    {
+      "id": "Kelpie_Fire",
+      "dexNo": 43,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Kelpsea Ignis",
+        "ru": "Келпси Игнис"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 400
+    },
+    {
+      "id": "PinkRabbit",
+      "dexNo": 44,
+      "dexSuffix": "",
+      "name": {
+        "en": "Ribbuny",
+        "ru": "Риббани"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 1,
+        "Collection": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 172
+    },
+    {
+      "id": "PinkRabbit_Grass",
+      "dexNo": 44,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Ribbuny Botan",
+        "ru": "Риббани Ботан"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 2,
+        "Handcraft": 2,
+        "Collection": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 172
+    },
+    {
+      "id": "JellyfishFairy",
+      "dexNo": 45,
+      "dexSuffix": "",
+      "name": {
+        "en": "Jelliette",
+        "ru": "Джелиэтта"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 2,
+        "Handcraft": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 160
+    },
+    {
+      "id": "JellyfishGhost",
+      "dexNo": 46,
+      "dexSuffix": "",
+      "name": {
+        "en": "Jellroy",
+        "ru": "Джелрой"
+      },
+      "elements": [
+        "Water",
+        "Dark"
+      ],
+      "work": {
+        "Watering": 2,
+        "Handcraft": 1,
+        "ProductMedicine": 1,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 300
+    },
+    {
+      "id": "ClioneTwins",
+      "dexNo": 47,
+      "dexSuffix": "",
+      "name": {
+        "en": "Amione",
+        "ru": "Амиона"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 1,
+        "Handcraft": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 150
+    },
+    {
+      "id": "OctopusGirl",
+      "dexNo": 48,
+      "dexSuffix": "",
+      "name": {
+        "en": "Gloopie",
+        "ru": "Глуппи"
+      },
+      "elements": [
+        "Water",
+        "Dark"
+      ],
+      "work": {
+        "Watering": 2,
+        "Handcraft": 2,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 210
+    },
+    {
+      "id": "OctopusGirl_Neutral",
+      "dexNo": 48,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Gloopie Primo",
+        "ru": "Глуппи Примо"
+      },
+      "elements": [
+        "Water",
+        "Normal"
+      ],
+      "work": {
+        "Watering": 2,
+        "Handcraft": 2,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 210
+    },
+    {
+      "id": "Eagle",
+      "dexNo": 49,
+      "dexSuffix": "",
+      "name": {
+        "en": "Galeclaw",
+        "ru": "Эрмург"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "GhostBlackCat",
+      "dexNo": 50,
+      "dexSuffix": "",
+      "name": {
+        "en": "Wispaw",
+        "ru": "Виспау"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 2,
+        "Deforest": 1,
+        "ProductMedicine": 1,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 240
+    },
+    {
+      "id": "HawkBird",
+      "dexNo": 51,
+      "dexSuffix": "",
+      "name": {
+        "en": "Nitewing",
+        "ru": "Найтвинг"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 450
+    },
+    {
+      "id": "CatBat",
+      "dexNo": 52,
+      "dexSuffix": "",
+      "name": {
+        "en": "Tombat",
+        "ru": "Томбат"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 2,
+        "Mining": 3,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 270
+    },
+    {
+      "id": "ColorfulBird",
+      "dexNo": 53,
+      "dexSuffix": "",
+      "name": {
+        "en": "Tocotoco",
+        "ru": "Токотоко"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 170
+    },
+    {
+      "id": "Kirin",
+      "dexNo": 54,
+      "dexSuffix": "",
+      "name": {
+        "en": "Univolt",
+        "ru": "Юнивольт"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 3,
+        "Deforest": 1
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 425
+    },
+    {
+      "id": "Kirin_Ice",
+      "dexNo": 54,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Univolt Cryst",
+        "ru": "Юнивольт Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Deforest": 3,
+        "Cool": 6
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 425
+    },
+    {
+      "id": "SharkKid",
+      "dexNo": 55,
+      "dexSuffix": "",
+      "name": {
+        "en": "Gobfin",
+        "ru": "Гобфин"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 2,
+        "Handcraft": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 120
+    },
+    {
+      "id": "SharkKid_Fire",
+      "dexNo": 55,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Gobfin Ignis",
+        "ru": "Гобфин Игнис"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 2,
+        "Handcraft": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 120
+    },
+    {
+      "id": "Werewolf",
+      "dexNo": 56,
+      "dexSuffix": "",
+      "name": {
+        "en": "Loupmoon",
+        "ru": "Лупмун"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 375
+    },
+    {
+      "id": "Werewolf_Ice",
+      "dexNo": 56,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Loupmoon Cryst",
+        "ru": "Лупмун Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Handcraft": 4,
+        "Cool": 4
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 375
+    },
+    {
+      "id": "DarkCrow",
+      "dexNo": 57,
+      "dexSuffix": "",
+      "name": {
+        "en": "Cawgnito",
+        "ru": "Когнито"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Deforest": 2,
+        "MonsterFarm": 1
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 545
+    },
+    {
+      "id": "FlameBuffalo",
+      "dexNo": 58,
+      "dexSuffix": "",
+      "name": {
+        "en": "Arsox",
+        "ru": "Арсокс"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 3,
+        "Deforest": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 343
+    },
+    {
+      "id": "FluffyBird",
+      "dexNo": 59,
+      "dexSuffix": "",
+      "name": {
+        "en": "Muffly",
+        "ru": "Маффли"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Cool": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 75
+    },
+    {
+      "id": "LittleBriarRose",
+      "dexNo": 60,
+      "dexSuffix": "",
+      "name": {
+        "en": "Bristla",
+        "ru": "Бристла"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 2,
+        "Handcraft": 2,
+        "Collection": 2,
+        "ProductMedicine": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 250
+    },
+    {
+      "id": "CuteButterfly",
+      "dexNo": 61,
+      "dexSuffix": "",
+      "name": {
+        "en": "Cinnamoth",
+        "ru": "Синнамос"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 2,
+        "Collection": 2,
+        "ProductMedicine": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "ElecPomeranian",
+      "dexNo": 62,
+      "dexSuffix": "",
+      "name": {
+        "en": "Puffolt",
+        "ru": "Пуффольт"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 200
+    },
+    {
+      "id": "FairyDragon",
+      "dexNo": 63,
+      "dexSuffix": "",
+      "name": {
+        "en": "Elphidran",
+        "ru": "Элфидран"
+      },
+      "elements": [
+        "Dragon"
+      ],
+      "work": {
+        "Deforest": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 456
+    },
+    {
+      "id": "FairyDragon_Water",
+      "dexNo": 63,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Elphidran Aqua",
+        "ru": "Элфидран Аква"
+      },
+      "elements": [
+        "Dragon",
+        "Water"
+      ],
+      "work": {
+        "Watering": 4,
+        "Deforest": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 456
+    },
+    {
+      "id": "BirdDragon",
+      "dexNo": 64,
+      "dexSuffix": "",
+      "name": {
+        "en": "Vanwyrm",
+        "ru": "Ванвирм"
+      },
+      "elements": [
+        "Fire",
+        "Dark"
+      ],
+      "work": {
+        "EmitFlame": 2,
+        "Transport": 3
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 475
+    },
+    {
+      "id": "BirdDragon_Ice",
+      "dexNo": 64,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Vanwyrm Cryst",
+        "ru": "Ванвирм Крист"
+      },
+      "elements": [
+        "Ice",
+        "Dark"
+      ],
+      "work": {
+        "Cool": 2,
+        "Transport": 3
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 475
+    },
+    {
+      "id": "CatVampire",
+      "dexNo": 65,
+      "dexSuffix": "",
+      "name": {
+        "en": "Felbat",
+        "ru": "Фелбэт"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "ProductMedicine": 3
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 325
+    },
+    {
+      "id": "VioletFairy",
+      "dexNo": 66,
+      "dexSuffix": "",
+      "name": {
+        "en": "Vaelet",
+        "ru": "Ваэлет"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 3,
+        "Collection": 3,
+        "ProductMedicine": 3,
+        "Transport": 2,
+        "MonsterFarm": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 275
+    },
+    {
+      "id": "SoldierBee",
+      "dexNo": 67,
+      "dexSuffix": "",
+      "name": {
+        "en": "Beegarde",
+        "ru": "Бигард"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 2,
+        "Handcraft": 2,
+        "Collection": 3,
+        "Deforest": 2,
+        "ProductMedicine": 2,
+        "Transport": 2,
+        "MonsterFarm": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "QueenBee",
+      "dexNo": 68,
+      "dexSuffix": "",
+      "name": {
+        "en": "Elizabee",
+        "ru": "Элизаби"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 4,
+        "Handcraft": 4,
+        "Collection": 4,
+        "Deforest": 3,
+        "ProductMedicine": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 350
+    },
+    {
+      "id": "PinkLizard",
+      "dexNo": 69,
+      "dexSuffix": "",
+      "name": {
+        "en": "Lovander",
+        "ru": "Ловандер"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Mining": 2,
+        "ProductMedicine": 3,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 460
+    },
+    {
+      "id": "NaughtyCat",
+      "dexNo": 70,
+      "dexSuffix": "",
+      "name": {
+        "en": "Grintale",
+        "ru": "Гринтэйл"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 332
+    },
+    {
+      "id": "PurpleSpider",
+      "dexNo": 71,
+      "dexSuffix": "",
+      "name": {
+        "en": "Tarantriss",
+        "ru": "Тарантрисс"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Collection": 3,
+        "ProductMedicine": 2,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 200
+    },
+    {
+      "id": "IceSeal",
+      "dexNo": 72,
+      "dexSuffix": "",
+      "name": {
+        "en": "Polapup",
+        "ru": "Полапап"
+      },
+      "elements": [
+        "Ice",
+        "Water"
+      ],
+      "work": {
+        "Watering": 3,
+        "Cool": 4
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 250
+    },
+    {
+      "id": "IceSeal_Ground",
+      "dexNo": 72,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Polapup Terra",
+        "ru": "Полапап Терра"
+      },
+      "elements": [
+        "Ice",
+        "Earth"
+      ],
+      "work": {
+        "Mining": 4,
+        "Cool": 4
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 250
+    },
+    {
+      "id": "LizardMan",
+      "dexNo": 73,
+      "dexSuffix": "",
+      "name": {
+        "en": "Leezpunk",
+        "ru": "Лизпанк"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 2,
+        "Collection": 1,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 270
+    },
+    {
+      "id": "LizardMan_Fire",
+      "dexNo": 73,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Leezpunk Ignis",
+        "ru": "Лизпанк Игнис"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 2,
+        "Handcraft": 2,
+        "Collection": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 270
+    },
+    {
+      "id": "Gorilla",
+      "dexNo": 74,
+      "dexSuffix": "",
+      "name": {
+        "en": "Gorirat",
+        "ru": "Горират"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 2,
+        "Deforest": 3,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 250
+    },
+    {
+      "id": "Gorilla_Ground",
+      "dexNo": 74,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Gorirat Terra",
+        "ru": "Горират Терра"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 2,
+        "Mining": 3,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 250
+    },
+    {
+      "id": "Serpent",
+      "dexNo": 75,
+      "dexSuffix": "",
+      "name": {
+        "en": "Surfent",
+        "ru": "Серфент"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 3,
+        "MonsterFarm": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "Serpent_Ground",
+      "dexNo": 75,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Surfent Terra",
+        "ru": "Серфент Терра"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Collection": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "RobinHood",
+      "dexNo": 76,
+      "dexSuffix": "",
+      "name": {
+        "en": "Robinquill",
+        "ru": "Робинквилл"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 2,
+        "Handcraft": 3,
+        "Collection": 3,
+        "Deforest": 2,
+        "ProductMedicine": 1,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "RobinHood_Ground",
+      "dexNo": 76,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Robinquill Terra",
+        "ru": "Робинквилл Терра"
+      },
+      "elements": [
+        "Leaf",
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Collection": 3,
+        "Deforest": 2,
+        "ProductMedicine": 2,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "FlowerRabbit",
+      "dexNo": 77,
+      "dexSuffix": "",
+      "name": {
+        "en": "Flopie",
+        "ru": "Флопи"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 2,
+        "Handcraft": 2,
+        "Collection": 2,
+        "ProductMedicine": 1,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 250
+    },
+    {
+      "id": "FoxMage",
+      "dexNo": 78,
+      "dexSuffix": "",
+      "name": {
+        "en": "Wixen",
+        "ru": "Виксен"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 3,
+        "Handcraft": 3,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 292
+    },
+    {
+      "id": "FoxMage_Dark",
+      "dexNo": 78,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Wixen Noct",
+        "ru": "Виксен Нокт"
+      },
+      "elements": [
+        "Fire",
+        "Dark"
+      ],
+      "work": {
+        "EmitFlame": 4,
+        "Handcraft": 4,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 292
+    },
+    {
+      "id": "CatMage",
+      "dexNo": 79,
+      "dexSuffix": "",
+      "name": {
+        "en": "Katress",
+        "ru": "Катресс"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "ProductMedicine": 3,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 292
+    },
+    {
+      "id": "CatMage_Fire",
+      "dexNo": 79,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Katress Ignis",
+        "ru": "Катресс Игнис"
+      },
+      "elements": [
+        "Dark",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 3,
+        "Handcraft": 3,
+        "ProductMedicine": 3,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 292
+    },
+    {
+      "id": "HadesBird",
+      "dexNo": 80,
+      "dexSuffix": "",
+      "name": {
+        "en": "Helzephyr",
+        "ru": "Хэлзефир"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Transport": 4
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 450
+    },
+    {
+      "id": "HadesBird_Electric",
+      "dexNo": 80,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Helzephyr Lux",
+        "ru": "Хэлзефир Лакс"
+      },
+      "elements": [
+        "Dark",
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 4,
+        "Transport": 5
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 450
+    },
+    {
+      "id": "GrassMinotaur",
+      "dexNo": 81,
+      "dexSuffix": "",
+      "name": {
+        "en": "Elgrove",
+        "ru": "Элгрув"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Collection": 2,
+        "Deforest": 3,
+        "Mining": 2,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 200
+    },
+    {
+      "id": "GrassMinotaur_Ice",
+      "dexNo": 81,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Elgrove Cryst",
+        "ru": "Элгрув Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Deforest": 3,
+        "Mining": 3,
+        "Cool": 5,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 200
+    },
+    {
+      "id": "Mutant",
+      "dexNo": 82,
+      "dexSuffix": "",
+      "name": {
+        "en": "Lunaris",
+        "ru": "Лунарис"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 4,
+        "Collection": 2,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 315
+    },
+    {
+      "id": "FengyunDeeper",
+      "dexNo": 83,
+      "dexSuffix": "",
+      "name": {
+        "en": "Fenglope",
+        "ru": "Фенглоп"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Deforest": 3
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 417
+    },
+    {
+      "id": "FengyunDeeper_Electric",
+      "dexNo": 83,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Fenglope Lux",
+        "ru": "Фенглоп Лакс"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 5,
+        "Deforest": 4
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 417
+    },
+    {
+      "id": "FlowerDinosaur",
+      "dexNo": 84,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dinossom",
+        "ru": "Диноссум"
+      },
+      "elements": [
+        "Leaf",
+        "Dragon"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Deforest": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 335
+    },
+    {
+      "id": "FlowerDinosaur_Electric",
+      "dexNo": 84,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Dinossom Lux",
+        "ru": "Диноссум Лакс"
+      },
+      "elements": [
+        "Electricity",
+        "Dragon"
+      ],
+      "work": {
+        "GenerateElectricity": 3,
+        "Deforest": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 335
+    },
+    {
+      "id": "Ronin",
+      "dexNo": 85,
+      "dexSuffix": "",
+      "name": {
+        "en": "Bushi",
+        "ru": "Буси"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 2,
+        "Handcraft": 2,
+        "Collection": 1,
+        "Deforest": 3,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 320
+    },
+    {
+      "id": "Ronin_Dark",
+      "dexNo": 85,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Bushi Noct",
+        "ru": "Буси Нокт"
+      },
+      "elements": [
+        "Fire",
+        "Dark"
+      ],
+      "work": {
+        "EmitFlame": 2,
+        "Handcraft": 2,
+        "Collection": 1,
+        "Deforest": 5,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 320
+    },
+    {
+      "id": "IceCrocodile",
+      "dexNo": 86,
+      "dexSuffix": "",
+      "name": {
+        "en": "Munchill",
+        "ru": "Манчилл"
+      },
+      "elements": [
+        "Ice",
+        "Water"
+      ],
+      "work": {
+        "Watering": 2,
+        "Cool": 3,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 40
+    },
+    {
+      "id": "GrassMammoth",
+      "dexNo": 87,
+      "dexSuffix": "",
+      "name": {
+        "en": "Mammorest",
+        "ru": "Мамморест"
+      },
+      "elements": [
+        "Leaf",
+        "Earth"
+      ],
+      "work": {
+        "Seeding": 4,
+        "Deforest": 4,
+        "Mining": 4
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 282
+    },
+    {
+      "id": "GrassMammoth_Ice",
+      "dexNo": 87,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Mammorest Cryst",
+        "ru": "Мамморест Крист"
+      },
+      "elements": [
+        "Ice",
+        "Earth"
+      ],
+      "work": {
+        "Deforest": 5,
+        "Mining": 4,
+        "Cool": 5
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 282
+    },
+    {
+      "id": "StuffedShark",
+      "dexNo": 88,
+      "dexSuffix": "",
+      "name": {
+        "en": "Finsider",
+        "ru": "Финсайдер"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 250
+    },
+    {
+      "id": "StuffedShark_Fire",
+      "dexNo": 88,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Finsider Ignis",
+        "ru": "Финсайдер Игнис"
+      },
+      "elements": [
+        "Water",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 2,
+        "Watering": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 250
+    },
+    {
+      "id": "FlowerDoll",
+      "dexNo": 89,
+      "dexSuffix": "",
+      "name": {
+        "en": "Petallia",
+        "ru": "Петаллия"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 4,
+        "Handcraft": 3,
+        "Collection": 3,
+        "ProductMedicine": 4,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "FlowerDoll_Fire",
+      "dexNo": 89,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Petallia Ignis",
+        "ru": "Петаллия Игнис"
+      },
+      "elements": [
+        "Leaf",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 4,
+        "Handcraft": 3,
+        "Collection": 3,
+        "ProductMedicine": 4,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "PandaGirl",
+      "dexNo": 90,
+      "dexSuffix": "",
+      "name": {
+        "en": "Leafan",
+        "ru": "Лифан"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 3,
+        "Collection": 3,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 300
+    },
+    {
+      "id": "Baphomet",
+      "dexNo": 91,
+      "dexSuffix": "",
+      "name": {
+        "en": "Incineram",
+        "ru": "Инсинерам"
+      },
+      "elements": [
+        "Fire",
+        "Dark"
+      ],
+      "work": {
+        "EmitFlame": 3,
+        "Handcraft": 2,
+        "Mining": 3,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 320
+    },
+    {
+      "id": "Baphomet_Dark",
+      "dexNo": 91,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Incineram Noct",
+        "ru": "Инсинерам Нокт"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Mining": 4,
+        "Transport": 3
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 320
+    },
+    {
+      "id": "RaijinDaughter",
+      "dexNo": 92,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dazzi",
+        "ru": "Даззи"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 3,
+        "Handcraft": 2,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 300
+    },
+    {
+      "id": "RaijinDaughter_Water",
+      "dexNo": 92,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Dazzi Noct",
+        "ru": "Даззи Нокт"
+      },
+      "elements": [
+        "Dark",
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 1,
+        "Handcraft": 1,
+        "ProductMedicine": 1,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 300
+    },
+    {
+      "id": "FireKirin",
+      "dexNo": 93,
+      "dexSuffix": "",
+      "name": {
+        "en": "Pyrin",
+        "ru": "Пирин"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 4,
+        "Deforest": 2
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 500
+    },
+    {
+      "id": "FireKirin_Dark",
+      "dexNo": 93,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Pyrin Noct",
+        "ru": "Пирин Нокт"
+      },
+      "elements": [
+        "Fire",
+        "Dark"
+      ],
+      "work": {
+        "EmitFlame": 4,
+        "Deforest": 3
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 500
+    },
+    {
+      "id": "LazyDragon",
+      "dexNo": 94,
+      "dexSuffix": "",
+      "name": {
+        "en": "Relaxaurus",
+        "ru": "Релаксаурус"
+      },
+      "elements": [
+        "Dragon",
+        "Water"
+      ],
+      "work": {
+        "Watering": 3,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 150
+    },
+    {
+      "id": "LazyDragon_Electric",
+      "dexNo": 94,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Relaxaurus Lux",
+        "ru": "Релаксаурус Лакс"
+      },
+      "elements": [
+        "Dragon",
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 4,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 150
+    },
+    {
+      "id": "IceFox",
+      "dexNo": 95,
+      "dexSuffix": "",
+      "name": {
+        "en": "Foxcicle",
+        "ru": "Фоксайкл"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Cool": 4,
+        "MonsterFarm": 3
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 315
+    },
+    {
+      "id": "ThunderBird",
+      "dexNo": 96,
+      "dexSuffix": "",
+      "name": {
+        "en": "Beakon",
+        "ru": "Райберд"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 4,
+        "Collection": 2,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 375
+    },
+    {
+      "id": "ThunderBird_Ice",
+      "dexNo": 96,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Beakon Cryst",
+        "ru": "Райберд Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Collection": 2,
+        "Cool": 5,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 375
+    },
+    {
+      "id": "GhostAnglerfish",
+      "dexNo": 97,
+      "dexSuffix": "",
+      "name": {
+        "en": "Ghangler",
+        "ru": "Ганглер"
+      },
+      "elements": [
+        "Dark",
+        "Water"
+      ],
+      "work": {
+        "Watering": 5,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "GhostAnglerfish_Fire",
+      "dexNo": 97,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Ghangler Ignis",
+        "ru": "Ганглер Игнис"
+      },
+      "elements": [
+        "Fire",
+        "Water"
+      ],
+      "work": {
+        "EmitFlame": 5,
+        "Watering": 5,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "ThunderDog",
+      "dexNo": 98,
+      "dexSuffix": "",
+      "name": {
+        "en": "Rayhound",
+        "ru": "Райхаунд"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 4
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 455
+    },
+    {
+      "id": "ThunderDog_Ice",
+      "dexNo": 98,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Rayhound Cryst",
+        "ru": "Райхаунд Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Cool": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 455
+    },
+    {
+      "id": "DarkScorpion",
+      "dexNo": 99,
+      "dexSuffix": "",
+      "name": {
+        "en": "Menasting",
+        "ru": "Менастинг"
+      },
+      "elements": [
+        "Dark",
+        "Earth"
+      ],
+      "work": {
+        "Deforest": 3,
+        "Mining": 5
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 600
+    },
+    {
+      "id": "DarkScorpion_Ground",
+      "dexNo": 99,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Menasting Terra",
+        "ru": "Менастинг Терра"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Deforest": 3,
+        "Mining": 6
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 600
+    },
+    {
+      "id": "CactusDoll",
+      "dexNo": 100,
+      "dexSuffix": "",
+      "name": {
+        "en": "Needoll",
+        "ru": "Нидолл"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Collection": 3,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 200
+    },
+    {
+      "id": "CactusDoll_Dark",
+      "dexNo": 100,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Needoll Noct",
+        "ru": "Нидолл Нокт"
+      },
+      "elements": [
+        "Dark",
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Collection": 3,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 200
+    },
+    {
+      "id": "IceDeer",
+      "dexNo": 101,
+      "dexSuffix": "",
+      "name": {
+        "en": "Reindrix",
+        "ru": "Рейндрикс"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Deforest": 3,
+        "Cool": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 310
+    },
+    {
+      "id": "GrassPanda",
+      "dexNo": 102,
+      "dexSuffix": "",
+      "name": {
+        "en": "Mossanda",
+        "ru": "Моссанда"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 2,
+        "Deforest": 4,
+        "Transport": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 275
+    },
+    {
+      "id": "GrassPanda_Electric",
+      "dexNo": 102,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Mossanda Lux",
+        "ru": "Моссанда Лакс"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 4,
+        "Handcraft": 3,
+        "Deforest": 4,
+        "Transport": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 275
+    },
+    {
+      "id": "WeaselDragon",
+      "dexNo": 103,
+      "dexSuffix": "",
+      "name": {
+        "en": "Chillet",
+        "ru": "Чиллет"
+      },
+      "elements": [
+        "Ice",
+        "Dragon"
+      ],
+      "work": {
+        "Collection": 1,
+        "Cool": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 390
+    },
+    {
+      "id": "WeaselDragon_Fire",
+      "dexNo": 103,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Chillet Ignis",
+        "ru": "Чиллет Игнис"
+      },
+      "elements": [
+        "Fire",
+        "Dragon"
+      ],
+      "work": {
+        "EmitFlame": 4,
+        "Collection": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 390
+    },
+    {
+      "id": "RedArmorBird",
+      "dexNo": 104,
+      "dexSuffix": "",
+      "name": {
+        "en": "Ragnahawk",
+        "ru": "Рагнахавк"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 4,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 375
+    },
+    {
+      "id": "VolcanoDragon",
+      "dexNo": 105,
+      "dexSuffix": "",
+      "name": {
+        "en": "Moldron",
+        "ru": "Молдрон"
+      },
+      "elements": [
+        "Fire",
+        "Earth"
+      ],
+      "work": {
+        "EmitFlame": 5,
+        "Mining": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": -1
+    },
+    {
+      "id": "VolcanoDragon_Ice",
+      "dexNo": 105,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Moldron Cryst",
+        "ru": "Молдрон Крист"
+      },
+      "elements": [
+        "Ice",
+        "Earth"
+      ],
+      "work": {
+        "Mining": 5,
+        "Cool": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": -1
+    },
+    {
+      "id": "TropicalOstrich",
+      "dexNo": 106,
+      "dexSuffix": "",
+      "name": {
+        "en": "Palumba",
+        "ru": "Палумба"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 4,
+        "Collection": 4,
+        "Mining": 5
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "DrillGame",
+      "dexNo": 107,
+      "dexSuffix": "",
+      "name": {
+        "en": "Digtoise",
+        "ru": "Дигтос"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Mining": 4
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 190
+    },
+    {
+      "id": "SakuraSaurus",
+      "dexNo": 108,
+      "dexSuffix": "",
+      "name": {
+        "en": "Broncherry",
+        "ru": "Брончерри"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 5
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 200
+    },
+    {
+      "id": "SakuraSaurus_Water",
+      "dexNo": 108,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Broncherry Aqua",
+        "ru": "Брончерри Аква"
+      },
+      "elements": [
+        "Leaf",
+        "Water"
+      ],
+      "work": {
+        "Watering": 5
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 200
+    },
+    {
+      "id": "LazyCatfish",
+      "dexNo": 109,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dumud",
+        "ru": "Думад"
+      },
+      "elements": [
+        "Earth",
+        "Water"
+      ],
+      "work": {
+        "Watering": 2,
+        "Mining": 2,
+        "Transport": 1,
+        "MonsterFarm": 1
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "LazyCatfish_Gold",
+      "dexNo": 109,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Dumud Gild",
+        "ru": "Думад Гилд"
+      },
+      "elements": [
+        "Earth",
+        "Water"
+      ],
+      "work": {
+        "Watering": 2,
+        "Mining": 2,
+        "Transport": 1,
+        "MonsterFarm": 4
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "Plesiosaur",
+      "dexNo": 110,
+      "dexSuffix": "",
+      "name": {
+        "en": "Braloha",
+        "ru": "Бралоха"
+      },
+      "elements": [
+        "Leaf",
+        "Earth"
+      ],
+      "work": {
+        "Seeding": 5,
+        "Collection": 5,
+        "Mining": 3
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": -1
+    },
+    {
+      "id": "AmaterasuWolf",
+      "dexNo": 111,
+      "dexSuffix": "",
+      "name": {
+        "en": "Kitsun",
+        "ru": "Кицун"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 415
+    },
+    {
+      "id": "AmaterasuWolf_Dark",
+      "dexNo": 111,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Kitsun Noct",
+        "ru": "Кицун Нокт"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "EmitFlame": 4
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 415
+    },
+    {
+      "id": "Manticore",
+      "dexNo": 112,
+      "dexSuffix": "",
+      "name": {
+        "en": "Blazehowl",
+        "ru": "Блейзхаул"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 5,
+        "Deforest": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 465
+    },
+    {
+      "id": "Manticore_Dark",
+      "dexNo": 112,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Blazehowl Noct",
+        "ru": "Блейзхаул Нокт"
+      },
+      "elements": [
+        "Fire",
+        "Dark"
+      ],
+      "work": {
+        "EmitFlame": 5,
+        "Deforest": 3
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 420
+    },
+    {
+      "id": "HerculesBeetle",
+      "dexNo": 113,
+      "dexSuffix": "",
+      "name": {
+        "en": "Warsect",
+        "ru": "Ворсект"
+      },
+      "elements": [
+        "Earth",
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 3,
+        "Deforest": 4,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 110
+    },
+    {
+      "id": "HerculesBeetle_Ground",
+      "dexNo": 113,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Warsect Terra",
+        "ru": "Ворсект Терра"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 2,
+        "Mining": 5,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 110
+    },
+    {
+      "id": "SnowPeafowl",
+      "dexNo": 114,
+      "dexSuffix": "",
+      "name": {
+        "en": "Frostplume",
+        "ru": "Фростплюм"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Collection": 2,
+        "Cool": 4
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": -1
+    },
+    {
+      "id": "DarkFlameFox",
+      "dexNo": 115,
+      "dexSuffix": "",
+      "name": {
+        "en": "Majex",
+        "ru": "Маджекс"
+      },
+      "elements": [
+        "Dark",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 4,
+        "Handcraft": 5,
+        "ProductMedicine": 3,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 150
+    },
+    {
+      "id": "WhiteMoth",
+      "dexNo": 116,
+      "dexSuffix": "",
+      "name": {
+        "en": "Sibelyx",
+        "ru": "Сибеликс"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "ProductMedicine": 3,
+        "Cool": 3,
+        "MonsterFarm": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 250
+    },
+    {
+      "id": "WhiteMoth_Neutral",
+      "dexNo": 116,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Sibelyx Primo",
+        "ru": "Сибеликс Примо"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "ProductMedicine": 3,
+        "MonsterFarm": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 250
+    },
+    {
+      "id": "GhostBeast",
+      "dexNo": 117,
+      "dexSuffix": "",
+      "name": {
+        "en": "Maraith",
+        "ru": "Мараит"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 4,
+        "Mining": 4
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 365
+    },
+    {
+      "id": "MushroomDragon",
+      "dexNo": 118,
+      "dexSuffix": "",
+      "name": {
+        "en": "Shroomer",
+        "ru": "Шрумер"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 2,
+        "Collection": 3,
+        "Deforest": 2,
+        "MonsterFarm": 3
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": -1
+    },
+    {
+      "id": "MushroomDragon_Dark",
+      "dexNo": 118,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Shroomer Noct",
+        "ru": "Шрумер Нокт"
+      },
+      "elements": [
+        "Leaf",
+        "Dark"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 3,
+        "Collection": 3,
+        "Deforest": 2
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": -1
+    },
+    {
+      "id": "IceWitch",
+      "dexNo": 119,
+      "dexSuffix": "",
+      "name": {
+        "en": "Icelyn",
+        "ru": "Айселин"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Handcraft": 5,
+        "ProductMedicine": 4,
+        "Cool": 5,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 200
+    },
+    {
+      "id": "MummyPal",
+      "dexNo": 120,
+      "dexSuffix": "",
+      "name": {
+        "en": "Gildra",
+        "ru": "Йомира"
+      },
+      "elements": [
+        "Dark",
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 5,
+        "ProductMedicine": 4,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "Umihebi",
+      "dexNo": 121,
+      "dexSuffix": "",
+      "name": {
+        "en": "Jormuntide",
+        "ru": "Йормунтайд"
+      },
+      "elements": [
+        "Dragon",
+        "Water"
+      ],
+      "work": {
+        "Watering": 7
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 350
+    },
+    {
+      "id": "Umihebi_Fire",
+      "dexNo": 121,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Jormuntide Ignis",
+        "ru": "Йормунтайд Игнис"
+      },
+      "elements": [
+        "Dragon",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 7
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 350
+    },
+    {
+      "id": "Suzaku",
+      "dexNo": 122,
+      "dexSuffix": "",
+      "name": {
+        "en": "Suzaku",
+        "ru": "Судзаку"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 5
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 450
+    },
+    {
+      "id": "Suzaku_Water",
+      "dexNo": 122,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Suzaku Aqua",
+        "ru": "Судзаку Аква"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 6
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 450
+    },
+    {
+      "id": "FeatherOstrich",
+      "dexNo": 123,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dazemu",
+        "ru": "Дазему"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": -1
+    },
+    {
+      "id": "SkyDragon",
+      "dexNo": 124,
+      "dexSuffix": "",
+      "name": {
+        "en": "Quivern",
+        "ru": "Фэски"
+      },
+      "elements": [
+        "Dragon"
+      ],
+      "work": {
+        "Handcraft": 2,
+        "Collection": 3,
+        "Mining": 4,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 470
+    },
+    {
+      "id": "SkyDragon_Grass",
+      "dexNo": 124,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Quivern Botan",
+        "ru": "Фэски Ботан"
+      },
+      "elements": [
+        "Dragon",
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 5,
+        "Handcraft": 2,
+        "Collection": 4,
+        "Mining": 3,
+        "Transport": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 470
+    },
+    {
+      "id": "LeafPrincess",
+      "dexNo": 125,
+      "dexSuffix": "",
+      "name": {
+        "en": "Lullu",
+        "ru": "Нежноцвет"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 3,
+        "Collection": 2,
+        "ProductMedicine": 3
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 250
+    },
+    {
+      "id": "SmallArmadillo",
+      "dexNo": 126,
+      "dexSuffix": "",
+      "name": {
+        "en": "Kikit",
+        "ru": "Бронебол"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Mining": 1
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 300
+    },
+    {
+      "id": "GuardianDog",
+      "dexNo": 127,
+      "dexSuffix": "",
+      "name": {
+        "en": "Yakumo",
+        "ru": "Якумо"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 165
+    },
+    {
+      "id": "SwordCutlassfish",
+      "dexNo": 128,
+      "dexSuffix": "",
+      "name": {
+        "en": "Skutlass",
+        "ru": "Скатласс"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 4,
+        "Collection": 1,
+        "Deforest": 4
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "SwordCutlassfish_Fire",
+      "dexNo": 128,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Skutlass Ignis",
+        "ru": "Скатласс Игнис"
+      },
+      "elements": [
+        "Water",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 3,
+        "Watering": 2,
+        "Collection": 2,
+        "Deforest": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "VolcanicMonster",
+      "dexNo": 129,
+      "dexSuffix": "",
+      "name": {
+        "en": "Reptyro",
+        "ru": "Рептиро"
+      },
+      "elements": [
+        "Fire",
+        "Earth"
+      ],
+      "work": {
+        "EmitFlame": 5,
+        "Mining": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 235
+    },
+    {
+      "id": "VolcanicMonster_Ice",
+      "dexNo": 129,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Reptyro Cryst",
+        "ru": "Рептиро Крист"
+      },
+      "elements": [
+        "Ice",
+        "Earth"
+      ],
+      "work": {
+        "Mining": 5,
+        "Cool": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 235
+    },
+    {
+      "id": "NightBlueHorse",
+      "dexNo": 130,
+      "dexSuffix": "",
+      "name": {
+        "en": "Starryon",
+        "ru": "Старрион"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 5
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": -1
+    },
+    {
+      "id": "NightBlueHorse_Neutral",
+      "dexNo": 130,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Starryon Primo",
+        "ru": "Старрион Примо"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 7
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": -1
+    },
+    {
+      "id": "RockBeast",
+      "dexNo": 131,
+      "dexSuffix": "",
+      "name": {
+        "en": "Pierdon",
+        "ru": "Пиродон"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Mining": 5
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 230
+    },
+    {
+      "id": "RockBeast_Ice",
+      "dexNo": 131,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Pierdon Cryst",
+        "ru": "Пиродон Крист"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Mining": 5,
+        "Cool": 6
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 230
+    },
+    {
+      "id": "WhiteTiger",
+      "dexNo": 132,
+      "dexSuffix": "",
+      "name": {
+        "en": "Cryolinx",
+        "ru": "Криолинкс"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Deforest": 4,
+        "Cool": 4,
+        "Transport": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 460
+    },
+    {
+      "id": "WhiteTiger_Ground",
+      "dexNo": 132,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Cryolinx Terra",
+        "ru": "Криолинкс Терра"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 2,
+        "Deforest": 6,
+        "Mining": 5,
+        "Transport": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 460
+    },
+    {
+      "id": "SmallYeti",
+      "dexNo": 133,
+      "dexSuffix": "",
+      "name": {
+        "en": "Snugloo",
+        "ru": "Снаглоу"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Handcraft": 2,
+        "Mining": 3,
+        "Cool": 3,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 100
+    },
+    {
+      "id": "Yeti",
+      "dexNo": 134,
+      "dexSuffix": "",
+      "name": {
+        "en": "Wumpo",
+        "ru": "Вумпо"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Deforest": 5,
+        "Cool": 5,
+        "Transport": 6
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 150
+    },
+    {
+      "id": "Yeti_Grass",
+      "dexNo": 134,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Wumpo Botan",
+        "ru": "Вумпо Ботан"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 3,
+        "Deforest": 5,
+        "Transport": 6
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 150
+    },
+    {
+      "id": "CandleGhost",
+      "dexNo": 135,
+      "dexSuffix": "",
+      "name": {
+        "en": "Sootseer",
+        "ru": "Гостлайт"
+      },
+      "elements": [
+        "Dark",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 3,
+        "Handcraft": 3,
+        "Collection": 2,
+        "Mining": 3,
+        "MonsterFarm": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 450
+    },
+    {
+      "id": "VenusFlytrap",
+      "dexNo": 136,
+      "dexSuffix": "",
+      "name": {
+        "en": "Carnibora",
+        "ru": "Карнибора"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 6,
+        "Handcraft": 4,
+        "Collection": 4,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 330
+    },
+    {
+      "id": "KingBahamut",
+      "dexNo": 137,
+      "dexSuffix": "",
+      "name": {
+        "en": "Blazamut",
+        "ru": "Блазамут"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 6,
+        "Mining": 7
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 500
+    },
+    {
+      "id": "KingBahamut_Dragon",
+      "dexNo": 137,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Blazamut Ryu",
+        "ru": "Блазамут Рю"
+      },
+      "elements": [
+        "Dragon",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 6,
+        "Mining": 7
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 500
+    },
+    {
+      "id": "GrassGolem",
+      "dexNo": 138,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dualith",
+        "ru": "Дуалит"
+      },
+      "elements": [
+        "Earth",
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Collection": 3,
+        "Deforest": 5,
+        "Mining": 6,
+        "Transport": 6
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 350
+    },
+    {
+      "id": "GrassGolem_Dark",
+      "dexNo": 138,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Dualith Noct",
+        "ru": "Дуалит Нокт"
+      },
+      "elements": [
+        "Earth",
+        "Dark"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Collection": 3,
+        "Deforest": 5,
+        "Mining": 6,
+        "Transport": 6
+      },
+      "nocturnal": true,
+      "size": "XL",
+      "transportSpeed": 350
+    },
+    {
+      "id": "Anubis",
+      "dexNo": 139,
+      "dexSuffix": "",
+      "name": {
+        "en": "Anubis",
+        "ru": "Анубис"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 6,
+        "Mining": 6,
+        "Transport": 4
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 480
+    },
+    {
+      "id": "Sekhmet",
+      "dexNo": 140,
+      "dexSuffix": "",
+      "name": {
+        "en": "Sekhmet",
+        "ru": "Сехмет"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 6,
+        "Mining": 3,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 375
+    },
+    {
+      "id": "ScorpionMan",
+      "dexNo": 141,
+      "dexSuffix": "",
+      "name": {
+        "en": "Prixter",
+        "ru": "Скорпио"
+      },
+      "elements": [
+        "Dark",
+        "Earth"
+      ],
+      "work": {
+        "Collection": 2,
+        "Deforest": 4,
+        "ProductMedicine": 2
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": -1
+    },
+    {
+      "id": "ScorpionMan_Electric",
+      "dexNo": 141,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Prixter Lux",
+        "ru": "Скорпио Лакс"
+      },
+      "elements": [
+        "Electricity",
+        "Earth"
+      ],
+      "work": {
+        "GenerateElectricity": 3,
+        "Collection": 2,
+        "Deforest": 4,
+        "ProductMedicine": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": -1
+    },
+    {
+      "id": "CubeTurtle",
+      "dexNo": 142,
+      "dexSuffix": "",
+      "name": {
+        "en": "Tetroise",
+        "ru": "Тетроис"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Mining": 4
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 360
+    },
+    {
+      "id": "CubeTurtle_Neutral",
+      "dexNo": 142,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Tetroise Primo",
+        "ru": "Тетроис Примо"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Mining": 6
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 360
+    },
+    {
+      "id": "BadCatgirl",
+      "dexNo": 143,
+      "dexSuffix": "",
+      "name": {
+        "en": "Nyafia",
+        "ru": "Няфия"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 4,
+        "Collection": 4,
+        "Deforest": 2,
+        "Transport": 3
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "MimicDog",
+      "dexNo": 144,
+      "dexSuffix": "",
+      "name": {
+        "en": "Mimog",
+        "ru": "Мимидог"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 1,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "XS",
+      "transportSpeed": 450
+    },
+    {
+      "id": "DarkAlien",
+      "dexNo": 145,
+      "dexSuffix": "",
+      "name": {
+        "en": "Xenovader",
+        "ru": "Зеноведа"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Deforest": 3,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 400
+    },
+    {
+      "id": "WhiteAlienDragon",
+      "dexNo": 146,
+      "dexSuffix": "",
+      "name": {
+        "en": "Xenogard",
+        "ru": "Зеногард"
+      },
+      "elements": [
+        "Dragon"
+      ],
+      "work": {
+        "Mining": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 500
+    },
+    {
+      "id": "BlueberryFairy",
+      "dexNo": 147,
+      "dexSuffix": "",
+      "name": {
+        "en": "Prunelia",
+        "ru": "Прунелия"
+      },
+      "elements": [
+        "Leaf",
+        "Dark"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 1,
+        "Collection": 2,
+        "ProductMedicine": 3,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 350
+    },
+    {
+      "id": "GhostRabbit",
+      "dexNo": 148,
+      "dexSuffix": "",
+      "name": {
+        "en": "Nitemary",
+        "ru": "Найтмери"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 4,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 180
+    },
+    {
+      "id": "GhostRabbit_Grass",
+      "dexNo": 148,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Nitemary Botan",
+        "ru": "Найтмери Ботан"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 3,
+        "Handcraft": 4,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 180
+    },
+    {
+      "id": "BlackPuppy",
+      "dexNo": 149,
+      "dexSuffix": "",
+      "name": {
+        "en": "Smokie",
+        "ru": "Смоки"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": -1
+    },
+    {
+      "id": "BlackPuppy_Ice",
+      "dexNo": 149,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Smokie Cryst",
+        "ru": "Смоки Крист"
+      },
+      "elements": [
+        "Dark",
+        "Ice"
+      ],
+      "work": {
+        "Collection": 2,
+        "Cool": 2
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": -1
+    },
+    {
+      "id": "MysteryMask",
+      "dexNo": 150,
+      "dexSuffix": "",
+      "name": {
+        "en": "Omascul",
+        "ru": "Омаскул"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 5
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": -1
+    },
+    {
+      "id": "IceNarwhal",
+      "dexNo": 151,
+      "dexSuffix": "",
+      "name": {
+        "en": "Whalaska",
+        "ru": "Валаска"
+      },
+      "elements": [
+        "Ice",
+        "Water"
+      ],
+      "work": {
+        "Watering": 5,
+        "Cool": 6
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 400
+    },
+    {
+      "id": "IceNarwhal_Fire",
+      "dexNo": 151,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Whalaska Ignis",
+        "ru": "Валаска Игнис"
+      },
+      "elements": [
+        "Ice",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 5,
+        "Cool": 6
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 400
+    },
+    {
+      "id": "GrassRabbitMan",
+      "dexNo": 152,
+      "dexSuffix": "",
+      "name": {
+        "en": "Verdash",
+        "ru": "Вердаш"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 4,
+        "Handcraft": 5,
+        "Collection": 5,
+        "Deforest": 3,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 275
+    },
+    {
+      "id": "GrimGirl",
+      "dexNo": 153,
+      "dexSuffix": "",
+      "name": {
+        "en": "Splatterina",
+        "ru": "Сплаттерина"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 6,
+        "Deforest": 3,
+        "ProductMedicine": 5,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 180
+    },
+    {
+      "id": "GoldenHorse",
+      "dexNo": 154,
+      "dexSuffix": "",
+      "name": {
+        "en": "Gildane",
+        "ru": "Гилдейн"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Collection": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": -1
+    },
+    {
+      "id": "SifuDog",
+      "dexNo": 155,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dogen",
+        "ru": "Ванфу"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 4,
+        "Collection": 3,
+        "Deforest": 3,
+        "ProductMedicine": 2,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 187
+    },
+    {
+      "id": "SumoDog",
+      "dexNo": 156,
+      "dexSuffix": "",
+      "name": {
+        "en": "Bulldosu",
+        "ru": "Буллдос"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Mining": 4,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 120
+    },
+    {
+      "id": "WhiteDeer",
+      "dexNo": 157,
+      "dexSuffix": "",
+      "name": {
+        "en": "Celesdir",
+        "ru": "Селесдир"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 4,
+        "Deforest": 7
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "WhiteDeer_Dark",
+      "dexNo": 157,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Celesdir Noct",
+        "ru": "Селесдир Нокт"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 4,
+        "Deforest": 8
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "BlackMetalDragon",
+      "dexNo": 158,
+      "dexSuffix": "",
+      "name": {
+        "en": "Astegon",
+        "ru": "Астегон"
+      },
+      "elements": [
+        "Dragon",
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Mining": 7
+      },
+      "nocturnal": true,
+      "size": "XL",
+      "transportSpeed": 375
+    },
+    {
+      "id": "WingGolem",
+      "dexNo": 159,
+      "dexSuffix": "",
+      "name": {
+        "en": "Knocklem",
+        "ru": "Теранайт"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Collection": 4,
+        "Mining": 7,
+        "Transport": 7
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 400
+    },
+    {
+      "id": "WingGolem_Fire",
+      "dexNo": 159,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Knocklem Ignis",
+        "ru": "Теранайт Игнис"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 5,
+        "Mining": 7,
+        "Transport": 7
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 400
+    },
+    {
+      "id": "WhiteShieldDragon",
+      "dexNo": 160,
+      "dexSuffix": "",
+      "name": {
+        "en": "Silvegis",
+        "ru": "Силвегис"
+      },
+      "elements": [
+        "Dragon"
+      ],
+      "work": {
+        "Deforest": 6
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": -1
+    },
+    {
+      "id": "BlueThunderHorse",
+      "dexNo": 161,
+      "dexSuffix": "",
+      "name": {
+        "en": "Azurmane",
+        "ru": "Азурмейн"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": -1
+    },
+    {
+      "id": "LongCat",
+      "dexNo": 162,
+      "dexSuffix": "",
+      "name": {
+        "en": "Valentail",
+        "ru": "Валентейл"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 150
+    },
+    {
+      "id": "ElecSnail",
+      "dexNo": 163,
+      "dexSuffix": "",
+      "name": {
+        "en": "Snock",
+        "ru": "Снок"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 4
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 120
+    },
+    {
+      "id": "ElecSnail_Ground",
+      "dexNo": 163,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Snock Lux",
+        "ru": "Снок Лакс"
+      },
+      "elements": [
+        "Electricity",
+        "Earth"
+      ],
+      "work": {
+        "GenerateElectricity": 4
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 120
+    },
+    {
+      "id": "DandelionGirl",
+      "dexNo": 164,
+      "dexSuffix": "",
+      "name": {
+        "en": "Souffline",
+        "ru": "Суффлин"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 2,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 50
+    },
+    {
+      "id": "BrownRabbit",
+      "dexNo": 165,
+      "dexSuffix": "",
+      "name": {
+        "en": "Lapiron",
+        "ru": "Лапирон"
+      },
+      "elements": [
+        "Earth"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "Collection": 4,
+        "Mining": 2,
+        "Transport": 1
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": 220
+    },
+    {
+      "id": "HoodGhost",
+      "dexNo": 166,
+      "dexSuffix": "",
+      "name": {
+        "en": "Hoodle",
+        "ru": "Худл"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 1,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "XS",
+      "transportSpeed": 200
+    },
+    {
+      "id": "ElecLizard",
+      "dexNo": 167,
+      "dexSuffix": "",
+      "name": {
+        "en": "Slowatt",
+        "ru": "Слоуватт"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 3
+      },
+      "nocturnal": false,
+      "size": "S",
+      "transportSpeed": -1
+    },
+    {
+      "id": "OniGhostGirl",
+      "dexNo": 168,
+      "dexSuffix": "",
+      "name": {
+        "en": "Bakemi",
+        "ru": "Бакеми"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 3,
+        "ProductMedicine": 4,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 300
+    },
+    {
+      "id": "KingSunfish",
+      "dexNo": 169,
+      "dexSuffix": "",
+      "name": {
+        "en": "Solmora",
+        "ru": "Солмора"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 4
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 150
+    },
+    {
+      "id": "KingSunfish_Thunder",
+      "dexNo": 169,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Solmora Lux",
+        "ru": "Солмора Лакс"
+      },
+      "elements": [
+        "Water",
+        "Electricity"
+      ],
+      "work": {
+        "Watering": 4,
+        "GenerateElectricity": 6
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 150
+    },
+    {
+      "id": "SleeveRabbit",
+      "dexNo": 170,
+      "dexSuffix": "",
+      "name": {
+        "en": "Lapure",
+        "ru": "Немофи"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 6,
+        "Collection": 5
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 100
+    },
+    {
+      "id": "GhostDragon",
+      "dexNo": 171,
+      "dexSuffix": "",
+      "name": {
+        "en": "Eidrolon",
+        "ru": "Айдролон"
+      },
+      "elements": [
+        "Dragon",
+        "Dark"
+      ],
+      "work": {
+        "Transport": 6
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 400
+    },
+    {
+      "id": "GhostDragon_Fire",
+      "dexNo": 171,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Eidrolon Ignis",
+        "ru": "Айдролон Игнис"
+      },
+      "elements": [
+        "Dragon",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 6,
+        "Transport": 6
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 400
+    },
+    {
+      "id": "ThunderFluffyBird",
+      "dexNo": 172,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dynamoff",
+        "ru": "Динамофф"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 6,
+        "Collection": 3,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "RedFlowerBird",
+      "dexNo": 173,
+      "dexSuffix": "",
+      "name": {
+        "en": "Tropicaw",
+        "ru": "Тропикау"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 5,
+        "Collection": 5
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 200
+    },
+    {
+      "id": "FoxExorcist",
+      "dexNo": 174,
+      "dexSuffix": "",
+      "name": {
+        "en": "Flaracle",
+        "ru": "Фларакл"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 7,
+        "Handcraft": 6,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "LotusDragon",
+      "dexNo": 175,
+      "dexSuffix": "",
+      "name": {
+        "en": "Ophydia",
+        "ru": "Офидия"
+      },
+      "elements": [
+        "Leaf",
+        "Water"
+      ],
+      "work": {
+        "Watering": 5,
+        "Seeding": 7
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 200
+    },
+    {
+      "id": "ClownRabbit",
+      "dexNo": 176,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dupin",
+        "ru": "Дупин"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 7,
+        "Handcraft": 5,
+        "ProductMedicine": 4,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 350
+    },
+    {
+      "id": "ThiefBird",
+      "dexNo": 177,
+      "dexSuffix": "",
+      "name": {
+        "en": "Roujay",
+        "ru": "Роуджей"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 5,
+        "Transport": 5
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 450
+    },
+    {
+      "id": "SnakeGirl",
+      "dexNo": 178,
+      "dexSuffix": "",
+      "name": {
+        "en": "Venusa",
+        "ru": "Медуна"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 6,
+        "Collection": 6,
+        "ProductMedicine": 5,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 200
+    },
+    {
+      "id": "MushroomLady",
+      "dexNo": 179,
+      "dexSuffix": "",
+      "name": {
+        "en": "Mycora",
+        "ru": "Микора"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 6,
+        "Handcraft": 4,
+        "Collection": 4,
+        "ProductMedicine": 6
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": 100
+    },
+    {
+      "id": "LanternButler",
+      "dexNo": 180,
+      "dexSuffix": "",
+      "name": {
+        "en": "Loomen",
+        "ru": "Люмен"
+      },
+      "elements": [
+        "Dark",
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 4,
+        "Handcraft": 4,
+        "ProductMedicine": 4
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 175
+    },
+    {
+      "id": "MoonChild",
+      "dexNo": 181,
+      "dexSuffix": "",
+      "name": {
+        "en": "Wistella",
+        "ru": "Вистелла"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 6,
+        "ProductMedicine": 6,
+        "Transport": 1
+      },
+      "nocturnal": true,
+      "size": "S",
+      "transportSpeed": 300
+    },
+    {
+      "id": "MonochromeQueen",
+      "dexNo": 182,
+      "dexSuffix": "",
+      "name": {
+        "en": "Solenne",
+        "ru": "Соленна"
+      },
+      "elements": [
+        "Dark",
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 8,
+        "Collection": 4,
+        "Transport": 2
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 250
+    },
+    {
+      "id": "KabukiMan",
+      "dexNo": 183,
+      "dexSuffix": "",
+      "name": {
+        "en": "Renjishi",
+        "ru": "Рэндзиши"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 8,
+        "Handcraft": 6,
+        "Collection": 5,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 250
+    },
+    {
+      "id": "DomeArmorDragon",
+      "dexNo": 184,
+      "dexSuffix": "",
+      "name": {
+        "en": "Aegidron",
+        "ru": "Аэгидрон"
+      },
+      "elements": [
+        "Dragon",
+        "Earth"
+      ],
+      "work": {
+        "Mining": 8
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 360
+    },
+    {
+      "id": "ElecPanda",
+      "dexNo": 185,
+      "dexSuffix": "",
+      "name": {
+        "en": "Grizzbolt",
+        "ru": "Гриззболт"
+      },
+      "elements": [
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 5,
+        "Handcraft": 4,
+        "Deforest": 3,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 210
+    },
+    {
+      "id": "LilyQueen",
+      "dexNo": 186,
+      "dexSuffix": "",
+      "name": {
+        "en": "Lyleen",
+        "ru": "Лилин"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 7,
+        "Handcraft": 5,
+        "Collection": 6,
+        "ProductMedicine": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 275
+    },
+    {
+      "id": "LilyQueen_Dark",
+      "dexNo": 186,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Lyleen Noct",
+        "ru": "Лилин Нокт"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 5,
+        "Collection": 6,
+        "ProductMedicine": 7
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 275
+    },
+    {
+      "id": "ThunderDragonMan",
+      "dexNo": 187,
+      "dexSuffix": "",
+      "name": {
+        "en": "Orserk",
+        "ru": "Орсерк"
+      },
+      "elements": [
+        "Dragon",
+        "Electricity"
+      ],
+      "work": {
+        "GenerateElectricity": 8,
+        "Handcraft": 3,
+        "Transport": 4
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 250
+    },
+    {
+      "id": "Horus",
+      "dexNo": 188,
+      "dexSuffix": "",
+      "name": {
+        "en": "Faleris",
+        "ru": "Фалерис"
+      },
+      "elements": [
+        "Fire"
+      ],
+      "work": {
+        "EmitFlame": 6,
+        "Transport": 3
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 500
+    },
+    {
+      "id": "Horus_Water",
+      "dexNo": 188,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Faleris Aqua",
+        "ru": "Фалерис Аква"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 6,
+        "Transport": 5
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 500
+    },
+    {
+      "id": "BlackGriffon",
+      "dexNo": 189,
+      "dexSuffix": "",
+      "name": {
+        "en": "Shadowbeak",
+        "ru": "Шэдоубик"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 465
+    },
+    {
+      "id": "MoonQueen",
+      "dexNo": 190,
+      "dexSuffix": "",
+      "name": {
+        "en": "Selyne",
+        "ru": "Селена"
+      },
+      "elements": [
+        "Dark",
+        "Normal"
+      ],
+      "work": {
+        "Handcraft": 7,
+        "ProductMedicine": 6,
+        "Transport": 3
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 275
+    },
+    {
+      "id": "SnowTigerBeastman",
+      "dexNo": 191,
+      "dexSuffix": "",
+      "name": {
+        "en": "Bastigor",
+        "ru": "Бастигор"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Deforest": 6,
+        "Mining": 5,
+        "Cool": 8
+      },
+      "nocturnal": false,
+      "size": "M",
+      "transportSpeed": -1
+    },
+    {
+      "id": "BlueSkyDragon",
+      "dexNo": 192,
+      "dexSuffix": "",
+      "name": {
+        "en": "Shaolong",
+        "ru": "Шаолонг"
+      },
+      "elements": [
+        "Dragon",
+        "Water"
+      ],
+      "work": {
+        "Watering": 8,
+        "Collection": 5
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 450
+    },
+    {
+      "id": "Mothman",
+      "dexNo": 193,
+      "dexSuffix": "",
+      "name": {
+        "en": "Silvance",
+        "ru": "Сильванс"
+      },
+      "elements": [
+        "Leaf"
+      ],
+      "work": {
+        "Seeding": 6,
+        "Handcraft": 6,
+        "Collection": 4,
+        "ProductMedicine": 8,
+        "Transport": 2
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 500
+    },
+    {
+      "id": "FlowerPrince",
+      "dexNo": 194,
+      "dexSuffix": "",
+      "name": {
+        "en": "Dandilord",
+        "ru": "Дандилорд"
+      },
+      "elements": [
+        "Leaf",
+        "Dark"
+      ],
+      "work": {
+        "Seeding": 8,
+        "Handcraft": 6,
+        "Collection": 5,
+        "ProductMedicine": 6,
+        "Transport": 3
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 300
+    },
+    {
+      "id": "NightLady",
+      "dexNo": 195,
+      "dexSuffix": "",
+      "name": {
+        "en": "Bellanoir",
+        "ru": "Бэллануар"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 5,
+        "ProductMedicine": 5,
+        "Transport": 4
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "NightLady_Dark",
+      "dexNo": 195,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Bellanoir Libero",
+        "ru": "Бэллануар Либеро"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Handcraft": 6,
+        "ProductMedicine": 7,
+        "Transport": 4
+      },
+      "nocturnal": true,
+      "size": "M",
+      "transportSpeed": 400
+    },
+    {
+      "id": "DarkMechaDragon",
+      "dexNo": 196,
+      "dexSuffix": "",
+      "name": {
+        "en": "Xenolord",
+        "ru": "Зенолорд"
+      },
+      "elements": [
+        "Dark",
+        "Dragon"
+      ],
+      "work": {
+        "Collection": 2
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": -1
+    },
+    {
+      "id": "LegendDeer",
+      "dexNo": 197,
+      "dexSuffix": "",
+      "name": {
+        "en": "Hartalis",
+        "ru": "Харталис"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Collection": 7,
+        "Deforest": 7
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 450
+    },
+    {
+      "id": "SaintCentaur",
+      "dexNo": 198,
+      "dexSuffix": "",
+      "name": {
+        "en": "Paladius",
+        "ru": "Паладиус"
+      },
+      "elements": [
+        "Normal"
+      ],
+      "work": {
+        "Deforest": 6,
+        "Mining": 6
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 450
+    },
+    {
+      "id": "BlackCentaur",
+      "dexNo": 199,
+      "dexSuffix": "",
+      "name": {
+        "en": "Necromus",
+        "ru": "Некромус"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Deforest": 6,
+        "Mining": 6
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 625
+    },
+    {
+      "id": "IceHorse",
+      "dexNo": 200,
+      "dexSuffix": "",
+      "name": {
+        "en": "Frostallion",
+        "ru": "Фросталлион"
+      },
+      "elements": [
+        "Ice"
+      ],
+      "work": {
+        "Cool": 7
+      },
+      "nocturnal": false,
+      "size": "L",
+      "transportSpeed": 440
+    },
+    {
+      "id": "IceHorse_Dark",
+      "dexNo": 200,
+      "dexSuffix": "B",
+      "name": {
+        "en": "Frostallion Noct",
+        "ru": "Фросталлион Нокт"
+      },
+      "elements": [
+        "Dark"
+      ],
+      "work": {
+        "Collection": 7
+      },
+      "nocturnal": true,
+      "size": "L",
+      "transportSpeed": 440
+    },
+    {
+      "id": "PoseidonOrca",
+      "dexNo": 201,
+      "dexSuffix": "",
+      "name": {
+        "en": "Neptilius",
+        "ru": "Нептилиус"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {
+        "Watering": 7
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 450
+    },
+    {
+      "id": "JetDragon",
+      "dexNo": 202,
+      "dexSuffix": "",
+      "name": {
+        "en": "Jetragon",
+        "ru": "Джетрагон"
+      },
+      "elements": [
+        "Dragon"
+      ],
+      "work": {
+        "Collection": 8
+      },
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 1250
+    },
+    {
+      "id": "KingWhale",
+      "dexNo": 203,
+      "dexSuffix": "",
+      "name": {
+        "en": "Panthalus",
+        "ru": "Панталус"
+      },
+      "elements": [
+        "Water"
+      ],
+      "work": {},
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": 3000
+    },
+    {
+      "id": "WorldTreeDragon",
+      "dexNo": 204,
+      "dexSuffix": "",
+      "name": {
+        "en": "Astralym",
+        "ru": "Астралим"
+      },
+      "elements": [],
+      "work": {},
+      "nocturnal": false,
+      "size": "XL",
+      "transportSpeed": -1
+    }
+  ]
+}

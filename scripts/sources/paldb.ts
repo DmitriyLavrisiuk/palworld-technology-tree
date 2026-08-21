@@ -196,3 +196,35 @@ export async function fetchRecipe(slug: string, fresh: boolean): Promise<PaldbRe
   if (!materials.length) return null
   return { stations, materials }
 }
+
+export interface PaldbPal {
+  id: string
+  icon: string
+}
+
+/**
+ * Портреты палов приезжают одной страницей — тем же приёмом, что и иконки
+ * технологий. `data-pal-id` несёт точный ключ строки DataTable, поэтому джойн
+ * с игровой таблицей идёт по id, а не по отображаемому имени.
+ *
+ * На странице у каждого пала несколько ссылок с этим атрибутом (портрет, имя),
+ * но `img` есть только у портрета — по нему и отбираем.
+ */
+export async function fetchPalList(fresh: boolean): Promise<PaldbPal[]> {
+  const html = await fetchText(`${BASE}/en/Pals`, { fresh })
+  if (!html) throw new Error("Pals page returned nothing")
+
+  const $ = load(html)
+  const icons = new Map<string, string>()
+
+  $("a[data-pal-id]").each((_, element) => {
+    const node = $(element)
+    const id = node.attr("data-pal-id")
+    if (!id || icons.has(id)) return
+
+    const icon = node.find("img").first().attr("src")
+    if (icon) icons.set(id, icon)
+  })
+
+  return [...icons].map(([id, icon]) => ({ id, icon }))
+}
