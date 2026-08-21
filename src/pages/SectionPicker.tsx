@@ -1,6 +1,7 @@
 import { EggIcon, NetworkIcon, ZapIcon } from "lucide-react"
 
 import { SettingsSheet } from "@/components/SettingsSheet"
+import { CONTROL } from "@/components/Toolbar"
 import { Badge } from "@/components/ui/badge"
 import type { ProgressState } from "@/hooks/useProgress"
 import { t } from "@/lib/i18n"
@@ -57,7 +58,7 @@ export function SectionPicker({ progress }: SectionPickerProps) {
           locale={locale}
           theme={progress.theme}
           nodeSize={progress.nodeSize}
-          triggerClassName="h-9 pointer-coarse:h-11"
+          triggerClassName={CONTROL}
           onLocale={progress.setLocale}
           onTheme={progress.setTheme}
           onNodeSize={progress.setNodeSize}
@@ -104,8 +105,8 @@ export function SectionPicker({ progress }: SectionPickerProps) {
                   // Именно div, а не отключённая кнопка: раздела ещё нет, и
                   // ловить на него фокус незачем. «Скоро» — видимый текст, а не
                   // одна лишь приглушённость.
-                  <div className={cn(CARD, "border-dashed opacity-60")}>
-                    <Icon className="size-5 text-muted-foreground" aria-hidden />
+                  <div className={cn(CARD, "border-dashed")}>
+                    <Icon className="size-5 text-muted-foreground/70" aria-hidden />
                     <span className="flex flex-wrap items-center gap-2 text-sm font-medium text-muted-foreground">
                       {t(section.title, locale)}
                       <Badge variant="secondary">{t("soon", locale)}</Badge>

@@ -16,8 +16,34 @@ export interface TechData {
 /**
  * Данных около 1 МБ, поэтому они грузятся отдельными чанками, а не едут
  * в основном бандле. См. docs/ARCHITECTURE.md.
+ *
+ * Результат кэшируется на всё время сессии: раздел «Исследования»
+ * размонтируется при уходе на экран выбора, и без кэша каждый возврат заново
+ * перестраивал бы индексы по 588 технологиям — со скелетоном на ровном месте.
+ * Данные неизменяемы, поэтому один объект на всех безопасен.
  */
-export async function loadTechData(): Promise<TechData> {
+let cached: Promise<TechData> | null = null
+let ready: TechData | null = null
+
+export function loadTechData(): Promise<TechData> {
+  cached ??= buildTechData().then((data) => {
+    ready = data
+    return data
+  })
+  return cached
+}
+
+/**
+ * Готовые данные, если они уже загружены. Нужно разделу для стартового
+ * состояния: даже разрешённый промис отдаёт значение только в микрозадаче, а
+ * до неё успевает отрисоваться кадр со скелетоном — при возврате в раздел это
+ * видно вспышкой.
+ */
+export function peekTechData(): TechData | null {
+  return ready
+}
+
+async function buildTechData(): Promise<TechData> {
   const [technologies, chains, recipes] = await Promise.all([
     import("@/data/technologies.json").then((m) => m.default as unknown as Technology[]),
     import("@/data/chains.json").then((m) => m.default as unknown as ChainsFile),

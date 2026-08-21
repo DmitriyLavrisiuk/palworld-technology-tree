@@ -31,7 +31,7 @@ type UiKey = Parameters<typeof t>[0]
  * по типу указателя, а не по ширине экрана: у сенсорного ноутбука палец такой
  * же толстый, как у телефона.
  */
-const CONTROL = "h-9 pointer-coarse:h-11"
+export const CONTROL = "h-9 pointer-coarse:h-11"
 
 const VIEWS: { value: ViewMode; label: UiKey; icon: typeof Rows3Icon }[] = [
   { value: "lanes", label: "viewLanes", icon: Rows3Icon },

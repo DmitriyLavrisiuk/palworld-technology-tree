@@ -7,7 +7,7 @@ import { PlannerBar } from "@/components/tree/PlannerBar"
 import { TechTree } from "@/components/tree/TechTree"
 import { Skeleton } from "@/components/ui/skeleton"
 import type { ProgressState } from "@/hooks/useProgress"
-import { loadTechData, type TechData } from "@/lib/data"
+import { loadTechData, peekTechData, type TechData } from "@/lib/data"
 import type { Technology } from "@/types/tech"
 import { buildRoute } from "@/lib/planner"
 import { t } from "@/lib/i18n"
@@ -31,7 +31,7 @@ interface ResearchPageProps {
 
 /** Раздел «Исследования»: дерево технологий целиком. */
 export function ResearchPage({ progress }: ResearchPageProps) {
-  const [data, setData] = useState<TechData | null>(null)
+  const [data, setData] = useState<TechData | null>(peekTechData)
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState("")
   /** Переключаемые фильтры эфемерны, категории живут в хранилище. */
