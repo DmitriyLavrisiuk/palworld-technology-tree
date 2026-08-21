@@ -4,6 +4,7 @@ import {
   NO_PAL_FILTERS,
   buffGroupOf,
   filterPals,
+  filterPalsCached,
   hitRange,
   matchesPal,
   maxFood,
@@ -153,6 +154,37 @@ describe("избранное", () => {
     const pals = [pal("A", {}), pal("B", {})]
     const f = filters({ favoritesOnly: true })
     expect(filterPals(pals, f, "", "ru", new Set(["B"])).map((p) => p.id)).toEqual(["B"])
+  })
+})
+
+describe("кеш выдач", () => {
+  it("повторный запрос отдаёт тот же массив по ссылке", () => {
+    const pals = [pal("A", { Mining: 2 }), pal("B", {})]
+    const f = filters({ works: works([["Mining", null]]) })
+    const first = filterPalsCached(pals, f, "", "ru")
+    expect(filterPalsCached(pals, f, "", "ru")).toBe(first)
+    expect(first.map((p) => p.id)).toEqual(["A"])
+  })
+
+  it("другой запрос или язык — другая запись", () => {
+    const pals = [pal("A", {}), pal("B", {})]
+    expect(filterPalsCached(pals, NO_PAL_FILTERS, "a", "ru")).not.toBe(
+      filterPalsCached(pals, NO_PAL_FILTERS, "b", "ru"),
+    )
+  })
+
+  it("смена избранного при включённом фильтре не отдаёт устаревшую выдачу", () => {
+    const pals = [pal("A", {}), pal("B", {})]
+    const f = filters({ favoritesOnly: true })
+    expect(filterPalsCached(pals, f, "", "ru", new Set(["A"])).map((p) => p.id)).toEqual(["A"])
+    expect(filterPalsCached(pals, f, "", "ru", new Set(["B"])).map((p) => p.id)).toEqual(["B"])
+  })
+
+  it("смена массива палов не отдаёт выдачу от прежних данных", () => {
+    const before = [pal("A", {})]
+    const after = [pal("A", {}), pal("B", {})]
+    expect(filterPalsCached(before, NO_PAL_FILTERS, "", "ru")).toHaveLength(1)
+    expect(filterPalsCached(after, NO_PAL_FILTERS, "", "ru")).toHaveLength(2)
   })
 })
 

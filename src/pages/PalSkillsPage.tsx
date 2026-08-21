@@ -17,7 +17,7 @@ import { loadPals, peekPals } from "@/lib/palData"
 import {
   NO_PAL_FILTERS,
   buffGroupOf,
-  filterPals,
+  filterPalsCached,
   maxFood,
   maxWorkLevel,
   usedWorkKeys,
@@ -74,9 +74,19 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
     return counts
   }, [pals])
 
+  const anyFilterActive =
+    filters.works.size > 0 ||
+    filters.elements.size > 0 ||
+    filters.food !== null ||
+    filters.buffs.size > 0 ||
+    filters.favoritesOnly
+
+  /** Пока не выбран ни фильтр, ни запрос, показывать некого — и незачем. */
+  const idle = !anyFilterActive && query.trim() === ""
+
   const found = useMemo(
-    () => filterPals(pals, filters, query, locale, progress.palFavorites),
-    [pals, filters, query, locale, progress.palFavorites],
+    () => (idle ? [] : filterPalsCached(pals, filters, query, locale, progress.palFavorites)),
+    [idle, pals, filters, query, locale, progress.palFavorites],
   )
 
   /**
@@ -207,8 +217,10 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
         {deferredFound.length === 0 ? (
           <Empty className="py-12">
             <EmptyHeader>
-              <EmptyTitle>{t("palsEmpty", locale)}</EmptyTitle>
-              <EmptyDescription>{t("palsEmptyHint", locale)}</EmptyDescription>
+              <EmptyTitle>{t(idle ? "palsIdle" : "palsEmpty", locale)}</EmptyTitle>
+              <EmptyDescription>
+                {t(idle ? "palsIdleHint" : "palsEmptyHint", locale)}
+              </EmptyDescription>
             </EmptyHeader>
           </Empty>
         ) : (

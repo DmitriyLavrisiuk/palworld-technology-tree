@@ -1,4 +1,7 @@
+import { useState } from "react"
 import {
+  CheckIcon,
+  ChevronDownIcon,
   LayoutGridIcon,
   Rows3Icon,
   RulerIcon,
@@ -9,6 +12,8 @@ import {
 
 import { BackToSections } from "@/components/BackToSections"
 import { CategoryFilter } from "@/components/CategoryFilter"
+import { FilterPopoverContent } from "@/components/FilterPopoverContent"
+import { Popover, PopoverTrigger } from "@/components/ui/popover"
 import { SettingsSheet } from "@/components/SettingsSheet"
 import { Badge } from "@/components/ui/badge"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
@@ -35,9 +40,13 @@ export const CONTROL = "h-9 pointer-coarse:h-11"
  * Парящая шапка, общая для разделов: постоянная тень, скругление и отступы
  * от краёв экрана со всех сторон. Из-за зазора сверху контент при прокрутке
  * виден в щели над шапкой — это и есть «парение», а не дефект.
+ *
+ * `mt-3` обязан совпадать с `top-3`: без него sticky сдвигает шапку вниз от
+ * позиции в потоке и она накрывает первые 12 px контента. Фон и граница —
+ * те же, что у меню фильтров: прилипшее меню читается как продолжение шапки.
  */
 export const FLOATING_HEADER =
-  "sticky top-3 z-40 mx-3 rounded-xl border bg-background/95 shadow-[0_8px_24px_-12px_rgb(0_0_0/0.25)] backdrop-blur"
+  "sticky top-3 z-40 mx-3 mt-3 rounded-xl border border-border/60 bg-popover/75 shadow-[0_8px_24px_-12px_rgb(0_0_0/0.25)] backdrop-blur-xl backdrop-saturate-150"
 
 const VIEWS: { value: ViewMode; label: UiKey; icon: typeof Rows3Icon }[] = [
   { value: "lanes", label: "viewLanes", icon: Rows3Icon },
@@ -62,6 +71,68 @@ const LEGEND: { label: UiKey; className: string }[] = [
   { label: "legendFavorite", className: "bg-favorite" },
   { label: "legendLocked", className: "bg-muted-foreground/60" },
 ]
+
+/**
+ * Режимы просмотра — пилюля с меню, той же формы, что остальные меню шапки.
+ * Выбор одиночный, поэтому меню закрывается сразу после клика — в отличие
+ * от мультивыборных панелей, которые держатся открытыми.
+ */
+function ViewMenu({
+  locale,
+  view,
+  onView,
+}: {
+  locale: Locale
+  view: ViewMode
+  onView: (view: ViewMode) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const current = VIEWS.find((item) => item.value === view) ?? VIEWS[0]
+  const CurrentIcon = current.icon
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger
+        className={cn(
+          CONTROL,
+          "flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-xs whitespace-nowrap transition-colors",
+          "text-foreground hover:bg-muted",
+          "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
+        )}
+      >
+        <CurrentIcon className="size-3.5" />
+        {t(current.label, locale)}
+        <ChevronDownIcon className="size-3.5 text-muted-foreground" />
+      </PopoverTrigger>
+
+      <FilterPopoverContent className="w-56 p-1">
+        <ul className="flex flex-col">
+          {VIEWS.map((item) => {
+            const Icon = item.icon
+            const active = view === item.value
+            return (
+              <li key={item.value}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onView(item.value)
+                    setOpen(false)
+                  }}
+                  aria-pressed={active}
+                  className="flex min-h-9 w-full items-center gap-2 rounded-md px-2 text-left text-sm transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none pointer-coarse:min-h-11"
+                >
+                  <Icon className="size-4 shrink-0 text-muted-foreground" />
+                  <span className="min-w-0 flex-1 truncate">{t(item.label, locale)}</span>
+                  {active && <CheckIcon className="size-4 shrink-0" strokeWidth={3} />}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </FilterPopoverContent>
+    </Popover>
+  )
+}
 
 interface ToolbarProps {
   locale: Locale
@@ -184,31 +255,7 @@ export function Toolbar({
       </div>
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t px-3 py-2">
-        {/* Контейнер под пальцем выше обычного: сегменты внутри тянутся на всю
-            высоту минус паддинг, и при 44 px контейнера им доставалось бы 40. */}
-        <span className="flex h-9 shrink-0 items-center rounded-lg bg-muted p-0.5 pointer-coarse:h-12">
-          {VIEWS.map((item) => {
-            const Icon = item.icon
-            const active = view === item.value
-            return (
-              <button
-                key={item.value}
-                type="button"
-                onClick={() => onView(item.value)}
-                aria-pressed={active}
-                className={cn(
-                  "flex h-full items-center gap-1.5 rounded-md px-2.5 text-xs whitespace-nowrap transition-colors sm:px-3",
-                  active
-                    ? "bg-background text-foreground shadow-xs"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <Icon className="size-3.5" />
-                {t(item.label, locale)}
-              </button>
-            )
-          })}
-        </span>
+        <ViewMenu locale={locale} view={view} onView={onView} />
 
         <span className="flex flex-wrap items-center gap-2">
           <CategoryFilter

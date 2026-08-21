@@ -158,6 +158,43 @@ export function filterPals(
 }
 
 /**
+ * Кеш выдач на сессию: повторный запрос отдаёт прежний массив без пересбора,
+ * а неизменная ссылка даёт memo-карточкам пропустить рендер. Привязан к
+ * массиву палов через WeakMap, поэтому со сменой данных умирает сам. Язык и
+ * избранное входят в ключ — избранное только при включённом фильтре, иначе
+ * от него ничего не зависит.
+ */
+const filterCache = new WeakMap<readonly Pal[], Map<string, Pal[]>>()
+
+export function filterPalsCached(
+  pals: readonly Pal[],
+  filters: PalFilters,
+  query: string,
+  locale: Locale,
+  favorites: ReadonlySet<string> = new Set(),
+): Pal[] {
+  let cache = filterCache.get(pals)
+  if (!cache) {
+    cache = new Map()
+    filterCache.set(pals, cache)
+  }
+  const key = JSON.stringify([
+    locale,
+    query,
+    [...filters.works],
+    [...filters.elements],
+    filters.food,
+    [...filters.buffs],
+    filters.favoritesOnly ? [...favorites].sort() : null,
+  ])
+  const cached = cache.get(key)
+  if (cached) return cached
+  const result = filterPals(pals, filters, query, locale, favorites)
+  cache.set(key, result)
+  return result
+}
+
+/**
  * Верхняя граница шкалы уровней. Берётся из данных, а не из константы: в игре
  * базовый максимум четыре, у стихийных вариантов доходит до восьми, и после
  * патча это число может измениться.

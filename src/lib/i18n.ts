@@ -82,6 +82,11 @@ export const UI = {
   palNocturnal: { ru: "Работает ночью", en: "Nocturnal" },
   palNoWork: { ru: "не работает", en: "no jobs" },
   palsEmpty: { ru: "Никто не подходит", en: "Nobody matches" },
+  palsIdle: { ru: "Выберите фильтр", en: "Pick a filter" },
+  palsIdleHint: {
+    ru: "Отметьте работы, стихии или другой фильтр — подходящие палы появятся здесь. Или начните вводить имя в поиске.",
+    en: "Choose works, elements or another filter — matching pals will show up here. Or start typing a name in the search box.",
+  },
   palsEmptyHint: {
     ru: "Ни один пал не закрывает все выбранные работы на таком уровне — снизьте требование или уберите работу",
     en: "No pal covers every selected job at that level — lower a requirement or drop a job",
