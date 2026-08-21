@@ -14,6 +14,7 @@ import {
 import { GROUP_NAMES, GROUP_ORDER } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
 import { ELEMENT_ORDER, WORK_ORDER, type PalsFile } from "../src/types/pal.ts"
+import type { DropsFile } from "../src/types/drop.ts"
 
 /**
  * Сторожит сгенерированные данные. Парсер сверяет то же самое во время
@@ -29,6 +30,7 @@ const recipes = read<Recipe[]>("src/data/recipes.json")
 const chains = read<ChainsFile>("src/data/chains.json")
 const palsFile = read<PalsFile>("src/data/pals.json")
 const pals = palsFile.pals
+const dropsFile = read<DropsFile>("src/data/drops.json")
 
 const ids = new Set(technologies.map((tech) => tech.id))
 
@@ -488,5 +490,66 @@ describe("палы: контрольные суммы", () => {
 
   it("версия игры совпадает с константой", () => {
     expect(palsFile.gameVersion).toBe(GAME_VERSION)
+  })
+})
+
+describe("дроп с палов", () => {
+  const resources = dropsFile.resources
+  const palIds = new Set(pals.map((pal) => pal.id))
+
+  it("ресурсы есть и id уникальны без оглядки на регистр", () => {
+    expect(resources.length).toBeGreaterThanOrEqual(90)
+    const lower = resources.map((resource) => resource.id.toLowerCase())
+    expect(new Set(lower).size).toBe(resources.length)
+  })
+
+  it("у каждого ресурса имя на обоих языках", () => {
+    for (const resource of resources) {
+      expect(resource.name.en, resource.id).toBeTruthy()
+      expect(resource.name.ru, resource.id).toBeTruthy()
+    }
+  })
+
+  it("каждый источник — пал из Палдекса, без дублей внутри ресурса", () => {
+    for (const resource of resources) {
+      expect(resource.sources.length, resource.id).toBeGreaterThan(0)
+      const seen = new Set<string>()
+      for (const source of resource.sources) {
+        expect(palIds.has(source.palId), `${resource.id}: ${source.palId}`).toBe(true)
+        expect(seen.has(source.palId), `${resource.id}: ${source.palId} дважды`).toBe(false)
+        seen.add(source.palId)
+      }
+    }
+  })
+
+  it("количества и шансы в осмысленных пределах", () => {
+    for (const resource of resources) {
+      for (const source of resource.sources) {
+        expect(source.min, `${resource.id}: ${source.palId}`).toBeGreaterThanOrEqual(1)
+        expect(source.max).toBeGreaterThanOrEqual(source.min)
+        expect(source.rate).toBeGreaterThan(0)
+        expect(source.rate).toBeLessThanOrEqual(100)
+      }
+    }
+  })
+
+  it("почти у каждого пала есть дроп: пустые перечислены поимённо", () => {
+    const covered = new Set(
+      resources.flatMap((resource) => resource.sources.map((source) => source.palId)),
+    )
+    const without = pals.filter((pal) => !covered.has(pal.id)).map((pal) => pal.id)
+    // Единственное известное исключение — DrillGame: у него нет строки в таблице дропа.
+    expect(without).toEqual(["DrillGame"])
+  })
+
+  it("у каждого ресурса есть файл иконки на диске", () => {
+    for (const resource of resources) {
+      const file = join(ROOT, "public/icons/drops", `${resource.id}.webp`)
+      expect(existsSync(file), resource.id).toBe(true)
+    }
+  })
+
+  it("версия игры совпадает с остальными данными", () => {
+    expect(dropsFile.gameVersion).toBe(GAME_VERSION)
   })
 })

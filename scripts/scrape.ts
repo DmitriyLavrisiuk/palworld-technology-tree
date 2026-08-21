@@ -3,9 +3,10 @@ import { readFile } from "node:fs/promises"
 
 import { writeJson } from "./lib/http.ts"
 import { log } from "./lib/log.ts"
-import { fetchDataTable, fetchPalTable } from "./sources/datatable.ts"
+import { fetchDataTable, fetchDropTable, fetchPalTable } from "./sources/datatable.ts"
 import {
   fetchDescriptions,
+  fetchDropItemNames,
   fetchElementNames,
   fetchPalNames,
   fetchPassiveSkills,
@@ -13,6 +14,7 @@ import {
 } from "./sources/l10n.ts"
 import {
   fetchElementIcons,
+  fetchItemIconIndex,
   fetchItemNames,
   fetchPalList,
   fetchRecipe,
@@ -30,6 +32,7 @@ import {
   TOTAL_TECH_POINTS,
 } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
+import type { DropResource, DropsFile } from "../src/types/drop.ts"
 import {
   ELEMENT_ORDER,
   WORK_ORDER,
@@ -44,9 +47,10 @@ const OUT = {
   recipes: "src/data/recipes.json",
   chains: "src/data/chains.json",
   pals: "src/data/pals.json",
+  drops: "src/data/drops.json",
 }
 
-const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons", "work-icons", "element-icons"] as const
+const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons", "work-icons", "element-icons", "drops", "drop-icons"] as const
 type Stage = (typeof STAGES)[number]
 
 const args = process.argv.slice(2)
@@ -353,6 +357,67 @@ async function buildChainsFile(technologies: Technology[]) {
  * Палы: числа из игровой таблицы, имена из дампа локализации — то же
  * распределение авторитета, что у технологий.
  */
+/**
+ * Дроп с палов: ресурс → палы-источники. Палы берутся из уже собранного
+ * pals.json — стадия зависит от `pals`, как chains от techs: иначе сюда
+ * попали бы босс- и квестовые строки таблицы дропа.
+ */
+async function buildDrops(): Promise<void> {
+  log.step("Pal drops")
+
+  const palsFile = JSON.parse(await readFile(OUT.pals, "utf8")) as PalsFile
+  const ourPals = new Set(palsFile.pals.map((pal) => pal.id))
+
+  const [table, namesEn, namesRu] = await Promise.all([
+    fetchDropTable(fresh),
+    fetchDropItemNames("en", fresh),
+    fetchDropItemNames("ru", fresh),
+  ])
+
+  // Регистр itemId в таблице гуляет («poppy» против «Poppy» у разных палов) —
+  // канонический id берётся из ключей локализации, регистронезависимо.
+  const canon = new Map(Object.keys(namesEn).map((key) => [key.toLowerCase(), key]))
+
+  const resources = new Map<string, DropResource>()
+  const unnamed = new Set<string>()
+
+  for (const row of table) {
+    if (!ourPals.has(row.id)) continue
+    for (const slot of row.slots) {
+      const id = canon.get(slot.itemId.toLowerCase()) ?? slot.itemId
+      if (!canon.has(slot.itemId.toLowerCase())) unnamed.add(slot.itemId)
+
+      let resource = resources.get(id)
+      if (!resource) {
+        resource = {
+          id,
+          name: {
+            en: usable(namesEn[id]) ?? id,
+            ru: usable(namesRu[id]) ?? usable(namesEn[id]) ?? id,
+          },
+          sources: [],
+        }
+        resources.set(id, resource)
+      }
+      resource.sources.push({ palId: row.id, min: slot.min, max: slot.max, rate: slot.rate })
+    }
+  }
+
+  if (unnamed.size) {
+    log.warn(`${unnamed.size} drop items without a localised name: ${[...unnamed].slice(0, 5).join(", ")}`)
+  }
+
+  const file: DropsFile = {
+    gameVersion: GAME_VERSION,
+    generatedAt: new Date().toISOString().slice(0, 10),
+    resources: [...resources.values()].sort((a, b) => a.id.localeCompare(b.id)),
+  }
+
+  await writeJson(OUT.drops, file)
+  const sources = file.resources.reduce((sum, resource) => sum + resource.sources.length, 0)
+  log.done(`${file.resources.length} resources, ${sources} sources → ${OUT.drops}`)
+}
+
 async function buildPals(): Promise<PalsFile> {
   log.step("Pals")
 
@@ -527,6 +592,36 @@ async function main() {
     }
     const result = await downloadIcons(icons, fresh, "public/icons/elements")
     log.done(`${result.saved} element icons → public/icons/elements`)
+  }
+
+  if (runs("drops")) await buildDrops()
+
+  if (runs("drop-icons")) {
+    log.step("Drop icons")
+    const drops = JSON.parse(await readFile(OUT.drops, "utf8")) as DropsFile
+    const index = await fetchItemIconIndex(false)
+    const slugOf = (name: string) => name.trim().replace(/ /g, "_")
+
+    const unresolved: string[] = []
+    const entries = drops.resources.map((resource) => {
+      const direct = index.byId.get(resource.id)
+      const viaName = index.bySlug.get(slugOf(resource.name.en))
+      if (direct && viaName && direct !== viaName) {
+        throw new Error(
+          `item icon mismatch for ${resource.id}: hover says ${direct}, name slug says ${viaName}`,
+        )
+      }
+      const icon = direct ?? viaName ?? ""
+      if (!icon) unresolved.push(resource.id)
+      return { id: resource.id, icon }
+    })
+
+    if (unresolved.length) {
+      log.warn(`${unresolved.length} drop icons unresolved: ${unresolved.slice(0, 5).join(", ")}`)
+    }
+    const result = await downloadIcons(entries, fresh, "public/icons/drops")
+    log.done(`${result.saved} drop icons → public/icons/drops`)
+    if (result.failed.length) log.warn(`${result.failed.length} drop icons failed`)
   }
 
   if (runs("recipes")) await buildRecipes(technologies)

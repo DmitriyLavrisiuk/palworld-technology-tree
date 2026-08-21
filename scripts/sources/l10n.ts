@@ -65,6 +65,11 @@ export async function fetchWorkNames(locale: Locale, fresh: boolean): Promise<Re
   return await fetchNameMap(locale, "work_suitability", fresh)
 }
 
+/** Названия предметов. Ключи — игровые id, те же, что в таблице дропа. */
+export async function fetchDropItemNames(locale: Locale, fresh: boolean): Promise<Record<string, string>> {
+  return await fetchNameMap(locale, "items", fresh)
+}
+
 /** Названия стихий. Формат тот же, что у работ. */
 export async function fetchElementNames(locale: Locale, fresh: boolean): Promise<Record<string, string>> {
   return await fetchNameMap(locale, "elements", fresh)

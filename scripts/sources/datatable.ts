@@ -10,6 +10,7 @@ const MIRROR =
 
 const URL = `${MIRROR}Technology/DT_TechnologyRecipeUnlock.json`
 const PAL_URL = `${MIRROR}Character/DT_PalMonsterParameter.json`
+const DROP_URL = `${MIRROR}Character/DT_PalDropItem.json`
 
 export interface RawRow {
   UnlockBuildObjects: string[]
@@ -167,6 +168,68 @@ export async function fetchPalTable(fresh: boolean): Promise<PalTableRow[]> {
       passives: [row.PassiveSkill1, row.PassiveSkill2, row.PassiveSkill3, row.PassiveSkill4]
         .filter((skill): skill is string => Boolean(skill) && skill !== "None"),
     })
+  }
+
+  return rows
+}
+
+interface RawDrop {
+  CharacterID: string
+  Level: number
+  [slot: string]: unknown
+}
+
+interface DropExport {
+  Rows?: Record<string, RawDrop>
+}
+
+export interface DropSlot {
+  itemId: string
+  /** Шанс в процентах. */
+  rate: number
+  min: number
+  max: number
+}
+
+export interface DropTableRow {
+  /** CharacterID — тот же ключ, что id пала в DT_PalMonsterParameter. */
+  id: string
+  slots: DropSlot[]
+}
+
+/**
+ * Дроп палов. Берётся только базовая строка `Level 0`: строки уровней 10–80
+ * описывают эндгейм-дроп «пробуждения» (реликвии Древа и души) поверх
+ * базового и в раздел не входят. Регистр itemId в таблице гуляет — у одного
+ * пала «poppy» строчными; нормализация живёт на этапе сборки, где есть карта
+ * ключей локализации.
+ */
+export async function fetchDropTable(fresh: boolean): Promise<DropTableRow[]> {
+  const exports = await fetchJson<DropExport[]>(DROP_URL, { fresh })
+  const table = exports.find((entry) => entry.Rows)
+  if (!table?.Rows) throw new Error("Drop DataTable export contains no Rows")
+
+  const rows: DropTableRow[] = []
+  const seen = new Set<string>()
+
+  for (const row of Object.values(table.Rows)) {
+    if (row.Level !== 0 || seen.has(row.CharacterID)) continue
+    seen.add(row.CharacterID)
+
+    const slots: DropSlot[] = []
+    for (let index = 1; index <= 10; index++) {
+      const itemId = row[`ItemId${index}`] as string | undefined
+      if (!itemId || itemId === "None") continue
+      slots.push({
+        itemId,
+        rate: row[`Rate${index}`] as number,
+        // Регистр полей в таблице именно такой: min строчными, Max заглавной.
+        min: row[`min${index}`] as number,
+        max: row[`Max${index}`] as number,
+      })
+    }
+
+    if (slots.length > 0) rows.push({ id: row.CharacterID, slots })
   }
 
   return rows

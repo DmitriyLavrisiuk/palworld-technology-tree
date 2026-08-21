@@ -26,6 +26,11 @@ export const UI = {
     ru: "Кто на какие работы годится: подбор пала под задачи базы",
     en: "Who is good at what: pick a pal for the jobs your base needs",
   },
+  sectionPalDrops: { ru: "Дроп с палов", en: "Pal drops" },
+  sectionPalDropsHint: {
+    ru: "Что выпадает из палов при смерти: нужна шерсть — видно, кого фармить",
+    en: "What pals drop when killed: need wool — see who to farm",
+  },
   sectionBreeding: { ru: "Разведение палов", en: "Pal breeding" },
   sectionBreedingHint: {
     ru: "Пары родителей и кто из них вылупляется",
@@ -37,6 +42,19 @@ export const UI = {
     ru: "Навыки палов — Шпаргалки Palworld",
     en: "Pal Skills — Palworld Cheatsheets",
   },
+  titlePalDrops: {
+    ru: "Дроп с палов — Шпаргалки Palworld",
+    en: "Pal Drops — Palworld Cheatsheets",
+  },
+  dropSearch: { ru: "Поиск ресурса…", en: "Search resources…" },
+  dropsFound: { ru: "Найдено", en: "Found" },
+  dropsEmpty: { ru: "Ничего не нашлось", en: "Nothing found" },
+  dropsEmptyHint: {
+    ru: "Такого ресурса нет — проверьте написание или поищите на другом языке",
+    en: "No such resource — check the spelling or try the other language",
+  },
+  dropSheetHint: { ru: "кто выпадает при смерти", en: "dropped on death by" },
+  dropChanceTitle: { ru: "Шанс выпадения", en: "Drop chance" },
   workFilterTitle: { ru: "Какие работы нужны", en: "Jobs you need covered" },
   workFilterHint: {
     ru: "Первый клик по цифре — «от», второй — «до». Клик при растянутом диапазоне начинает новый, по единственной выбранной цифре — снимает выбор.",
@@ -217,6 +235,11 @@ const STEP_FORMS = {
   en: ["step", "steps", "steps"],
 } as const
 
+const PAL_FORMS = {
+  ru: ["пал", "пала", "палов"],
+  en: ["pal", "pals", "pals"],
+} as const
+
 /**
  * «1 очков» и «1 шагов» — так писать нельзя. Русский требует трёх форм,
  * английскому хватает двух, поэтому склонение живёт здесь, а не в компонентах.
@@ -238,4 +261,8 @@ export function pointsLabel(count: number, locale: Locale, ancient: boolean): st
 
 export function stepsLabel(count: number, locale: Locale): string {
   return pluralForm(count, locale, STEP_FORMS[locale])
+}
+
+export function palsLabel(count: number, locale: Locale): string {
+  return pluralForm(count, locale, PAL_FORMS[locale])
 }

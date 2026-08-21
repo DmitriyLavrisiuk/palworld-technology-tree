@@ -318,3 +318,43 @@ export async function fetchElementIcons(
 
   return [...found].map(([id, icon]) => ({ id, icon }))
 }
+
+export interface ItemIconIndex {
+  /** Прямое соответствие: data-hover несёт игровой id предмета. */
+  byId: Map<string, string>
+  /** Резерв: слаг английского имени — из него paldb строит href предмета. */
+  bySlug: Map<string, string>
+}
+
+/**
+ * Иконки предметов со страницы Items — двумя честными путями сразу. У части
+ * блоков ссылка с иконкой несёт `data-hover="?s=Items%2F<GameId>"` — это
+ * прямой игровой id. У остальных hover закэширован хэшем, и соответствие
+ * строится через слаг английского имени из локализации игры: href страницы
+ * предмета paldb получает из имени заменой пробелов на подчёркивания. Пути
+ * сверяются друг с другом на этапе сборки; расхождение — ошибка.
+ */
+export async function fetchItemIconIndex(fresh: boolean): Promise<ItemIconIndex> {
+  const html = await fetchText(`${BASE}/en/Items`, { fresh })
+  if (!html) throw new Error("Items page returned nothing")
+
+  const $ = load(html)
+  const byId = new Map<string, string>()
+  const bySlug = new Map<string, string>()
+
+  $("a").each((_, element) => {
+    const anchor = $(element)
+    const icon = anchor.children("img").first().attr("src")
+    if (!icon) return
+
+    const href = anchor.attr("href")
+    if (href && !bySlug.has(decodeURIComponent(href))) {
+      bySlug.set(decodeURIComponent(href), icon)
+    }
+
+    const hover = /^\?s=Items%2F([A-Za-z0-9_]+)$/.exec(anchor.attr("data-hover") ?? "")?.[1]
+    if (hover && !byId.has(hover)) byId.set(hover, icon)
+  })
+
+  return { byId, bySlug }
+}

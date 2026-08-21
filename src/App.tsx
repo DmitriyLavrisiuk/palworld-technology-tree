@@ -4,6 +4,7 @@ import { useProgress } from "@/hooks/useProgress"
 import { useSection } from "@/hooks/useSection"
 import { useTheme } from "@/hooks/useTheme"
 import { t } from "@/lib/i18n"
+import { PalDropsPage } from "@/pages/PalDropsPage"
 import { PalSkillsPage } from "@/pages/PalSkillsPage"
 import { ResearchPage } from "@/pages/ResearchPage"
 import { SectionPicker } from "@/pages/SectionPicker"
@@ -20,6 +21,7 @@ const TITLE = {
   home: "appName",
   research: "titleResearch",
   "pal-skills": "titlePalSkills",
+  "pal-drops": "titlePalDrops",
 } as const
 
 export default function App() {
@@ -43,6 +45,7 @@ export default function App() {
 
   if (section === "research") return <ResearchPage progress={progress} />
   if (section === "pal-skills") return <PalSkillsPage progress={progress} />
+  if (section === "pal-drops") return <PalDropsPage progress={progress} />
 
   return <SectionPicker progress={progress} />
 }
