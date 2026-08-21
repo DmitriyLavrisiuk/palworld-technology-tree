@@ -451,6 +451,41 @@ describe("палы: контрольные суммы", () => {
     }
   })
 
+  it("расход еды в диапазоне 1–9", () => {
+    for (const pal of pals) {
+      expect(pal.food, pal.id).toBeGreaterThanOrEqual(1)
+      expect(pal.food, pal.id).toBeLessThanOrEqual(9)
+    }
+  })
+
+  it("описание есть у каждого пала на обоих языках", () => {
+    for (const pal of pals) {
+      expect(pal.description.ru.length, pal.id).toBeGreaterThan(0)
+      expect(pal.description.en.length, pal.id).toBeGreaterThan(0)
+    }
+  })
+
+  /**
+   * Каждая пассивка, встречающаяся у палов, обязана иметь тексты в
+   * справочнике файла. Обратное тоже верно: в справочнике нет ничего
+   * лишнего — тексты кладутся только для реально встречающихся.
+   */
+  it("пассивки палов и их справочник совпадают", () => {
+    const used = new Set(pals.flatMap((pal) => pal.passives))
+    expect([...used].sort()).toEqual(Object.keys(palsFile.passives).sort())
+    for (const id of used) {
+      const info = palsFile.passives[id]
+      expect(info.name.ru.length, id).toBeGreaterThan(0)
+      expect(info.description.ru.length, id).toBeGreaterThan(0)
+    }
+  })
+
+  it("у каждой стихии есть иконка на диске", () => {
+    for (const key of ELEMENT_ORDER) {
+      expect(existsSync(join(ROOT, "public/icons/elements", `${key}.webp`)), key).toBe(true)
+    }
+  })
+
   it("версия игры совпадает с константой", () => {
     expect(palsFile.gameVersion).toBe(GAME_VERSION)
   })

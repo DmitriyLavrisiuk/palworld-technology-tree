@@ -69,3 +69,15 @@ export async function fetchWorkNames(locale: Locale, fresh: boolean): Promise<Re
 export async function fetchElementNames(locale: Locale, fresh: boolean): Promise<Record<string, string>> {
   return await fetchNameMap(locale, "elements", fresh)
 }
+
+/** Тексты пассивных навыков: имя и описание эффекта. */
+export async function fetchPassiveSkills(locale: Locale, fresh: boolean): Promise<L10nMap> {
+  const raw = await fetchJson<Record<string, Entry>>(URL(locale, "passive_skills"), { fresh })
+  const out: L10nMap = {}
+
+  for (const [id, entry] of Object.entries(raw)) {
+    out[id] = { name: entry.localized_name ?? "", description: entry.description ?? "" }
+  }
+
+  return out
+}

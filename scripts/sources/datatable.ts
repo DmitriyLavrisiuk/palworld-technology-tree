@@ -84,7 +84,12 @@ interface RawPal {
   ElementType1: string
   ElementType2: string
   Nocturnal: boolean
+  FoodAmount: number
   TransportSpeed: number
+  PassiveSkill1: string
+  PassiveSkill2: string
+  PassiveSkill3: string
+  PassiveSkill4: string
   WorkSuitability_EmitFlame: number
   WorkSuitability_Watering: number
   WorkSuitability_Seeding: number
@@ -111,8 +116,10 @@ export interface PalTableRow {
   size: PalSize
   elements: ElementKey[]
   nocturnal: boolean
+  food: number
   transportSpeed: number
   work: Partial<Record<WorkKey, number>>
+  passives: string[]
 }
 
 function stripEnum(value: string | undefined, prefix: string): string | null {
@@ -154,8 +161,11 @@ export async function fetchPalTable(fresh: boolean): Promise<PalTableRow[]> {
       size: (stripEnum(row.Size, "EPalSizeType::") ?? "M") as PalSize,
       elements,
       nocturnal: row.Nocturnal,
+      food: row.FoodAmount,
       transportSpeed: row.TransportSpeed,
       work,
+      passives: [row.PassiveSkill1, row.PassiveSkill2, row.PassiveSkill3, row.PassiveSkill4]
+        .filter((skill): skill is string => Boolean(skill) && skill !== "None"),
     })
   }
 

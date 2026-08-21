@@ -4,8 +4,15 @@ import { readFile } from "node:fs/promises"
 import { writeJson } from "./lib/http.ts"
 import { log } from "./lib/log.ts"
 import { fetchDataTable, fetchPalTable } from "./sources/datatable.ts"
-import { fetchDescriptions, fetchElementNames, fetchPalNames, fetchWorkNames } from "./sources/l10n.ts"
 import {
+  fetchDescriptions,
+  fetchElementNames,
+  fetchPalNames,
+  fetchPassiveSkills,
+  fetchWorkNames,
+} from "./sources/l10n.ts"
+import {
+  fetchElementIcons,
   fetchItemNames,
   fetchPalList,
   fetchRecipe,
@@ -39,7 +46,7 @@ const OUT = {
   pals: "src/data/pals.json",
 }
 
-const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons", "work-icons"] as const
+const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons", "work-icons", "element-icons"] as const
 type Stage = (typeof STAGES)[number]
 
 const args = process.argv.slice(2)
@@ -349,16 +356,19 @@ async function buildChainsFile(technologies: Technology[]) {
 async function buildPals(): Promise<PalsFile> {
   log.step("Pals")
 
-  const [table, listed, namesEn, namesRu, workEn, workRu, elemEn, elemRu] = await Promise.all([
-    fetchPalTable(fresh),
-    fetchPalList(fresh),
-    fetchPalNames("en", fresh),
-    fetchPalNames("ru", fresh),
-    fetchWorkNames("en", fresh),
-    fetchWorkNames("ru", fresh),
-    fetchElementNames("en", fresh),
-    fetchElementNames("ru", fresh),
-  ])
+  const [table, listed, namesEn, namesRu, workEn, workRu, elemEn, elemRu, passEn, passRu] =
+    await Promise.all([
+      fetchPalTable(fresh),
+      fetchPalList(fresh),
+      fetchPalNames("en", fresh),
+      fetchPalNames("ru", fresh),
+      fetchWorkNames("en", fresh),
+      fetchWorkNames("ru", fresh),
+      fetchElementNames("en", fresh),
+      fetchElementNames("ru", fresh),
+      fetchPassiveSkills("en", fresh),
+      fetchPassiveSkills("ru", fresh),
+    ])
 
   /**
    * Номер Палдекса сам по себе не уникален: у Ламболла есть служебный близнец
@@ -400,9 +410,15 @@ async function buildPals(): Promise<PalsFile> {
         dexNo: row.dexNo,
         dexSuffix: row.dexSuffix,
         name: { en, ru },
+        description: {
+          en: usable(namesEn[key]?.description) ?? "",
+          ru: usable(namesRu[key]?.description) ?? usable(namesEn[key]?.description) ?? "",
+        },
         elements: row.elements,
         work: row.work,
         nocturnal: row.nocturnal,
+        food: row.food,
+        passives: row.passives,
         size: row.size,
         transportSpeed: row.transportSpeed,
       }
@@ -429,11 +445,29 @@ async function buildPals(): Promise<PalsFile> {
     }
   }
 
+  /** Тексты пассивок кладём один раз — только тех, что реально встречаются. */
+  const passives: PalsFile["passives"] = {}
+  for (const pal of pals) {
+    for (const id of pal.passives) {
+      passives[id] ??= {
+        name: {
+          en: usable(passEn[id]?.name) ?? id,
+          ru: usable(passRu[id]?.name) ?? usable(passEn[id]?.name) ?? id,
+        },
+        description: {
+          en: usable(passEn[id]?.description) ?? "",
+          ru: usable(passRu[id]?.description) ?? usable(passEn[id]?.description) ?? "",
+        },
+      }
+    }
+  }
+
   const file: PalsFile = {
     gameVersion: GAME_VERSION,
     generatedAt: new Date().toISOString().slice(0, 10),
     workNames,
     elementNames,
+    passives,
     pals,
   }
 
@@ -481,6 +515,18 @@ async function main() {
     const result = await downloadIcons(icons, fresh, "public/icons/work")
     log.done(`${result.saved} work icons → public/icons/work`)
     if (result.failed.length) log.warn(`${result.failed.length} work icons failed`)
+  }
+
+  if (runs("element-icons")) {
+    log.step("Element icons")
+    const table = await fetchPalTable(false)
+    const elementsById = new Map(table.map((row) => [row.id, row.elements]))
+    const icons = await fetchElementIcons(elementsById, false)
+    if (icons.length !== ELEMENT_ORDER.length) {
+      log.warn(`only ${icons.length} of ${ELEMENT_ORDER.length} element icons resolved`)
+    }
+    const result = await downloadIcons(icons, fresh, "public/icons/elements")
+    log.done(`${result.saved} element icons → public/icons/elements`)
   }
 
   if (runs("recipes")) await buildRecipes(technologies)

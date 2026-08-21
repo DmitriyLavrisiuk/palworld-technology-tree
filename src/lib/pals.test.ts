@@ -9,9 +9,12 @@ function pal(id: string, work: Partial<Record<WorkKey, number>>, ru = id, en = i
     dexNo: 1,
     dexSuffix: "",
     name: { ru, en },
+    description: { ru: "", en: "" },
     elements: ["Normal"],
     work,
     nocturnal: false,
+    food: 1,
+    passives: [],
     size: "M",
     transportSpeed: 100,
   }

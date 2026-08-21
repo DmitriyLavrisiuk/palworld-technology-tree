@@ -63,6 +63,11 @@ export const ELEMENT_ORDER: ElementKey[] = [
 
 export type PalSize = "XS" | "S" | "M" | "L" | "XL"
 
+export interface PassiveInfo {
+  name: Localized
+  description: Localized
+}
+
 export interface Pal {
   /** Ключ строки DataTable, например `SheepBall`. Стабилен между патчами. */
   id: string
@@ -71,11 +76,19 @@ export interface Pal {
   /** Суффикс номера у стихийных вариантов: `121B` — это Jormuntide Ignis. */
   dexSuffix: string
   name: Localized
+  description: Localized
   /** Одна или две стихии. */
   elements: ElementKey[]
   /** Только ненулевые уровни: нулевых втрое больше, и в файле они мусор. */
   work: Partial<Record<WorkKey, number>>
   nocturnal: boolean
+  /** Расход еды, 1–9. */
+  food: number
+  /**
+   * Врождённые пассивки — идентификаторы из PassiveSkill1..4 таблицы.
+   * Тексты лежат один раз в `PalsFile.passives`, а не в каждом пале.
+   */
+  passives: string[]
   size: PalSize
   /**
    * Скорость переноски. Вместимости («сколько предметов за раз») в игровых
@@ -94,5 +107,7 @@ export interface PalsFile {
   generatedAt: string
   workNames: WorkNames
   elementNames: ElementNames
+  /** Тексты врождённых пассивок по их идентификаторам. */
+  passives: Record<string, PassiveInfo>
   pals: Pal[]
 }

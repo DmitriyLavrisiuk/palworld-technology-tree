@@ -1,5 +1,5 @@
 import { load } from "cheerio"
-import { WORK_ORDER, type WorkKey } from "../../src/types/pal.ts"
+import { WORK_ORDER, type ElementKey, type WorkKey } from "../../src/types/pal.ts"
 import { fetchText } from "../lib/http.ts"
 import type { GroupKey, Locale } from "../../src/types/tech.ts"
 
@@ -261,6 +261,59 @@ export async function fetchWorkIcons(fresh: boolean): Promise<WorkIcon[]> {
 
     const icon = node.closest("a").find("img").first().attr("src")
     if (icon) found.set(key, icon)
+  })
+
+  return [...found].map(([id, icon]) => ({ id, icon }))
+}
+
+export interface ElementIcon {
+  id: ElementKey
+  icon: string
+}
+
+/**
+ * Иконки стихий. Соответствие «номер файла → стихия» нигде не записано, но
+ * выводится без гадания: в строке каждого пала стоят его иконки стихий, а сами
+ * стихии известны из игровой таблицы. Сопоставив порядок иконок с порядком
+ * стихий у всех палов, получаем карту — и любое противоречие роняет сборку,
+ * а не тихо подменяет огонь льдом.
+ */
+export async function fetchElementIcons(
+  elementsById: ReadonlyMap<string, readonly ElementKey[]>,
+  fresh: boolean,
+): Promise<ElementIcon[]> {
+  const html = await fetchText(`${BASE}/en/Pals`, { fresh })
+  if (!html) throw new Error("Pals page returned nothing")
+
+  const $ = load(html)
+  const found = new Map<ElementKey, string>()
+  const seen = new Set<string>()
+
+  $("a[data-pal-id]").each((_, anchor) => {
+    const id = $(anchor).attr("data-pal-id")
+    if (!id || seen.has(id)) return
+    seen.add(id)
+
+    const elements = elementsById.get(id)
+    if (!elements?.length) return
+
+    const icons: string[] = []
+    $(anchor)
+      .closest("div.d-flex")
+      .find("img[src*='T_Icon_element_s_']")
+      .each((_, img) => {
+        const src = $(img).attr("src")
+        if (src) icons.push(src)
+      })
+    if (icons.length !== elements.length) return
+
+    elements.forEach((element, index) => {
+      const known = found.get(element)
+      if (known && known !== icons[index]) {
+        throw new Error(`Element icon conflict for ${element}: ${known} vs ${icons[index]} (${id})`)
+      }
+      found.set(element, icons[index])
+    })
   })
 
   return [...found].map(([id, icon]) => ({ id, icon }))
