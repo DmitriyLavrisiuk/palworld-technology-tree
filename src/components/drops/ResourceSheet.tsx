@@ -3,16 +3,16 @@ import { XIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { WorkIcon } from "@/components/pals/WorkIcon"
 import { dropIconUrl } from "@/lib/dropData"
 import { palIconUrl } from "@/lib/palData"
 import { palsLabel, t } from "@/lib/i18n"
-import { dropQtyLabel, sortedSources } from "@/lib/drops"
+import { dropQtyLabel, sortedSources, type CombinedResource } from "@/lib/drops"
 import type { Locale } from "@/types/tech"
-import type { DropResource } from "@/types/drop"
 import type { Pal } from "@/types/pal"
 
 interface ResourceSheetProps {
-  resource: DropResource | null
+  resource: CombinedResource | null
   locale: Locale
   palsById: ReadonlyMap<string, Pal>
   onClose: () => void
@@ -38,6 +38,36 @@ export function ResourceSheet({
   if (!resource) return null
 
   const sources = sortedSources(resource.sources)
+  const farm = sortedSources(resource.farm)
+
+  const palRow = (palId: string) => {
+    const pal = palsById.get(palId)
+    return (
+      <>
+        <img
+          src={palIconUrl(palId)}
+          alt=""
+          width={32}
+          height={32}
+          loading="lazy"
+          decoding="async"
+          className="size-8 shrink-0 rounded-full border bg-muted/30 object-contain"
+          onError={(event) => {
+            event.currentTarget.style.visibility = "hidden"
+          }}
+        />
+        <span className="min-w-0 flex-1 truncate text-sm">
+          {pal ? pal.name[locale] : palId}
+        </span>
+        {pal && (
+          <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
+            #{pal.dexNo}
+            {pal.dexSuffix}
+          </span>
+        )}
+      </>
+    )
+  }
 
   return (
     <Sheet open={activeResource !== null} onOpenChange={(open) => !open && onClose()}>
@@ -70,57 +100,87 @@ export function ResourceSheet({
             <div className="flex min-w-0 flex-col">
               <SheetTitle>{resource.name[locale]}</SheetTitle>
               <SheetDescription>
-                {t("dropSheetHint", locale)} · {sources.length}{" "}
-                {palsLabel(sources.length, locale)}
+                {sources.length > 0 &&
+                  `${t("dropSheetHint", locale)} · ${sources.length} ${palsLabel(sources.length, locale)}`}
+                {sources.length > 0 && farm.length > 0 && ", "}
+                {farm.length > 0 && `${t("dropFarmLabel", locale)} · ${farm.length}`}
               </SheetDescription>
             </div>
           </div>
         </SheetHeader>
 
-        <ul className="flex flex-col px-4 pb-6">
-          {sources.map((source) => {
-            const pal = palsById.get(source.palId)
-            return (
-              <li
-                key={source.palId}
-                className="flex min-h-11 items-center gap-2.5 border-t first:border-t-0"
-              >
-                <img
-                  src={palIconUrl(source.palId)}
-                  alt=""
-                  width={32}
-                  height={32}
-                  loading="lazy"
-                  decoding="async"
-                  className="size-8 shrink-0 rounded-full border bg-muted/30 object-contain"
-                  onError={(event) => {
-                    event.currentTarget.style.visibility = "hidden"
-                  }}
-                />
-                <span className="min-w-0 flex-1 truncate text-sm">
-                  {pal ? pal.name[locale] : source.palId}
-                </span>
-                {pal && (
-                  <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
-                    #{pal.dexNo}
-                    {pal.dexSuffix}
-                  </span>
-                )}
-                {source.rate < 100 && (
-                  <span
-                    title={t("dropChanceTitle", locale)}
-                    className="shrink-0 rounded-full border border-ancient/40 bg-ancient-surface px-2 py-0.5 text-xs text-ancient-foreground tabular-nums"
+        <div className="flex flex-col gap-3 px-4 pb-6">
+          {sources.length > 0 && (
+            <section>
+              {/* Подписи групп появляются, только когда есть обе механики. */}
+              {farm.length > 0 && (
+                <h3 className="mb-1 text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
+                  {t("dropGroupKill", locale)}
+                </h3>
+              )}
+              <ul className="flex flex-col">
+                {sources.map((source) => (
+                  <li
+                    key={source.palId}
+                    className="flex min-h-11 items-center gap-2.5 border-t first:border-t-0"
                   >
-                    {source.rate}%
-                  </span>
-                )}
-                <span className="shrink-0 text-sm font-medium tabular-nums">
-                  {dropQtyLabel(source)}
-                </span>
-              </li>
-            )
-          })}
-        </ul>
+                    {palRow(source.palId)}
+                    {source.rate < 100 && (
+                      <span
+                        title={t("dropChanceTitle", locale)}
+                        className="shrink-0 rounded-full border border-ancient/40 bg-ancient-surface px-2 py-0.5 text-xs text-ancient-foreground tabular-nums"
+                      >
+                        {source.rate}%
+                      </span>
+                    )}
+                    <span className="shrink-0 text-sm font-medium tabular-nums">
+                      {dropQtyLabel(source)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {farm.length > 0 && (
+            <section>
+              <h3 className="mb-1 flex items-center gap-1.5 text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
+                <WorkIcon work="MonsterFarm" title="" className="size-4" />
+                {t("dropGroupFarm", locale)}
+              </h3>
+              <ul className="flex flex-col">
+                {farm.map((source) => (
+                  <li
+                    key={source.palId}
+                    className="flex min-h-11 items-center gap-2.5 border-t py-1 first:border-t-0"
+                  >
+                    {palRow(source.palId)}
+                    {source.unlockLevel > 1 && (
+                      <span className="shrink-0 rounded-full border px-2 py-0.5 text-xs text-muted-foreground tabular-nums">
+                        {t("ranchUnlockLabel", locale)} {source.unlockLevel}
+                      </span>
+                    )}
+                    {source.rate < 100 && (
+                      <span
+                        title={`${t("dropChanceTitle", locale)}: ${source.rate}%`}
+                        className="shrink-0 rounded-full border border-ancient/40 bg-ancient-surface px-2 py-0.5 text-xs text-ancient-foreground tabular-nums"
+                      >
+                        {Math.round(source.rate)}%
+                      </span>
+                    )}
+                    <span className="shrink-0 text-right text-sm font-medium tabular-nums">
+                      {dropQtyLabel(source)}
+                      <span className="block text-[10.5px] font-normal text-muted-foreground">
+                        {t("ranchCapLabel", locale)}{" "}
+                        {dropQtyLabel({ ...source, min: source.min10, max: source.max10 })}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
       </SheetContent>
     </Sheet>
   )

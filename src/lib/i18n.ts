@@ -55,6 +55,16 @@ export const UI = {
   },
   dropSheetHint: { ru: "кто выпадает при смерти", en: "dropped on death by" },
   dropChanceTitle: { ru: "Шанс выпадения", en: "Drop chance" },
+  dropFarmLabel: { ru: "с фермы", en: "ranch" },
+  dropGroupKill: { ru: "При смерти", en: "On death" },
+  dropGroupFarm: { ru: "С фермы", en: "From the ranch" },
+  palFarmTitle: { ru: "На ферме производит", en: "Produces at the ranch" },
+  palFarmNote: {
+    ru: "Количество растёт с уровнем партнёрского навыка.",
+    en: "The amount grows with the partner skill level.",
+  },
+  ranchCapLabel: { ru: "ур. 10:", en: "lv. 10:" },
+  ranchUnlockLabel: { ru: "с ур.", en: "from lv." },
   workFilterTitle: { ru: "Какие работы нужны", en: "Jobs you need covered" },
   workFilterHint: {
     ru: "Первый клик по цифре — «от», второй — «до». Клик при растянутом диапазоне начинает новый, по единственной выбранной цифре — снимает выбор.",

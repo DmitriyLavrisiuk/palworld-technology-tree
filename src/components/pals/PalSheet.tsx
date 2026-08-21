@@ -6,9 +6,11 @@ import { WorkIcon } from "@/components/pals/WorkIcon"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { dropIconUrl } from "@/lib/dropData"
 import { palIconUrl } from "@/lib/palData"
 import { t } from "@/lib/i18n"
 import { buffGroupOf } from "@/lib/pals"
+import { dropQtyLabel, sortedSources } from "@/lib/drops"
 import { cn } from "@/lib/utils"
 import type { Locale } from "@/types/tech"
 import {
@@ -20,6 +22,7 @@ import {
   type WorkKey,
   type WorkNames,
 } from "@/types/pal"
+import type { RanchFile } from "@/types/ranch"
 
 type UiKey = Parameters<typeof t>[0]
 
@@ -39,6 +42,8 @@ interface PalSheetProps {
   passives: Record<string, PassiveInfo>
   /** Верх шкалы работ — из данных, как и в фильтре. */
   maxLevel: number
+  /** Продукция фермы: показывается блоком у палов с работой «Фермерство». */
+  ranch: RanchFile | null
   favorite: boolean
   onToggleFavorite: (id: string) => void
   onClose: () => void
@@ -56,6 +61,7 @@ export function PalSheet({
   elements,
   passives,
   maxLevel,
+  ranch,
   favorite,
   onToggleFavorite,
   onClose,
@@ -70,6 +76,11 @@ export function PalSheet({
   if (!pal) return null
 
   const owned = WORK_ORDER.filter((key: WorkKey) => pal.work[key])
+  const farmProducts = sortedSources(
+    (ranch?.producers.find((producer) => producer.palId === pal.id)?.products ?? []).map(
+      (product) => ({ ...product, palId: pal.id }),
+    ),
+  )
 
   return (
     <Sheet open={activePal !== null} onOpenChange={(open) => !open && onClose()}>
@@ -212,6 +223,58 @@ export function PalSheet({
               )
             })}
           </section>
+
+          {farmProducts.length > 0 && (
+            <>
+              <Separator />
+              <section className="flex flex-col gap-2 rounded-lg border border-researched/50 bg-researched-surface px-3 py-2.5">
+                <h3 className="flex items-center gap-2 text-xs font-medium text-researched">
+                  <WorkIcon work="MonsterFarm" title="" className="size-5" />
+                  {t("palFarmTitle", locale)}
+                </h3>
+                {farmProducts.map((product) => (
+                  <span key={product.itemId} className="flex items-center gap-2.5">
+                    <img
+                      src={dropIconUrl(product.itemId)}
+                      alt=""
+                      width={28}
+                      height={28}
+                      loading="lazy"
+                      decoding="async"
+                      className="size-7 shrink-0 rounded-md border bg-card object-contain p-0.5"
+                      onError={(event) => {
+                        event.currentTarget.style.visibility = "hidden"
+                      }}
+                    />
+                    <span className="min-w-0 flex-1 truncate text-sm">
+                      {ranch?.items[product.itemId]?.name[locale] ?? product.itemId}
+                    </span>
+                    {product.unlockLevel > 1 && (
+                      <span className="shrink-0 rounded-full border px-2 py-0.5 text-xs text-muted-foreground tabular-nums">
+                        {t("ranchUnlockLabel", locale)} {product.unlockLevel}
+                      </span>
+                    )}
+                    {product.rate < 100 && (
+                      <span
+                        title={`${t("dropChanceTitle", locale)}: ${product.rate}%`}
+                        className="shrink-0 rounded-full border border-ancient/40 bg-ancient-surface px-2 py-0.5 text-xs text-ancient-foreground tabular-nums"
+                      >
+                        {Math.round(product.rate)}%
+                      </span>
+                    )}
+                    <span className="shrink-0 text-right text-sm font-medium tabular-nums">
+                      {dropQtyLabel(product)}
+                      <span className="block text-[10.5px] font-normal text-muted-foreground">
+                        {t("ranchCapLabel", locale)}{" "}
+                        {dropQtyLabel({ ...product, min: product.min10, max: product.max10 })}
+                      </span>
+                    </span>
+                  </span>
+                ))}
+                <p className="text-xs text-muted-foreground">{t("palFarmNote", locale)}</p>
+              </section>
+            </>
+          )}
 
           {pal.passives.length > 0 && (
             <>

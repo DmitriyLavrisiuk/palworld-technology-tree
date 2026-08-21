@@ -12,11 +12,13 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import type { ProgressState } from "@/hooks/useProgress"
 import { t } from "@/lib/i18n"
-import { filterResources } from "@/lib/drops"
+import { combineResources, filterResources } from "@/lib/drops"
 import { loadDrops, peekDrops } from "@/lib/dropData"
 import { loadPals, peekPals } from "@/lib/palData"
+import { loadRanch, peekRanch } from "@/lib/ranchData"
 import type { DropsFile } from "@/types/drop"
 import type { PalsFile } from "@/types/pal"
+import type { RanchFile } from "@/types/ranch"
 
 const CONTROL = "h-9 pointer-coarse:h-11"
 
@@ -28,8 +30,9 @@ interface PalDropsPageProps {
 export function PalDropsPage({ progress }: PalDropsPageProps) {
   const { locale } = progress
   const [drops, setDrops] = useState<DropsFile | null>(peekDrops)
-  /** Палы нужны для имён и портретов источников — чанк общий с razделом навыков. */
+  /** Палы нужны для имён и портретов источников — чанк общий с разделом навыков. */
   const [palsFile, setPalsFile] = useState<PalsFile | null>(peekPals)
+  const [ranch, setRanch] = useState<RanchFile | null>(peekRanch)
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState("")
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -40,9 +43,14 @@ export function PalDropsPage({ progress }: PalDropsPageProps) {
     }
     loadDrops().then(setDrops, fail)
     loadPals().then(setPalsFile, fail)
+    loadRanch().then(setRanch, fail)
   }, [])
 
-  const resources = useMemo(() => drops?.resources ?? [], [drops])
+  /** Дроп и продукция фермы сливаются в один список ресурсов раздела. */
+  const resources = useMemo(
+    () => (drops && ranch ? combineResources(drops.resources, ranch) : []),
+    [drops, ranch],
+  )
   const palsById = useMemo(
     () => new Map((palsFile?.pals ?? []).map((pal) => [pal.id, pal])),
     [palsFile],
@@ -63,7 +71,7 @@ export function PalDropsPage({ progress }: PalDropsPageProps) {
     )
   }
 
-  if (!drops || !palsFile) return <PageLoader locale={locale} />
+  if (!drops || !palsFile || !ranch) return <PageLoader locale={locale} />
 
   return (
     <TooltipProvider delay={250}>

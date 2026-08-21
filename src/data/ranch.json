@@ -1,0 +1,711 @@
+{
+  "gameVersion": "1.0.3",
+  "generatedAt": "2026-08-21",
+  "items": {
+    "Wool": {
+      "name": {
+        "en": "Wool",
+        "ru": "Шерсть"
+      }
+    },
+    "Egg": {
+      "name": {
+        "en": "Egg",
+        "ru": "Яйцо"
+      }
+    },
+    "PalSphere": {
+      "name": {
+        "en": "Pal Sphere",
+        "ru": "Пал-сфера"
+      }
+    },
+    "Arrow": {
+      "name": {
+        "en": "Arrow",
+        "ru": "Стрела"
+      }
+    },
+    "Money": {
+      "name": {
+        "en": "Gold Coin",
+        "ru": "Золотая монета"
+      }
+    },
+    "Bone": {
+      "name": {
+        "en": "Bone",
+        "ru": "Кость"
+      }
+    },
+    "PalSphere_Mega": {
+      "name": {
+        "en": "Mega Sphere",
+        "ru": "Мегасфера"
+      }
+    },
+    "PalSphere_Giga": {
+      "name": {
+        "en": "Giga Sphere",
+        "ru": "Гигасфера"
+      }
+    },
+    "PalSphere_Tera": {
+      "name": {
+        "en": "Hyper Sphere",
+        "ru": "Терасфера"
+      }
+    },
+    "Venom": {
+      "name": {
+        "en": "Venom Gland",
+        "ru": "Ядовитая железа"
+      }
+    },
+    "FireOrgan": {
+      "name": {
+        "en": "Flame Organ",
+        "ru": "Огненный орган"
+      }
+    },
+    "IceOrgan": {
+      "name": {
+        "en": "Ice Organ",
+        "ru": "Ледяной орган"
+      }
+    },
+    "Berries": {
+      "name": {
+        "en": "Red Berries",
+        "ru": "Красная ягода"
+      }
+    },
+    "Sweet": {
+      "name": {
+        "en": "Cotton Candy",
+        "ru": "Сахарная вата"
+      }
+    },
+    "Sweet_Caramel": {
+      "name": {
+        "en": "Caramel Cotton Candy",
+        "ru": "Карамельная сахарная вата"
+      }
+    },
+    "Milk": {
+      "name": {
+        "en": "Milk",
+        "ru": "Молоко"
+      }
+    },
+    "ElectricOrgan": {
+      "name": {
+        "en": "Electric Organ",
+        "ru": "Электрический орган"
+      }
+    },
+    "PalFluid": {
+      "name": {
+        "en": "Aquatic Pal Fluids",
+        "ru": "Жидкость водного Пала"
+      }
+    },
+    "TomatoSeeds": {
+      "name": {
+        "en": "Tomato Seeds",
+        "ru": "Семена помидоров"
+      }
+    },
+    "WheatSeeds": {
+      "name": {
+        "en": "Wheat Seeds",
+        "ru": "Семена пшеницы"
+      }
+    },
+    "PotatoSeeds": {
+      "name": {
+        "en": "Potato Seeds",
+        "ru": "Семенной картофель"
+      }
+    },
+    "CarrotSeeds": {
+      "name": {
+        "en": "Carrot Seeds",
+        "ru": "Семена моркови"
+      }
+    },
+    "OnionSeeds": {
+      "name": {
+        "en": "Onion Seeds",
+        "ru": "Семена лука"
+      }
+    },
+    "LettuceSeeds": {
+      "name": {
+        "en": "Lettuce Seeds",
+        "ru": "Семена латука"
+      }
+    },
+    "Honey": {
+      "name": {
+        "en": "Honey",
+        "ru": "Мёд"
+      }
+    },
+    "Leather": {
+      "name": {
+        "en": "Leather",
+        "ru": "Кожа"
+      }
+    },
+    "PalOil": {
+      "name": {
+        "en": "High Quality Pal Oil",
+        "ru": "Качественное масло Пала"
+      }
+    },
+    "Cloth2": {
+      "name": {
+        "en": "High Quality Cloth",
+        "ru": "Качественная ткань"
+      }
+    },
+    "Mushroom": {
+      "name": {
+        "en": "Mushroom",
+        "ru": "Гриб"
+      }
+    },
+    "CaveMushroom": {
+      "name": {
+        "en": "Cavern Mushroom",
+        "ru": "Пещерный гриб"
+      }
+    }
+  },
+  "producers": [
+    {
+      "palId": "SheepBall",
+      "products": [
+        {
+          "itemId": "Wool",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "ChickenPal",
+      "products": [
+        {
+          "itemId": "Egg",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "CuteFox",
+      "products": [
+        {
+          "itemId": "PalSphere",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 6,
+          "rate": 59.524
+        },
+        {
+          "itemId": "Arrow",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 12,
+          "max10": 13,
+          "rate": 23.81
+        },
+        {
+          "itemId": "Money",
+          "unlockLevel": 1,
+          "min": 10,
+          "max": 10,
+          "min10": 100,
+          "max10": 100,
+          "rate": 11.905
+        },
+        {
+          "itemId": "Bone",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 4.762
+        },
+        {
+          "itemId": "PalSphere_Mega",
+          "unlockLevel": 3,
+          "min": 1,
+          "max": 1,
+          "min10": 2,
+          "max10": 3,
+          "rate": 11.765
+        },
+        {
+          "itemId": "PalSphere_Giga",
+          "unlockLevel": 4,
+          "min": 1,
+          "max": 1,
+          "min10": 1,
+          "max10": 2,
+          "rate": 5.882
+        },
+        {
+          "itemId": "PalSphere_Tera",
+          "unlockLevel": 5,
+          "min": 1,
+          "max": 1,
+          "min10": 1,
+          "max10": 2,
+          "rate": 0.535
+        }
+      ]
+    },
+    {
+      "palId": "WoolFox",
+      "products": [
+        {
+          "itemId": "Wool",
+          "unlockLevel": 1,
+          "min": 2,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "NegativeKoala",
+      "products": [
+        {
+          "itemId": "Venom",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "Alpaca",
+      "products": [
+        {
+          "itemId": "Wool",
+          "unlockLevel": 1,
+          "min": 2,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "LavaGirl",
+      "products": [
+        {
+          "itemId": "FireOrgan",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "FlameBambi",
+      "products": [
+        {
+          "itemId": "FireOrgan",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "Bastet",
+      "products": [
+        {
+          "itemId": "Money",
+          "unlockLevel": 1,
+          "min": 10,
+          "max": 10,
+          "min10": 30,
+          "max10": 100,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "Bastet_Ice",
+      "products": [
+        {
+          "itemId": "IceOrgan",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "BerryGoat",
+      "products": [
+        {
+          "itemId": "Berries",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "BerryGoat_Dark",
+      "products": [
+        {
+          "itemId": "Venom",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "SweetsSheep",
+      "products": [
+        {
+          "itemId": "Sweet",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "SweetsSheep_Ground",
+      "products": [
+        {
+          "itemId": "Sweet_Caramel",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "CowPal",
+      "products": [
+        {
+          "itemId": "Milk",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "ElecCat",
+      "products": [
+        {
+          "itemId": "ElectricOrgan",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "Kelpie",
+      "products": [
+        {
+          "itemId": "PalFluid",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "Kelpie_Fire",
+      "products": [
+        {
+          "itemId": "FireOrgan",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "DarkCrow",
+      "products": [
+        {
+          "itemId": "Bone",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "VioletFairy",
+      "products": [
+        {
+          "itemId": "TomatoSeeds",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 22.222
+        },
+        {
+          "itemId": "WheatSeeds",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 20
+        },
+        {
+          "itemId": "PotatoSeeds",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 17.778
+        },
+        {
+          "itemId": "CarrotSeeds",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 15.556
+        },
+        {
+          "itemId": "OnionSeeds",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 13.333
+        },
+        {
+          "itemId": "LettuceSeeds",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 11.111
+        }
+      ]
+    },
+    {
+      "palId": "SoldierBee",
+      "products": [
+        {
+          "itemId": "Honey",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "Serpent",
+      "products": [
+        {
+          "itemId": "Leather",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "IceFox",
+      "products": [
+        {
+          "itemId": "IceOrgan",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "LazyCatfish",
+      "products": [
+        {
+          "itemId": "PalOil",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "LazyCatfish_Gold",
+      "products": [
+        {
+          "itemId": "PalOil",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 80
+        },
+        {
+          "itemId": "Money",
+          "unlockLevel": 1,
+          "min": 100,
+          "max": 100,
+          "min10": 300,
+          "max10": 1000,
+          "rate": 20
+        }
+      ]
+    },
+    {
+      "palId": "WhiteMoth",
+      "products": [
+        {
+          "itemId": "Cloth2",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "WhiteMoth_Neutral",
+      "products": [
+        {
+          "itemId": "Cloth2",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 2,
+          "min10": 4,
+          "max10": 11,
+          "rate": 100
+        }
+      ]
+    },
+    {
+      "palId": "MushroomDragon",
+      "products": [
+        {
+          "itemId": "Mushroom",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 66.667
+        },
+        {
+          "itemId": "CaveMushroom",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 33.333
+        }
+      ]
+    },
+    {
+      "palId": "CandleGhost",
+      "products": [
+        {
+          "itemId": "Bone",
+          "unlockLevel": 1,
+          "min": 1,
+          "max": 1,
+          "min10": 3,
+          "max10": 10,
+          "rate": 100
+        }
+      ]
+    }
+  ]
+}

@@ -17,6 +17,8 @@ import {
   fetchItemIconIndex,
   fetchItemNames,
   fetchPalList,
+  fetchPalPageSlugs,
+  fetchRanchTable,
   fetchRecipe,
   fetchTechList,
   fetchWorkIcons,
@@ -33,6 +35,7 @@ import {
 } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
 import type { DropResource, DropsFile } from "../src/types/drop.ts"
+import type { RanchFile, RanchProduct } from "../src/types/ranch.ts"
 import {
   ELEMENT_ORDER,
   WORK_ORDER,
@@ -48,9 +51,10 @@ const OUT = {
   chains: "src/data/chains.json",
   pals: "src/data/pals.json",
   drops: "src/data/drops.json",
+  ranch: "src/data/ranch.json",
 }
 
-const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons", "work-icons", "element-icons", "drops", "drop-icons"] as const
+const STAGES = ["techs", "icons", "recipes", "materials", "chains", "pals", "pal-icons", "work-icons", "element-icons", "drops", "ranch", "drop-icons"] as const
 type Stage = (typeof STAGES)[number]
 
 const args = process.argv.slice(2)
@@ -357,6 +361,108 @@ async function buildChainsFile(technologies: Technology[]) {
  * Палы: числа из игровой таблицы, имена из дампа локализации — то же
  * распределение авторитета, что у технологий.
  */
+/** «1» → [1, 1]; «1–2» → [1, 2]. Дефис у paldb — длинное тире. */
+function parseQty(text: string): [number, number] {
+  const match = /^(\d+)(?:[–-](\d+))?$/.exec(text.trim())
+  if (!match) throw new Error(`unparseable ranch quantity: "${text}"`)
+  const min = Number(match[1])
+  return [min, match[2] ? Number(match[2]) : min]
+}
+
+/**
+ * Продукция фермы: пал с работой «Фермерство» → что он производит. Данных
+ * нет в зеркале игровых таблиц, поэтому источник — таблицы «Lv. / Item» на
+ * страницах палов paldb. Слаг предмета в таблице — слаг его английского
+ * имени; в игровой id он резолвится через локализацию, нерешённый слаг —
+ * ошибка сборки, а не молчаливый пропуск.
+ */
+async function buildRanch(): Promise<void> {
+  log.step("Ranch")
+
+  const palsFile = JSON.parse(await readFile(OUT.pals, "utf8")) as PalsFile
+  const farmers = palsFile.pals.filter((pal) => pal.work.MonsterFarm)
+
+  const [slugs, namesEn, namesRu] = await Promise.all([
+    fetchPalPageSlugs(fresh),
+    fetchDropItemNames("en", fresh),
+    fetchDropItemNames("ru", fresh),
+  ])
+
+  const slugOf = (name: string) => name.trim().replace(/ /g, "_")
+  const idBySlug = new Map<string, string>()
+  for (const [id, name] of Object.entries(namesEn)) {
+    const slug = slugOf(name)
+    if (slug && !idBySlug.has(slug)) idBySlug.set(slug, id)
+  }
+
+  const producers: RanchFile["producers"] = []
+  const items: RanchFile["items"] = {}
+  const empty: string[] = []
+
+  for (const pal of farmers) {
+    const slug = slugs.get(pal.id)
+    if (!slug) throw new Error(`no paldb page slug for ${pal.id}`)
+
+    const table = await fetchRanchTable(slug, fresh)
+    if (!table || table.length === 0) {
+      empty.push(pal.id)
+      continue
+    }
+
+    const last = table[table.length - 1]
+    const byItem = new Map<string, RanchProduct>()
+
+    for (const row of table) {
+      for (const entry of row.items) {
+        const itemId = idBySlug.get(entry.slug)
+        if (!itemId) throw new Error(`${pal.id}: unresolved ranch item slug "${entry.slug}"`)
+        if (byItem.has(itemId)) continue
+
+        const [min, max] = parseQty(entry.qty)
+        const atCap = last.items.find((candidate) => idBySlug.get(candidate.slug) === itemId)
+        const [min10, max10] = atCap ? parseQty(atCap.qty) : [min, max]
+        if (atCap && atCap.rate !== entry.rate) {
+          log.warn(`${pal.id}: ${itemId} rate drifts with skill level (${entry.rate} → ${atCap.rate})`)
+        }
+
+        byItem.set(itemId, {
+          itemId,
+          unlockLevel: row.level,
+          min,
+          max,
+          min10,
+          max10,
+          rate: entry.rate,
+        })
+        items[itemId] ??= {
+          name: {
+            en: usable(namesEn[itemId]) ?? itemId,
+            ru: usable(namesRu[itemId]) ?? usable(namesEn[itemId]) ?? itemId,
+          },
+        }
+      }
+    }
+
+    if (byItem.size > 0) producers.push({ palId: pal.id, products: [...byItem.values()] })
+    else empty.push(pal.id)
+  }
+
+  if (empty.length) {
+    log.warn(`${empty.length} farm pals without a product table: ${empty.join(", ")}`)
+  }
+
+  const file: RanchFile = {
+    gameVersion: GAME_VERSION,
+    generatedAt: new Date().toISOString().slice(0, 10),
+    items,
+    producers,
+  }
+
+  await writeJson(OUT.ranch, file)
+  const products = producers.reduce((sum, producer) => sum + producer.products.length, 0)
+  log.done(`${producers.length} producers, ${products} products → ${OUT.ranch}`)
+}
+
 /**
  * Дроп с палов: ресурс → палы-источники. Палы берутся из уже собранного
  * pals.json — стадия зависит от `pals`, как chains от techs: иначе сюда
@@ -596,14 +702,25 @@ async function main() {
 
   if (runs("drops")) await buildDrops()
 
+  if (runs("ranch")) await buildRanch()
+
   if (runs("drop-icons")) {
     log.step("Drop icons")
     const drops = JSON.parse(await readFile(OUT.drops, "utf8")) as DropsFile
     const index = await fetchItemIconIndex(false)
     const slugOf = (name: string) => name.trim().replace(/ /g, "_")
 
+    // Иконки нужны и предметам фермы: каталог общий — это всё иконки предметов.
+    const wanted = new Map(drops.resources.map((resource) => [resource.id, resource.name.en]))
+    if (existsSync(OUT.ranch)) {
+      const ranch = JSON.parse(await readFile(OUT.ranch, "utf8")) as RanchFile
+      for (const [id, entry] of Object.entries(ranch.items)) {
+        if (!wanted.has(id)) wanted.set(id, entry.name.en)
+      }
+    }
+
     const unresolved: string[] = []
-    const entries = drops.resources.map((resource) => {
+    const entries = [...wanted].map(([id, nameEn]) => ({ id, name: { en: nameEn } })).map((resource) => {
       const direct = index.byId.get(resource.id)
       const viaName = index.bySlug.get(slugOf(resource.name.en))
       if (direct && viaName && direct !== viaName) {

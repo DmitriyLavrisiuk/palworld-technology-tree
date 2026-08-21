@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest"
 
-import { dropYield, filterResources, sortedSources } from "./drops.ts"
+import { combineResources, dropYield, filterResources, sortedSources } from "./drops.ts"
 import type { DropResource, DropSource } from "@/types/drop"
+import type { RanchFile } from "@/types/ranch"
 
 const source = (palId: string, min: number, max: number, rate = 100): DropSource => ({
   palId,
@@ -62,5 +63,45 @@ describe("поиск ресурсов", () => {
   it("ищет по обоим языкам сразу", () => {
     expect(filterResources(list, "шерсть", "ru").map((r) => r.id)).toEqual(["Wool"])
     expect(filterResources(list, "flame", "ru").map((r) => r.id)).toEqual(["FireOrgan"])
+  })
+})
+
+describe("слияние дропа и фермы", () => {
+  const product = (itemId: string) => ({
+    itemId,
+    unlockLevel: 1,
+    min: 1,
+    max: 1,
+    min10: 3,
+    max10: 10,
+    rate: 100,
+  })
+  const ranch: RanchFile = {
+    gameVersion: "x",
+    generatedAt: "x",
+    items: { Sweet: { name: { ru: "Сахарная вата", en: "Cotton Candy" } } },
+    producers: [
+      { palId: "SheepBall", products: [product("Wool")] },
+      { palId: "SweetsSheep", products: [product("Sweet")] },
+    ],
+  }
+
+  it("фермеры пристыковываются к ресурсу дропа", () => {
+    const merged = combineResources([resource("Wool", "Шерсть", "Wool")], ranch)
+    const wool = merged.find((entry) => entry.id === "Wool")
+    expect(wool?.farm.map((source) => source.palId)).toEqual(["SheepBall"])
+  })
+
+  it("ресурс только с фермы появляется в списке с именем из ranch", () => {
+    const merged = combineResources([], ranch)
+    const sweet = merged.find((entry) => entry.id === "Sweet")
+    expect(sweet?.name.ru).toBe("Сахарная вата")
+    expect(sweet?.sources).toEqual([])
+    expect(sweet?.farm).toHaveLength(1)
+  })
+
+  it("ресурс без фермеров получает пустой список фермы", () => {
+    const merged = combineResources([resource("Bone", "Кость", "Bone")], ranch)
+    expect(merged.find((entry) => entry.id === "Bone")?.farm).toEqual([])
   })
 })

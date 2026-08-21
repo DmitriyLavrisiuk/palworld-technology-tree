@@ -358,3 +358,85 @@ export async function fetchItemIconIndex(fresh: boolean): Promise<ItemIconIndex>
 
   return { byId, bySlug }
 }
+
+/** Слаг страницы пала на paldb — нужен стадии ranch для обхода фермеров. */
+export async function fetchPalPageSlugs(fresh: boolean): Promise<Map<string, string>> {
+  const html = await fetchText(`${BASE}/en/Pals`, { fresh })
+  if (!html) throw new Error("Pals page returned nothing")
+
+  const $ = load(html)
+  const slugs = new Map<string, string>()
+
+  $("a[data-pal-id]").each((_, element) => {
+    const node = $(element)
+    const id = node.attr("data-pal-id")
+    const href = node.attr("href")
+    if (id && href && !slugs.has(id)) slugs.set(id, href)
+  })
+
+  return slugs
+}
+
+export interface RanchTableItem {
+  /** Слаг предмета из href — в игровой id резолвит стадия сборки. */
+  slug: string
+  /** «1» или «1–2» — как напечатано; разбор на числа у сборки. */
+  qty: string
+  rate: number
+}
+
+export interface RanchTableRow {
+  level: number
+  items: RanchTableItem[]
+}
+
+/**
+ * Таблица продукции фермы со страницы пала: уровень партнёрского навыка →
+ * предметы с количеством за цикл и шансом. Ищется таблица с заголовком
+ * «Lv. / Item»: у палов без продукции такой таблицы нет вовсе, а первой
+ * таблицей «Lv. / …» может стоять таблица эффектов навыка — по одному лишь
+ * «Lv.» отличить их нельзя.
+ */
+export async function fetchRanchTable(
+  palSlug: string,
+  fresh: boolean,
+): Promise<RanchTableRow[] | null> {
+  const html = await fetchText(`${BASE}/en/${palSlug}`, { fresh })
+  if (!html) throw new Error(`Pal page ${palSlug} returned nothing`)
+
+  const $ = load(html)
+  const table = $("table.table")
+    .filter((_, element) => {
+      const head = $(element).find("thead").text()
+      return head.includes("Lv.") && head.includes("Item")
+    })
+    .first()
+  if (table.length === 0) return null
+
+  const rows: RanchTableRow[] = []
+  table.find("tbody tr").each((_, tr) => {
+    const cells = $(tr).children("td")
+    if (cells.length < 2) return
+    const level = Number($(cells[0]).text().trim())
+    if (!Number.isFinite(level)) return
+
+    const items: RanchTableItem[] = []
+    $(cells[1])
+      .children("div")
+      .each((_, block) => {
+        const node = $(block)
+        const slug = node.find("a.itemname").first().attr("href")
+        if (!slug) return
+        const qty = node.find("small.itemQuantity").first().text().trim() || "1"
+        const rate = Number.parseFloat(node.find("span.float-end").first().text())
+        items.push({
+          slug: decodeURIComponent(slug),
+          qty,
+          rate: Number.isFinite(rate) ? rate : 100,
+        })
+      })
+    rows.push({ level, items })
+  })
+
+  return rows
+}

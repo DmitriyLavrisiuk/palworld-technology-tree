@@ -15,6 +15,7 @@ import { GROUP_NAMES, GROUP_ORDER } from "../src/lib/constants.ts"
 import type { ChainsFile, Recipe, Technology } from "../src/types/tech.ts"
 import { ELEMENT_ORDER, WORK_ORDER, type PalsFile } from "../src/types/pal.ts"
 import type { DropsFile } from "../src/types/drop.ts"
+import type { RanchFile } from "../src/types/ranch.ts"
 
 /**
  * Сторожит сгенерированные данные. Парсер сверяет то же самое во время
@@ -31,6 +32,7 @@ const chains = read<ChainsFile>("src/data/chains.json")
 const palsFile = read<PalsFile>("src/data/pals.json")
 const pals = palsFile.pals
 const dropsFile = read<DropsFile>("src/data/drops.json")
+const ranchFile = read<RanchFile>("src/data/ranch.json")
 
 const ids = new Set(technologies.map((tech) => tech.id))
 
@@ -551,5 +553,57 @@ describe("дроп с палов", () => {
 
   it("версия игры совпадает с остальными данными", () => {
     expect(dropsFile.gameVersion).toBe(GAME_VERSION)
+  })
+})
+
+describe("продукция фермы", () => {
+  const producers = ranchFile.producers
+  const farmers = pals.filter((pal) => pal.work.MonsterFarm)
+
+  it("каждый пал с фермерством производит хоть что-то", () => {
+    const covered = new Set(producers.map((producer) => producer.palId))
+    const missing = farmers.filter((pal) => !covered.has(pal.id)).map((pal) => pal.id)
+    expect(missing).toEqual([])
+    expect(producers).toHaveLength(farmers.length)
+  })
+
+  it("каждый производитель — пал с работой «Фермерство»", () => {
+    const farmerIds = new Set(farmers.map((pal) => pal.id))
+    for (const producer of producers) {
+      expect(farmerIds.has(producer.palId), producer.palId).toBe(true)
+      expect(producer.products.length, producer.palId).toBeGreaterThan(0)
+    }
+  })
+
+  it("продукты корректны: имя, диапазоны, шанс, уровень открытия", () => {
+    for (const producer of producers) {
+      const seen = new Set<string>()
+      for (const product of producer.products) {
+        const label = `${producer.palId}: ${product.itemId}`
+        expect(seen.has(product.itemId), `${label} дважды`).toBe(false)
+        seen.add(product.itemId)
+        expect(ranchFile.items[product.itemId]?.name.ru, label).toBeTruthy()
+        expect(ranchFile.items[product.itemId]?.name.en, label).toBeTruthy()
+        expect(product.min, label).toBeGreaterThanOrEqual(1)
+        expect(product.max, label).toBeGreaterThanOrEqual(product.min)
+        expect(product.min10, label).toBeGreaterThanOrEqual(1)
+        expect(product.max10, label).toBeGreaterThanOrEqual(product.min10)
+        expect(product.rate, label).toBeGreaterThan(0)
+        expect(product.rate, label).toBeLessThanOrEqual(100)
+        expect(product.unlockLevel, label).toBeGreaterThanOrEqual(1)
+        expect(product.unlockLevel, label).toBeLessThanOrEqual(10)
+      }
+    }
+  })
+
+  it("у каждого предмета фермы есть файл иконки на диске", () => {
+    for (const id of Object.keys(ranchFile.items)) {
+      const file = join(ROOT, "public/icons/drops", `${id}.webp`)
+      expect(existsSync(file), id).toBe(true)
+    }
+  })
+
+  it("версия игры совпадает с остальными данными", () => {
+    expect(ranchFile.gameVersion).toBe(GAME_VERSION)
   })
 })

@@ -14,6 +14,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import type { ProgressState } from "@/hooks/useProgress"
 import { t } from "@/lib/i18n"
 import { loadPals, peekPals } from "@/lib/palData"
+import { loadRanch, peekRanch } from "@/lib/ranchData"
 import {
   NO_PAL_FILTERS,
   buffGroupOf,
@@ -27,6 +28,7 @@ import {
   type Range,
 } from "@/lib/pals"
 import type { PalsFile, ElementKey, WorkKey } from "@/types/pal"
+import type { RanchFile } from "@/types/ranch"
 
 const CONTROL = "h-9 pointer-coarse:h-11"
 
@@ -38,6 +40,8 @@ interface PalSkillsPageProps {
 export function PalSkillsPage({ progress }: PalSkillsPageProps) {
   const { locale } = progress
   const [data, setData] = useState<PalsFile | null>(peekPals)
+  /** Ферма нужна только карточке пала — раздел её не ждёт, блок догружается. */
+  const [ranch, setRanch] = useState<RanchFile | null>(peekRanch)
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState("")
   /** Фильтры живут только в сессии: это разовый запрос, а не настройка. */
@@ -48,6 +52,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
     loadPals().then(setData, (cause: unknown) => {
       setError(cause instanceof Error ? cause.message : String(cause))
     })
+    loadRanch().then(setRanch, () => setRanch(null))
   }, [])
 
   // Через useMemo, а не выражением: иначе каждый рендер даёт новый массив,
@@ -256,6 +261,7 @@ export function PalSkillsPage({ progress }: PalSkillsPageProps) {
           elements={data.elementNames}
           passives={data.passives}
           maxLevel={maxLevel}
+          ranch={ranch}
           favorite={selectedId !== null && progress.palFavorites.has(selectedId)}
           onToggleFavorite={progress.togglePalFavorite}
           onClose={() => setSelectedId(null)}
